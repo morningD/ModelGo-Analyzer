@@ -1,0 +1,100 @@
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix spdx: <http://spdx.org/rdf/terms#> .
+@prefix mg: <http://www.modelgo.li/rdf/terms#> . # a placeholder
+
+# Note: It is not an urgent need to link our vocabulary to SPDX; we can align it in the future.
+#mg:LicenseInfo rdfs:subClassOf spdx:SimpleLicensingInfo .
+
+
+# Vocabulary of Action
+
+mg:Action a rdfs:Class ;
+    rdfs:label "Action"@en ;
+    rdfs:comment "The superset of all actions (e.g., registering a license, reusing, publishing) in ModelGo.".
+
+mg:RegisterLicense a rdfs:Class ;
+    rdfs:subClassOf mg:Action ;
+    rdfs:lable "Register License"@en ;
+    rdfs:comment "This action attempts to register a license for the works." .
+
+mg:license a rdf:Property ;
+    rdfs:label "license"@en ;
+    rdfs:comment "License property which will build a link from registerLicense action to license info." ;
+    rdfs:domain mg:RegisterLicense;
+    rdfs:range mg:LicenseInfo.
+
+# Vocabulary of Work
+
+mg:WorkType a rdfs:Class ;
+    rdfs:label "WorkType"@en ;
+    rdfs:comment "A class representing the type of a licensed work such as software, dataset, or model." .
+
+mg:software a mg:WorkType ;
+    rdfs:label "software"@en .
+
+mg:dataset a mg:WorkType ;
+    rdfs:label "dataset"@en .
+
+mg:model a mg:WorkType ;
+    rdfs:label "model"@en .
+
+mg:mixed-type a mg:WorkType ;
+    rdfs:label "mixed-type"@en .
+
+mg:targetWorkType a rdfs:Property ;
+    rdfs:range mg:WorkType .
+
+mg:WorkForm a rdfs:Class;
+    rdfs:label "WorkForm"@en ;
+    rdfs:comment "A class representing the form of a licensed work such as code, binary, service." .
+
+
+# Vocabulary of Licenses
+mg:LicenseInfo a rdfs:Class ;
+    rdfs:label "LicenseInfo"@en ;
+    rdfs:comment "This class describes the basic information about a license (software, dataset, ML model)." .
+
+mg:isFsfLibre a rdfs:Property ;
+    rdfs:domain mg:LicenseInfo ;
+    rdfs:range xsd:boolean .
+
+mg:isOsiApproved a rdfs:Property ;
+    rdfs:domain mg:LicenseInfo ;
+    rdfs:range xsd:boolean .
+
+mg:isCopyleft a rdfs:Property ;
+    rdfs:domain mg:LicenseInfo ;
+    rdfs:range xsd:booean .
+
+mg:isOpenDomain a rdfs:Property ;
+    rdfs:domain mg:LicenseInfo ;
+    rdfs:range xsd:booean .
+
+mg:isPermissive a rdfs:Property ;
+    rdfs:domain mg:LicenseInfo ;
+    rdfs:range xsd:booean .
+
+mg:licenseId a rdfs:Property ;
+    rdfs:domain mg:LicenseInfo ;
+    rdfs:range xsd:string ;
+    rdfs:comment "The licenseId is the SPDX short identifier for the license." .
+
+mg:licenseId a rdfs:Property ;
+    rdfs:domain mg:LicenseInfo ;
+    rdfs:range xsd:string .
+
+mg:licenseName a rdfs:Property ;
+    rdfs:domain mg:LicenseInfo ;
+    rdfs:range xsd:string .
+
+mg:licenseVersion a rdfs:Property ;
+    rdfs:domain mg:LicenseInfo ;
+    rdfs:range xsd:float .
+
+mg:licenseUrl a rdfs:Property ;
+    rdfs:domain mg:LicenseInfo ;
+    rdfs:range xsd:anyURI .
+

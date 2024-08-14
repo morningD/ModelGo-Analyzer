@@ -1,0 +1,12 @@
+@prefix mg: <http://www.modelgo.li/rdf/terms#> . # a placeholder
+
+mg:Apache-2.0 a mg:LicenseInfo ;
+    mg:licenseId "Apache-2.0" ;
+    mg:licenseName "Apache License 2.0" ;
+    mg:licenseUrl <https://www.apache.org/licenses/LICENSE-2.0> ;
+    mg:licenseVersion 2.0 ;
+    mg:isFsfLibre true ;
+    mg:isOsiApproved true ;
+    mg:isPermissive true ;
+    mg:isOpenDomain false ;
+    mg:isCopyleft false .

@@ -20,7 +20,7 @@ mg:RegisterLicense a rdfs:Class ;
     rdfs:lable "Register License"@en ;
     rdfs:comment "This action attempts to register a license for the works." .
 
-mg:license a rdf:Property ;
+mg:license a rdfs:Property ;
     rdfs:label "license"@en ;
     rdfs:comment "License property which will build a link from registerLicense action to license info." ;
     rdfs:domain mg:RegisterLicense;
@@ -47,10 +47,51 @@ mg:mixed-type a mg:WorkType ;
 mg:targetWorkType a rdfs:Property ;
     rdfs:range mg:WorkType .
 
-mg:WorkForm a rdfs:Class;
+mg:WorkForm a rdfs:Class ;
     rdfs:label "WorkForm"@en ;
     rdfs:comment "A class representing the form of a licensed work such as code, binary, service." .
 
+mg:formName a rdfs:Property ;
+    rdfs:domain mg:WorkForm ;
+    rdfs:range xsd:string .
+
+mg:Raw rdfs:subClassOf mg:WorkForm .
+mg:Binary rdfs:subClassOf mg:WorkForm .
+mg:Service rdfs:subClassOf mg:WorkForm .
+
+mg:code a mg:Raw ;
+    rdfs:formName "code" ; 
+    rdfs:comment "Software in the form of source code." .
+mg:linguistics a mg:Raw ;
+    rdfs:formName "linguistics" ; 
+    rdfs:comment "Dataset in the form of linguistics resource." .
+mg:vision a mg:Raw ;
+    rdfs:formName "vision" ; 
+    rdfs:comment "Dataset in the form of vision resource." . 
+mg:weights a mg:Raw ;
+    rdfs:formName "weights" ; 
+    rdfs:comment "ML model in the form of model weights (parameters)." .
+mg:raw-form a mg:Raw ;
+    rdfs:formName "raw-form" ; 
+    rdfs:comment "General raw form for unspecified resource." .
+
+mg:exe a mg:Binary ;
+    rdfs:formName "exe" ;
+    rdfs:comment "Software as a compiled program." .
+mg:binary-form a mg:Binary ;
+    rdfs:formName "binary-form" ;
+    rdfs:comment "General binary form for unspecified resource." .
+
+mg:saas a mg:Service ;
+    rdfs:formName "saas" ;
+    rdfs:comment "Software as a SaaS." .
+mg:service-form a mg:Service ;
+    rdfs:formName "service-form" ;
+    rdfs:comment "General service form for unspecified resource." .
+
+mg:mixed-form a mg:WorkForm ;
+    rdfs:formName "mixed-form" ;
+    rdfs:comment "Mixed form for a collection of resources in different forms." .
 
 # Vocabulary of Licenses
 mg:LicenseInfo a rdfs:Class ;

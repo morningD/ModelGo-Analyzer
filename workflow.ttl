@@ -1,0 +1,11 @@
+@prefix mg: <http://www.modelgo.li/rdf/terms#> .
+@prefix : <http://example.org/ns#>.
+
+:whisper a mg:Work ;
+    mg:workName "Whisper" ;
+    mg:hasWorkType mg:model ;
+    mg:hasWorkForm mg:weights .
+
+:reg1 a mg:RegisterLicense ;
+    mg:targetWork :whisper ;
+    mg:license mg:MIT .

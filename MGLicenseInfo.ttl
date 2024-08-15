@@ -1,10 +1,24 @@
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
 @prefix mg: <http://www.modelgo.li/rdf/terms#> . # a placeholder
 
 mg:Apache-2.0 a mg:LicenseInfo ;
     mg:licenseId "Apache-2.0" ;
     mg:licenseName "Apache License 2.0" ;
+    mg:targetWorkType mg:dataset ;
     mg:licenseUrl <https://www.apache.org/licenses/LICENSE-2.0> ;
     mg:licenseVersion 2.0 ;
+    mg:isFsfLibre true ;
+    mg:isOsiApproved true ;
+    mg:isPermissive true ;
+    mg:isOpenDomain false ;
+    mg:isCopyleft false .
+
+mg:MIT a mg:LicenseInfo ;
+    mg:licenseId "MIT" ;
+    mg:licenseName "MIT License" ;
+    mg:targetWorkType mg:software ;
+    mg:licenseUrl <https://opensource.org/license/mit/> ;
+    mg:licenseVersion "NaN"^^xsd:float ;
     mg:isFsfLibre true ;
     mg:isOsiApproved true ;
     mg:isPermissive true ;

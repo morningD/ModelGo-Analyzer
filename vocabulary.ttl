@@ -13,11 +13,11 @@
 
 mg:Action a rdfs:Class ;
     rdfs:label "Action"@en ;
-    rdfs:comment "The superset of all actions (e.g., registering a license, reusing, publishing) in ModelGo.".
+    rdfs:comment "The superset of all actions (e.g., registering a license, reusing, publishing) in ModelGo." .
 
 mg:RegisterLicense a rdfs:Class ;
     rdfs:subClassOf mg:Action ;
-    rdfs:lable "Register License"@en ;
+    rdfs:lable "reg"@en ; # Display name of this action
     rdfs:comment "This action attempts to register a license for the works." .
 
 mg:license a rdfs:Property ;
@@ -26,12 +26,40 @@ mg:license a rdfs:Property ;
     rdfs:domain mg:RegisterLicense;
     rdfs:range mg:LicenseInfo.
 
+mg:targetWork a rdfs:Property ;
+    rdfs:domain mg:Action ;
+    rdfs:range mg:Work ;
+    rdfs:commnet "The traget work of an action." .
+
 # Vocabulary of Work
 
+## Definitions of work
+mg:Work a rdfs:Class ;
+    rdfs:label "Work"@en ;
+    rdfs:comment "A class representing the licenseable work, it has one type and one form." .
+
+mg:workName a rdfs:Property ;
+    rdfs:domain mg:Work ;
+    rdfs:range xsd:string ;
+    rdfs:comment "Name of this work, such as BLOOM, Imagenet." .
+
+mg:hasWorkType a rdfs:Property ;
+    rdfs:domain mg:Work ;
+    rdfs:range mg:WorkType .
+
+mg:hasWorkForm a rdfs:Property ;
+    rdfs:domain mg:Work ;
+    rdfs:range mg:WorkForm .
+
+## Type of work
 mg:WorkType a rdfs:Class ;
     rdfs:label "WorkType"@en ;
     rdfs:comment "A class representing the type of a licensed work such as software, dataset, or model." .
 
+mg:targetWorkType a rdfs:Property ;
+    rdfs:range mg:WorkType .
+
+# Known work types (instances)
 mg:software a mg:WorkType ;
     rdfs:label "software"@en .
 
@@ -44,9 +72,7 @@ mg:model a mg:WorkType ;
 mg:mixed-type a mg:WorkType ;
     rdfs:label "mixed-type"@en .
 
-mg:targetWorkType a rdfs:Property ;
-    rdfs:range mg:WorkType .
-
+## Form of work
 mg:WorkForm a rdfs:Class ;
     rdfs:label "WorkForm"@en ;
     rdfs:comment "A class representing the form of a licensed work such as code, binary, service." .
@@ -55,6 +81,10 @@ mg:formName a rdfs:Property ;
     rdfs:domain mg:WorkForm ;
     rdfs:range xsd:string .
 
+mg:hasWorkForm a rdfs:Property ;
+    rdfs:range mg:WorkForm .
+
+## Known work forms (instances)
 mg:Raw rdfs:subClassOf mg:WorkForm .
 mg:Binary rdfs:subClassOf mg:WorkForm .
 mg:Service rdfs:subClassOf mg:WorkForm .
@@ -139,3 +169,4 @@ mg:licenseUrl a rdfs:Property ;
     rdfs:domain mg:LicenseInfo ;
     rdfs:range xsd:anyURI .
 
+# Vocabulary of Report (notice, warning, error)

@@ -1,3 +1,4 @@
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
 @prefix mg: <http://www.modelgo.li/rdf/terms#> .
 @prefix : <http://example.org/ns#>.
 
@@ -6,6 +7,21 @@
     mg:hasWorkType mg:model ;
     mg:hasWorkForm mg:weights .
 
+:detr a mg:Work ;
+    mg:workName "DETR" ;
+    mg:hasWorkType mg:model ;
+    mg:hasWorkForm mg:weights . 
+
 :reg1 a mg:RegisterLicense ;
-    mg:targetWork :whisper ;
-    mg:license mg:MIT .
+    mg:actionId "REG1" ;
+    mg:hasInput [
+        mg:targetWork :whisper ;
+        mg:targetLicense mg:MIT
+    ] .
+
+:reg2 a mg:RegisterLicense ;
+    mg:actionId "REG2" ;
+    mg:hasInput [
+        mg:targetWork :detr ;
+        mg:targetLicense mg:Apache-2.0
+    ] .

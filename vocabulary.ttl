@@ -15,21 +15,44 @@ mg:Action a rdfs:Class ;
     rdfs:label "Action"@en ;
     rdfs:comment "The superset of all actions (e.g., registering a license, reusing, publishing) in ModelGo." .
 
-mg:RegisterLicense a rdfs:Class ;
-    rdfs:subClassOf mg:Action ;
-    rdfs:lable "reg"@en ; # Display name of this action
-    rdfs:comment "This action attempts to register a license for the works." .
+mg:nextAction a rdfs:Property ;
+    rdfs:domain mg:Action ;
+    rdfs:range mg:Action .
 
-mg:license a rdfs:Property ;
-    rdfs:label "license"@en ;
-    rdfs:comment "License property which will build a link from registerLicense action to license info." ;
-    rdfs:domain mg:RegisterLicense;
-    rdfs:range mg:LicenseInfo.
+mg:actionId a rdfs:Property ;
+    rdfs:domain mg:Action ;
+    rdfs:range xsd:string ;
+    rdfs:comment "The display name of this action." .
+
+mg:hasInput a rdfs:Property ;
+    rdfs:domain mg:Action ;
+    rdfs:comment "The input of an action." .
+
+mg:hasOutput a rdfs:Property ;
+    rdfs:domain mg:Action ;
+    rdfs:comment "The output of an action." .
+
+mg:targetLicense a rdfs:Property ; # The target license for register
+    rdfs:range mg:LicenseInfo ;
+    rdfs:label "targetLicense"@en ;
+    rdfs:comment "Property which will build a link from input/output (blank node) to license info." .
 
 mg:targetWork a rdfs:Property ;
-    rdfs:domain mg:Action ;
     rdfs:range mg:Work ;
-    rdfs:commnet "The traget work of an action." .
+    rdfs:commnet "The traget work of an input/output." .
+
+mg:targetSubwork a rdfs:Property ;
+    rdfs:range mg:Work ;
+    rdfs:commnet "The traget subwork of an input." .
+
+mg:targetAuxwork a rdfs:Property ;
+    rdfs:range mg:Work ;
+    rdfs:commnet "The traget auxwork of an input." .
+
+mg:RegisterLicense a rdfs:Class ;
+    rdfs:subClassOf mg:Action ;
+    rdfs:lable "RegisterLicense"@en ;
+    rdfs:comment "This action attempts to register a license for the works." .
 
 # Vocabulary of Work
 
@@ -50,6 +73,26 @@ mg:hasWorkType a rdfs:Property ;
 mg:hasWorkForm a rdfs:Property ;
     rdfs:domain mg:Work ;
     rdfs:range mg:WorkForm .
+
+mg:hasLicense a rdfs:Property ; # Registered license of a work.
+    rdfs:domain mg:Work ;
+    rdfs:range mg:LicenseInfo .
+
+mg:hasProvenance a rdfs:Property ;
+    rdfs:domain mg:Work ;
+    rdfs:range mg:Work .
+
+mg:hasMixwork a rdfs:Property ;
+    rdfs:domain mg:Work ;
+    rdfs:range mg:Work .
+
+mg:hasSubwork a rdfs:Property ;
+    rdfs:domain mg:Work ;
+    rdfs:range mg:Work .
+
+mg:hasAuxwork a rdfs:Property ;
+    rdfs:domain mg:Work ;
+    rdfs:range mg:Work .
 
 ## Type of work
 mg:WorkType a rdfs:Class ;
@@ -169,4 +212,29 @@ mg:licenseUrl a rdfs:Property ;
     rdfs:domain mg:LicenseInfo ;
     rdfs:range xsd:anyURI .
 
-# Vocabulary of Report (notice, warning, error)
+# Vocabulary of Report (notice, restriction, warning, error)
+mg:Report a rdfs:Class ;
+    rdfs:label "Report"@en ;
+    rdfs:comment "The superset of all reports (e.g., notice, warning, error) in ModelGo." .
+
+mg:Notice rdfs:subClassOf mg:Report ;
+    rdfs:comment "Notices like [Revocable license], [No public license]." . # See the Table1 in ModelGo paper (WWW'24) for more info.
+
+mg:Restriction rdfs:subClassOf mg:Report ;
+    rdfs:comment "Restrictions like [State changes], [Responsible AI use]." .
+
+mg:Warning rdfs:subClassOf mg:Report ;
+    rdfs:comment "Warnings like [Disclose self], [Rights not explicitly granted]." .
+
+mg:Error rdfs:subClassOf mg:Report ;
+    rdfs:comment "Errors like [Cannot relicense], [Rights not granted], [Cannot share]." .
+
+mg:reportBy a rdfs:Property ;
+    rdfs:domain mg:Report .
+    #rdfs:range mg:Action ; #TBD: Mayby we can let it free and enable reportBy->Work  or reportBy -> [work, action]
+
+mg:content a rdfs:Property ;
+    rdfs:domain mg:Report ;
+    rdfs:range xsd:string .
+
+

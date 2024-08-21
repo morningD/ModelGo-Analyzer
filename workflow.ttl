@@ -5,7 +5,7 @@
 :whisper a mg:Work ;
     mg:workName "Whisper" ;
     mg:hasWorkType mg:model ;
-    mg:hasWorkForm mg:weights .
+    mg:hasWorkForm mg:code .
 
 :detr a mg:Work ;
     mg:workName "DETR" ;

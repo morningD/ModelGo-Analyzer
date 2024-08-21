@@ -82,15 +82,19 @@ mg:hasProvenance a rdfs:Property ;
     rdfs:domain mg:Work ;
     rdfs:range mg:Work .
 
-mg:hasMixwork a rdfs:Property ;
+mg:hasReliedwork a rdfs:Property ;
     rdfs:domain mg:Work ;
     rdfs:range mg:Work .
 
-mg:hasSubwork a rdfs:Property ;
+mg:hasMixwork rdfs:subPropertyOf mg:hasReliedwork ;
     rdfs:domain mg:Work ;
     rdfs:range mg:Work .
 
-mg:hasAuxwork a rdfs:Property ;
+mg:hasSubwork rdfs:subPropertyOf mg:hasReliedwork ;
+    rdfs:domain mg:Work ;
+    rdfs:range mg:Work .
+
+mg:hasAuxwork rdfs:subPropertyOf mg:hasReliedwork ;
     rdfs:domain mg:Work ;
     rdfs:range mg:Work .
 
@@ -134,32 +138,41 @@ mg:Service rdfs:subClassOf mg:WorkForm .
 
 mg:code a mg:Raw ;
     rdfs:formName "code" ; 
+    mg:targetWorkType mg:software ;
     rdfs:comment "Software in the form of source code." .
 mg:linguistics a mg:Raw ;
     rdfs:formName "linguistics" ; 
+    mg:targetWorkType mg:dataset ;
     rdfs:comment "Dataset in the form of linguistics resource." .
 mg:vision a mg:Raw ;
     rdfs:formName "vision" ; 
+    mg:targetWorkType mg:dataset ;
     rdfs:comment "Dataset in the form of vision resource." . 
 mg:weights a mg:Raw ;
     rdfs:formName "weights" ; 
+    mg:targetWorkType mg:model ;
     rdfs:comment "ML model in the form of model weights (parameters)." .
 mg:raw-form a mg:Raw ;
     rdfs:formName "raw-form" ; 
+    #mg:targetWorkType mg:software, mg:dataset, mg:model, mg:mixed-type ; #NOTE: General work form that does not have a specific target work type.
     rdfs:comment "General raw form for unspecified resource." .
 
 mg:exe a mg:Binary ;
     rdfs:formName "exe" ;
+    mg:targetWorkType mg:software ;
     rdfs:comment "Software as a compiled program." .
 mg:binary-form a mg:Binary ;
     rdfs:formName "binary-form" ;
+    #mg:targetWorkType mg:softwar, mg:dataset, mg:model, mg:mixed-type ;
     rdfs:comment "General binary form for unspecified resource." .
 
 mg:saas a mg:Service ;
     rdfs:formName "saas" ;
+    mg:targetWorkType mg:software ;
     rdfs:comment "Software as a SaaS." .
 mg:service-form a mg:Service ;
     rdfs:formName "service-form" ;
+    #mg:targetWorkType mg:software, mg:dataset, mg:model, mg:mixed-type ;
     rdfs:comment "General service form for unspecified resource." .
 
 mg:mixed-form a mg:WorkForm ;
@@ -232,6 +245,11 @@ mg:Error rdfs:subClassOf mg:Report ;
 mg:reportBy a rdfs:Property ;
     rdfs:domain mg:Report .
     #rdfs:range mg:Action ; #TBD: Mayby we can let it free and enable reportBy->Work  or reportBy -> [work, action]
+
+mg:reportType a rdfs:Property ;
+    rdfs:domain mg:Report ;
+    rdfs:range xsd:string ;
+    rdfs:comment "The predefined type of a report, such as [License Type Mismatch] [Revocable License] [No Public License]." .
 
 mg:content a rdfs:Property ;
     rdfs:domain mg:Report ;

@@ -7,7 +7,7 @@
 @prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
 
 ####    Global rules    ####
-# Inheritance of class membership (rdfs:subClassOf
+# Inheritance of class membership (rdfs:subClassOf)
 {
   ?b a ?B .
   ?B rdfs:subClassOf ?A .
@@ -15,45 +15,78 @@
   ?b a ?A .
 } .
 
+# rdfs:subPropertyOf
+{
+    ?B rdfs:subPropertyOf ?A .
+    ?s ?B ?o .
+} => {
+    ?s ?A ?o .
+} .
+
 ####    Predefined rules set up for analysis    ####
-# All action instances will inherit the mg:actionId property from their parent action class.
-# {
-#     ?subA rdfs:subClassOf mg:Action .
-#     ?subA mg:actionId ?id .
-#     ?ac a ?subA
-# } => { ?ac mg:actionId ?id }.
+# An MG work has the same work type and form as its provenance work, if it exists.
+{
+    ?work a mg:Work .
+    ?work mg:hasProvenance ?pwork .
+    ?pwork mg:hasWorkType ?wtype .
+    ?pwork mg:hasWorkForm ?wform .
+} => {
+    ?work mg:hasWorkType ?wtype .
+    ?work mg:hasWorkForm ?wform .
+} .
 
 ####    ML workflow eatablishing rules  ####
 # Reasoning rules for registering a license to a work.
 {
-    ?action a mg:RegisterLicense .
+    ?action a mg:RegisterLicense . # Logical rule
     ?action!mg:hasInput mg:targetWork ?work .
     ?action!mg:hasInput mg:targetLicense ?license .
-    ?work mg:workName ?name .
+
+    ?work mg:workName ?wname . # Generate new work name
     ?action mg:actionId ?aid . 
-    (?aid "_" ?name) string:concatenation ?newName .
+    (?aid "_" ?wname) string:concatenation ?new_name .
 } => {
     _:work a mg:Work ;
         mg:hasProvenance ?work ;
         mg:hasLicense ?license ;
-        mg:workName ?newName .
-    ?action!mg:hasOutput mg:targetWork _:work
+        mg:workName ?new_name .
+    ?action!mg:hasOutput mg:targetWork _:work .
 } .
 
-# <License Type Mismatch Warning>
-# Report a warning if the license's target work type does not match the actual work type
-#{
-#    ?action a mg
+####    Generate license analysis report rules  ####
+# Warning [License Type Mismatch]. Report a warning if the license's target work type does not match the actual work type
 
-#}
+{   
+    ?work a mg:Work .
+    ?work mg:hasLicense ?license .
+    ?work mg:hasWorkType ?wtype.
+    ?license mg:targetWorkType ?ltype .
+    ?wtype log:notEqualTo ?ltype . # Type mismatching
 
-# :Let :param ( "hello" " " "world!" ) .
+    ?work mg:workName ?wname . # Genreate report content
+    ?license mg:licenseId ?lid .
+    ("** Warning ** [License Type Mismatch] " ?wname " is a " ?wtype " but it have a " ?ltype " license: " ?lid) string:concatenation ?report_content .
+} => {
+    _:warning a mg:Warning ;
+        mg:reportBy ?work ;
+        mg:reportType "License Type Mismatch" ;
+        mg:content ?report_content .
+} .
 
-# {
-#     :Let :param ?param .
-#     ?param string:concatenation ?result .
-# }
-# =>
-# {
-#     :result :is ?result .
-# } .
+# Error [Wrong Work Type or Form]. The work type cannot be inconsistent with its work form; i.e., a 'software' work cannot have a 'vision' form.
+{
+    ?work a mg:Work .
+    ?work mg:hasLicense ?license . # We filter out works that do not have a license
+    ?work mg:hasWorkForm ?wform .
+    ?wform mg:targetWorkType ?ttype .
+    ?work mg:hasWorkType ?wtype .
+    ?wtype log:notEqualTo ?ttype .
+
+    ?work mg:workName ?wname . # Genreate report content
+    ("** Error ** [Wrong Work Type or Form] " ?wname " is a " ?wtype " but it is in " ?wform " form") string:concatenation ?report_content .
+} => {
+    _:error a mg:Error ;
+        mg:reportBy ?work ;
+        mg:reportType "Wrong Work Type or Form" ;
+        mg:content ?report_content .
+}.

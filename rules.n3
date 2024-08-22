@@ -80,7 +80,7 @@
     ?work mg:hasWorkForm ?wform .
     ?wform mg:targetWorkType ?ttype .
     ?work mg:hasWorkType ?wtype .
-    ?wtype log:notEqualTo ?ttype .
+    ?wtype log:notEqualTo ?ttype . # Check the consistency between work type and work form
 
     ?work mg:workName ?wname . # Genreate report content
     ("** Error ** [Wrong Work Type or Form] " ?wname " is a " ?wtype " but it is in " ?wform " form") string:concatenation ?report_content .

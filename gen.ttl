@@ -1,0 +1,23 @@
+@prefix : <http://example.org/ns#> .
+@prefix mg: <http://www.modelgo.li/rdf/terms#> .
+
+:reg1 a mg:RegisterLicense ;
+    mg:actionId "reg1" ;
+    mg:hasInput [ mg:targetLicense mg:MIT ;
+            mg:targetWork :Whisper ] .
+
+:reg2 a mg:RegisterLicense ;
+    mg:actionId "reg2" ;
+    mg:hasInput [ mg:targetLicense mg:Apache-2.0 ;
+            mg:targetWork :DETR ] .
+
+:DETR a mg:work ;
+    mg:hasWorkForm "raw" ;
+    mg:hasWorkType "model" ;
+    mg:workName "DETR" .
+
+:Whisper a mg:work ;
+    mg:hasWorkForm "raw" ;
+    mg:hasWorkType "model" ;
+    mg:workName "Whisper" .
+

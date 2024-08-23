@@ -38,14 +38,23 @@ class Workflow(object):
     def __init__(self, prefixs=None):
         if prefixs: self.graph = create_base_graph(prefixs)
         else: self.graph = create_base_graph()
+        self.latest_action_id = ""
 
-    def merge(self, flows): # Merge RDF graph
+    # Merge multiple RDF graphs w/o changing the latest action id
+    def merge(self, flows): 
         if isinstance(flows, Workflow):
             self.graph += flows.graph
         if isinstance(flows, list):
             for f in flows:
                 self.graph += f.graph
         return
+
+    def update_action_id(self, action_id :str):
+        if action_id:
+            self.latest_action_id = action_id
+            return True
+        return False
+    
 
 # We maintain a function that generate a incremental number for each action
 def gen_action_num():
@@ -78,4 +87,11 @@ def register_license(target_work: Work, target_license: str='Unlicense', action_
     g.add((bn,MG.targetWork, wiri))
     g.add((bn,MG.targetLicense, MG[target_license]))
 
+    # Maintain the latest action ID
+    flow.update_action_id(action_id)
+
     return flow
+
+# def train() -> Workflow:
+
+#     return flow

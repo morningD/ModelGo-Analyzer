@@ -36,17 +36,35 @@
 } .
 
 ####    ML workflow eatablishing rules  ####
-# Reasoning rules for registering a license to a work.
+# Add the 'hasSubwork' property to the output if 'targetSubwork' is provided through the input.
+{
+    ?action a mg:Action .
+    ?action!mg:hasInput mg:targetSubwork ?work .
+    ?action!mg:hasOutput mg:targetWork ?output .
+} => {
+    ?output mg:hasSubwork ?work .
+} .
+# Add the 'hasAuxwork' property to the output.
+{
+    ?action a mg:Action .
+    ?action!mg:hasInput mg:targetAuxwork ?work .
+    ?action!mg:hasOutput mg:targetWork ?output .
+} => {
+    ?output mg:hasSubwork ?work .
+} .
+
+# Reasoning rules for registering a license to a work, which
+# adds the 'hasProvenance' and 'hasLicense' properties to the output.
 {
     ?action a mg:RegisterLicense . # Logical rule
     ?action!mg:hasInput mg:targetWork ?work .
     ?action!mg:hasInput mg:targetLicense ?license .
 
-    ?work mg:workName ?wname . # Generate new work name
+    ?work mg:workName ?wname . # Generate new work name, i.e., reg1_Whisper
     ?action mg:actionId ?aid . 
     (?aid "_" ?wname) string:concatenation ?new_name .
 } => {
-    _:work a mg:Work ;
+    _:work a mg:Work ; # Generate the hasOutput property
         mg:hasProvenance ?work ;
         mg:hasLicense ?license ;
         mg:workName ?new_name .

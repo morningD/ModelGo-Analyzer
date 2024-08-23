@@ -11,7 +11,18 @@ mg:Apache-2.0 a mg:LicenseInfo ;
     mg:isOsiApproved true ;
     mg:isPermissive true ;
     mg:isOpenDomain false ;
-    mg:isCopyleft false .
+    mg:isCopyleft false ;
+    mg:grant [
+        a mg:Right ;
+        mg:isPatent true ;
+        mg:isCopyright true ;
+        mg:hasRightPrefix mg:perpetual, mg:worldwide, mg:non-exclusive, mg:no-charge, mg:royalty-free, mg:irrevocable ;
+        mg:hasUsage mg:use, mg:modify, mg:merge, mg:redistribute, mg:sublicense, mg:commercial_use
+    ] ;
+    mg:reserve [
+        a mg:Right ;
+        mg:hasUsage mg:trademark_use, mg:copyright, mg:patent, mg:trademark
+    ] .
 
 mg:MIT a mg:LicenseInfo ;
     mg:licenseId "MIT" ;
@@ -23,4 +34,16 @@ mg:MIT a mg:LicenseInfo ;
     mg:isOsiApproved true ;
     mg:isPermissive true ;
     mg:isOpenDomain false ;
+    mg:isCopyleft false .
+
+mg:Unlicense a mg:LicenseInfo ;
+    mg:licenseId "Unlicense" ;
+    mg:licenseName "The Unlicense" ;
+    #mg:targetWorkType mg:software ;
+    mg:licenseUrl <https://opensource.org/license/unlicense/> ;
+    mg:licenseVersion "NaN"^^xsd:float ;
+    mg:isFsfLibre true ;
+    mg:isOsiApproved true ;
+    mg:isPermissive true ;
+    mg:isOpenDomain true ;
     mg:isCopyleft false .

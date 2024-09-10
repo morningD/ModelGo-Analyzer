@@ -35,8 +35,7 @@ detr_model = register_license(Work('DETR', 'model', 'raw'), target_license='Apac
 # bloom_model = Work('BLOOM', 'model', 'raw', 'BigScience-BLOOM-RAIL-1.0') # Text Generation, https://huggingface.co/bigscience/bloom
 # llama2_model = Work('Llama2', 'model', 'raw', 'Llama2') # Text Generation, https://huggingface.co/meta-llama/Llama-2-7b
 
-flow = Workflow()
-flow.merge([whisper_model, detr_model])
+flow = combine([whisper_model, detr_model])
 
 # Save the gen graph to a new Turtle file
 flow.graph.serialize(destination="gen.ttl", format="ttl")

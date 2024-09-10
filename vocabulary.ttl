@@ -15,7 +15,7 @@ mg:Action a rdfs:Class ;
     rdfs:label "Action"@en ;
     rdfs:comment "The superset of all actions (e.g., registering a license, reusing, publishing) in ModelGo." .
 
-mg:nextAction a rdfs:Property ;
+mg:yieldOutputWork a rdfs:Property ;
     rdfs:domain mg:Action ;
     rdfs:range mg:Action .
 
@@ -53,6 +53,11 @@ mg:RegisterLicense a rdfs:Class ;
     rdfs:subClassOf mg:Action ;
     rdfs:lable "RegisterLicense"@en ;
     rdfs:comment "This action attempts to register a license for the works." .
+
+mg:Combine a rdfs:Class ;
+    rdfs:subClassOf mg:Action ;
+    rdfs:lable "Combine"@en ;
+    rdfs:comment "This action attempts to bundle multiple works to construct a new work." .
 
 # Vocabulary of Work
 
@@ -277,9 +282,10 @@ mg:merge a mg:Usage .
 mg:redistribute a mg:Usage .
 mg:commercial_use a mg:Usage .
 mg:patent a mg:Usage .
-#mg:patent_use a mg:Usage . # Equal to mg:isPatent
 mg:trademark a mg:Usage .
 mg:trademark_use a mg:Usage .
+#mg:patent_use a mg:Usage . # Equal to mg:isPatent.
+#mg:copy a mg:Usage . # A license does not grant the right to copy is meaningless.
 
 # Vocabulary of Report (notice, restriction, warning, error)
 mg:Report a rdfs:Class ;

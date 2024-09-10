@@ -4,12 +4,14 @@
 :reg1 a mg:RegisterLicense ;
     mg:actionId "reg1" ;
     mg:hasInput [ mg:targetLicense mg:MIT ;
-            mg:targetWork :Whisper ] .
+            mg:targetWork :Whisper ] ;
+    mg:yieldOutputWork :combine3 .
 
 :reg2 a mg:RegisterLicense ;
     mg:actionId "reg2" ;
     mg:hasInput [ mg:targetLicense mg:Apache-2.0 ;
-            mg:targetWork :DETR ] .
+            mg:targetWork :DETR ] ;
+    mg:yieldOutputWork :combine3 .
 
 :DETR a mg:work ;
     mg:hasWorkForm "raw" ;
@@ -20,4 +22,8 @@
     mg:hasWorkForm "raw" ;
     mg:hasWorkType "model" ;
     mg:workName "Whisper" .
+
+:combine3 a mg:Combine ;
+    mg:actionId "combine3" ;
+    mg:hasInput [ ] .
 

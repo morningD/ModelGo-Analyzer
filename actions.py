@@ -3,6 +3,7 @@ import logging
 from copy import deepcopy
 from rdflib import Graph, Namespace, Literal, BNode
 from rdflib.namespace import RDF, RDFS
+from typing import Iterable
 
 """ <actions.py>
 This file contains the functions that can use to create a Turtule file that describe the ML workflow based on users' input,
@@ -44,7 +45,7 @@ class Workflow(object):
     def merge(self, flows): 
         if isinstance(flows, Workflow):
             self.graph += flows.graph
-        if isinstance(flows, list):
+        if isinstance(flows, Iterable):
             for f in flows:
                 self.graph += f.graph
         return
@@ -84,11 +85,30 @@ def register_license(target_work: Work, target_license: str='Unlicense', action_
     g.add((airi, MG.actionId, Literal(action_id)))
     bn = BNode() # Blank node of mg:hasInput
     g.add((airi, MG.hasInput, bn))
-    g.add((bn,MG.targetWork, wiri))
-    g.add((bn,MG.targetLicense, MG[target_license]))
+    g.add((bn, MG.targetWork, wiri))
+    g.add((bn, MG.targetLicense, MG[target_license]))
 
     # Maintain the latest action ID
     flow.update_action_id(action_id)
+
+    return flow
+
+def combine(target_flows: Iterable[Workflow], action_label='combine') -> Workflow:
+    flow = Workflow() # Create a new empty workflow
+    flow.merge(target_flows) # Add the graphs from targetflows to new workflow
+    g = flow.graph
+
+    # Add the Combine Action in the new graph
+    action_id = action_label + str(anum())
+    airi = EX[action_id]
+    g.add((airi, RDF.type, MG.Combine))
+    g.add((airi, MG.actionId, Literal(action_id)))
+    bn = BNode()
+    g.add((airi, MG.hasInput, bn)) # Add a blank node as input, which will be populated later by N3 rules
+    # Create the yieldOutputWork links from latest actions in target_flows to this Combine action
+    for f in target_flows: 
+        g.add((EX[f.latest_action_id], MG.yieldOutputWork, airi))
+    flow.update_action_id(airi)
 
     return flow
 

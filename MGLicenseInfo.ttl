@@ -34,16 +34,29 @@ mg:MIT a mg:LicenseInfo ;
     mg:isOsiApproved true ;
     mg:isPermissive true ;
     mg:isOpenDomain false ;
-    mg:isCopyleft false .
+    mg:isCopyleft false ;
+    mg:grant [
+        a mg:Right ;
+        mg:isCopyright true ;
+        mg:hasRightPrefix mg:no-charge, mg:mg:any-person ;
+        mg:hasUsage mg:use, mg:modify, mg:merge, mg:redistribute, mg:sublicense, mg:commercial_use
+    ] . # No rights are reserved under the MIT License; however, generally speaking, patent, trademark, and copyright rights are implicitly reserved.
 
-mg:Unlicense a mg:LicenseInfo ;
+# We treat the Unlicense as the default choice for any intermediate work that imposes no restrictions or limitations on its covered work.
+mg:Unlicense a mg:LicenseInfo ; 
     mg:licenseId "Unlicense" ;
     mg:licenseName "The Unlicense" ;
-    #mg:targetWorkType mg:software ;
+    #mg:targetWorkType mg:software ; # We ASSUME it applies to any type of work, even though it was originally designed as a software license.
     mg:licenseUrl <https://opensource.org/license/unlicense/> ;
     mg:licenseVersion "NaN"^^xsd:float ;
     mg:isFsfLibre true ;
     mg:isOsiApproved true ;
     mg:isPermissive true ;
     mg:isOpenDomain true ;
-    mg:isCopyleft false .
+    mg:isCopyleft false ;
+    mg:grant [
+        a mg:Right ;
+        mg:isCopyright true ;
+        mg:hasRightPrefix mg:mg:any-person ;
+        mg:hasUsage mg:use, mg:modify, mg:merge, mg:redistribute, mg:sublicense, mg:commercial_use
+    ] .

@@ -53,6 +53,17 @@
     ?output mg:hasSubwork ?work .
 } .
 
+# Add the TargetWork from hasOutput to the next action's hasInput if "yieldOutputWork" is provided.
+
+{
+    ?action a mg:Action .
+    ?action mg:yieldOutputWork ?next_action .
+    ?action!mg:hasOutput mg:targetWork ?work .
+    ?next_action mg:hasInput ?input .
+} => {
+    ?input mg:targetWork ?work .
+} .
+
 # Reasoning rules for registering a license to a work, which
 # adds the 'hasProvenance' and 'hasLicense' properties to the output.
 {
@@ -107,4 +118,4 @@
         mg:reportBy ?work ;
         mg:reportType "Wrong Work Type or Form" ;
         mg:content ?report_content .
-}.
+} .

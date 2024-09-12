@@ -70,7 +70,7 @@ anum = gen_action_num()
 def register_license(target_work: Work, target_license: str='Unlicense', action_label: str='reg') -> Workflow:
     flow = Workflow() # Create a new workflow contains this register action
     g = flow.graph
-    wiri = EX[target_work.name]
+    wiri = EX[target_work.name] # IRI of Output targetWork
     
     # Add the Work subject in a new RDF graph
     g.add((wiri, RDF.type, MG.work))
@@ -101,10 +101,16 @@ def combine(target_flows: Iterable[Workflow], action_label='combine') -> Workflo
     # Add the Combine Action in the new graph
     action_id = action_label + str(anum())
     airi = EX[action_id]
+    wiri = EX[action_id + "_out"]
+
     g.add((airi, RDF.type, MG.Combine))
     g.add((airi, MG.actionId, Literal(action_id)))
-    bn = BNode()
-    g.add((airi, MG.hasInput, bn)) # Add a blank node as input, which will be populated later by N3 rules
+    #bn = BNode()
+    g.add((airi, MG.hasInput, BNode())) # Add a blank node as input, which will be populated later by N3 rules
+    #bn, bn_work = BNode(), BNode()
+    g.add((airi, MG.hasOutput, BNode())) # Add this blank node as placeholder for output
+    #g.add((bn, MG.targetWork, bn_work))
+    #g.add((bn_work, RDF.type, MG.Work))
     # Create the yieldOutputWork links from latest actions in target_flows to this Combine action
     for f in target_flows: 
         g.add((EX[f.latest_action_id], MG.yieldOutputWork, airi))

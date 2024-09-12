@@ -5,6 +5,7 @@
 @prefix log: <http://www.w3.org/2000/10/swap/log#> .
 @prefix mg: <http://www.modelgo.li/rdf/terms#> .
 @prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix : <http://example.org/ns#>.
 
 ####    Global rules    ####
 # Inheritance of class membership (rdfs:subClassOf)
@@ -54,7 +55,6 @@
 } .
 
 # Add the TargetWork from hasOutput to the next action's hasInput if "yieldOutputWork" is provided.
-
 {
     ?action a mg:Action .
     ?action mg:yieldOutputWork ?next_action .
@@ -64,6 +64,20 @@
     ?input mg:targetWork ?work .
 } .
 
+# Assign the workname of output according the work names of inputs and action id
+{
+    ?action a mg:Action .
+    ?action!mg:hasInput mg:targetWork ?inwork .
+    ?action!mg:hasOutput mg:targetWork ?outwork .
+    ?inwork mg:workName ?wname .
+    ?action mg:actionId ?aid . 
+    #(?wname {} ?allnames) log:collectAllIn _:x .
+    # Generate new work name, i.e., reg1_Whisper, combine1_Wikipedia_FreeLaw
+    (?aid "_" ?wname) string:concatenation ?new_name . 
+} => {
+    ?outwork mg:workName ?new_name .
+} .
+
 # Reasoning rules for registering a license to a work, which
 # adds the 'hasProvenance' and 'hasLicense' properties to the output.
 {
@@ -71,15 +85,45 @@
     ?action!mg:hasInput mg:targetWork ?work .
     ?action!mg:hasInput mg:targetLicense ?license .
 
-    ?work mg:workName ?wname . # Generate new work name, i.e., reg1_Whisper
-    ?action mg:actionId ?aid . 
-    (?aid "_" ?wname) string:concatenation ?new_name .
+    # ?work mg:workName ?wname . # Generate new work name, i.e., reg1_Whisper
+    # ?action mg:actionId ?aid . 
+    # (?aid "_" ?wname) string:concatenation ?new_name .
 } => {
     _:work a mg:Work ; # Generate the hasOutput property
         mg:hasProvenance ?work ;
-        mg:hasLicense ?license ;
-        mg:workName ?new_name .
+        mg:hasLicense ?license .
     ?action!mg:hasOutput mg:targetWork _:work .
+} .
+
+    # ?action mg:actionId ?aid .
+    # (: ?aid "_out") string:concatenation ?newWork .
+
+# Reasoning rules for combine multiple works, which
+# creates a new output work and adds the 'hasMixwork' to this output.
+{
+    ?action a mg:Combine .
+    ?action!mg:hasInput mg:targetWork ?inw .
+    ?action mg:hasOutput ?out .
+    # We use log:skolem to ensure that just one targetWork is created for each combine case.
+    (:action "yieldOutputWork") log:skolem ?geniri . 
+} => {
+    ?out mg:targetWork ?geniri .
+    ?geniri mg:hasMixwork ?inw .
+} .
+# Combine: Request creating rule
+{
+    ?action a mg:Combine .
+    ?action!mg:hasInput mg:targetWork ?inw .
+    ?action!mg:hasOutput mg:targetWork ?outw .
+} => {
+    _:request a mg:Request ;
+        mg:requestBy ?outw ;
+        mg:requestBy ?action ;
+        mg:grant [ 
+            a mg:Right ;
+            mg:hasUsage mg:merge 
+        ] .
+    ?inw mg:hasRequest _:request .
 } .
 
 ####    Generate license analysis report rules  ####

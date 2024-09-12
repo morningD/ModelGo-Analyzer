@@ -243,11 +243,11 @@ mg:isCopyright a rdfs:Property ;
     rdfs:range xsd:boolean .
 
 mg:grant a rdfs:Property ;
-    rdfs:domain mg:LicenseInfo ;
+    #rdfs:domain mg:LicenseInfo ; #rdfs:domain mg:Request
     rdfs:range mg:Right .
 
 mg:reserve a rdfs:Property ;
-    rdfs:domain mg:LicenseInfo ;
+    #rdfs:domain mg:LicenseInfo ; #rdfs:domain mg:Request
     rdfs:range mg:Right .
 
 mg:RightPrefix a rdfs:Class ;
@@ -286,6 +286,17 @@ mg:trademark a mg:Usage .
 mg:trademark_use a mg:Usage .
 #mg:patent_use a mg:Usage . # Equal to mg:isPatent.
 #mg:copy a mg:Usage . # A license does not grant the right to copy is meaningless.
+
+mg:Request a rdfs:Class ;
+    rdfs:comment "The need to grant or reserve rights for a work depends on its method of reuse." .
+
+mg:hasRequest a rdfs:Property ;
+    rdfs:domain mg:Work ;
+    rdfs:range mg:Request .
+
+mg:requestBy a rdfs:Property ;
+    rdfs:domain mg:Request ;
+    rdfs:range mg:Work .
 
 # Vocabulary of Report (notice, restriction, warning, error)
 mg:Report a rdfs:Class ;

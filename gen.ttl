@@ -25,5 +25,6 @@
 
 :combine3 a mg:Combine ;
     mg:actionId "combine3" ;
-    mg:hasInput [ ] .
+    mg:hasInput [ ] ;
+    mg:hasOutput [ ] .
 

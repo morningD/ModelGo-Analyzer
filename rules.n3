@@ -65,15 +65,30 @@
 } .
 
 # Assign the workname of output according the work names of inputs and action id
+# Generate new work name, i.e., [reg1_Whisper], [combine1_[reg1_Wikipedia][reg1_FreeLaw]].
+# However, this approach can result in excessively long work names as the length of the ML workflow increases.
+# {   
+#     ?action a mg:Action .
+#     ?action mg:actionId ?aid .
+#     ?action!mg:hasOutput mg:targetWork ?outwork .
+#     ( ?wname 
+#         {   
+#             ?action!mg:hasInput mg:targetWork ?inwork .
+#             ?inwork mg:workName ?wname .
+#         }
+#     ?wnames ) log:collectAllIn _:x .
+#     ?wnames string:concatenation ?wnames_str .
+#     ("[" ?aid "_" ?wnames_str "]") string:concatenation ?new_name .
+# } => {
+#     ?outwork mg:workName ?new_name .
+# } .
+
+# We use a simplier name method instead.
 {
     ?action a mg:Action .
-    ?action!mg:hasInput mg:targetWork ?inwork .
-    ?action!mg:hasOutput mg:targetWork ?outwork .
-    ?inwork mg:workName ?wname .
-    ?action mg:actionId ?aid . 
-    #(?wname {} ?allnames) log:collectAllIn _:x .
-    # Generate new work name, i.e., reg1_Whisper, combine1_Wikipedia_FreeLaw
-    (?aid "_" ?wname) string:concatenation ?new_name . 
+    ?action mg:actionId ?aid .
+    ?action!mg:hasOutput mg:targetWork ?outwork . # Note: We have not yet considered the case of multiple output works
+    (?aid "_outwork")string:concatenation ?new_name .
 } => {
     ?outwork mg:workName ?new_name .
 } .

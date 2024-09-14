@@ -1,3 +1,4 @@
+@prefix math: <http://www.w3.org/2000/10/swap/math#> .
 @prefix list: <http://www.w3.org/2000/10/swap/list#> .
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
 @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
@@ -35,6 +36,9 @@
     ?work mg:hasWorkType ?wtype .
     ?work mg:hasWorkForm ?wform .
 } .
+
+# Collect all known work forms to a list mg:all_work_forms
+#{ (?form {?form a mg:WorkForm .} ?forms) log:collectAllIn _:x . } => { mg:all_work_forms mg:hasItems ?forms } .
 
 ####    ML workflow eatablishing rules  ####
 # Add the 'hasSubwork' property to the output if 'targetSubwork' is provided through the input.
@@ -93,7 +97,9 @@
     ?outwork mg:workName ?new_name .
 } .
 
-# Reasoning rules for registering a license to a work, which
+####   Action Reasoning rules  ####
+
+# [ResiterLicense] Reasoning rules for registering a license to a work, which
 # adds the 'hasProvenance' and 'hasLicense' properties to the output.
 {
     ?action a mg:RegisterLicense . # Logical rule
@@ -113,7 +119,7 @@
     # ?action mg:actionId ?aid .
     # (: ?aid "_out") string:concatenation ?newWork .
 
-# Reasoning rules for combine multiple works, which
+# [Combine] Reasoning rules for combine multiple works, which
 # creates a new output work and adds the 'hasMixwork' to this output.
 {
     ?action a mg:Combine .
@@ -125,6 +131,30 @@
     ?out mg:targetWork ?geniri .
     ?geniri mg:hasMixwork ?inw .
 } .
+# [Combine] Reasoning rules for determination the type and form of output work.
+{ # Mix-type case
+    ?action a mg:Combine .
+    ?action!mg:hasInput mg:targetWork ?inw .
+    ?action!mg:hasOutput mg:targetWork ?outw .
+    ( ?type { ?inw mg:hasWorkType ?type .} ?types ) log:collectAllIn _:x .
+    ?types list:length ?len .
+    ?len math:greaterThan "1"^^<xsd:int> . # More than one input work type
+} => {
+    ?outw mg:hasWorkType mg:mixed-type .
+} .
+{ # Else, single work type case
+    ?action a mg:Combine .
+    ?action!mg:hasInput mg:targetWork ?inw .
+    ?action!mg:hasOutput mg:targetWork ?outw .
+    ( ?type { ?inw mg:hasWorkType ?type .} ?types ) log:collectAllIn _:x .
+    ?types list:length ?len .
+    ?len math:equalTo "1"^^<xsd:int> . # Only one input work type
+    ?types list:first ?type .
+} => {
+    ?outw mg:hasWorkType ?type .
+} .
+
+
 # Combine: Request creating rule
 {
     ?action a mg:Combine .
@@ -132,8 +162,8 @@
     ?action!mg:hasOutput mg:targetWork ?outw .
 } => {
     _:request a mg:Request ;
-        mg:requestBy ?outw ;
-        mg:requestBy ?action ;
+        mg:targetWork ?outw ;
+        mg:targetAction ?action ;
         mg:grant [ 
             a mg:Right ;
             mg:hasUsage mg:merge 
@@ -149,6 +179,7 @@
     ?work mg:hasLicense ?license .
     ?work mg:hasWorkType ?wtype.
     ?license mg:targetWorkType ?ltype .
+    ?wtype log:notEqualTo mg:mixed-type . # Skip it if the work type is mixed-type
     ?wtype log:notEqualTo ?ltype . # Type mismatching
 
     ?work mg:workName ?wname . # Genreate report content
@@ -166,8 +197,10 @@
     ?work a mg:Work .
     ?work mg:hasLicense ?license . # We filter out works that do not have a license
     ?work mg:hasWorkForm ?wform .
+    ?wform log:notEqualTo mg:mixed-form . # Skip it if the work type is mixed-form
     ?wform mg:targetWorkType ?ttype .
     ?work mg:hasWorkType ?wtype .
+    ?wtype log:notEqualTo mg:mixed-type . # Skip it if the work type is mixed-type
     ?wtype log:notEqualTo ?ttype . # Check the consistency between work type and work form
 
     ?work mg:workName ?wname . # Genreate report content

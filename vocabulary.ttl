@@ -9,6 +9,11 @@
 #mg:LicenseInfo rdfs:subClassOf spdx:SimpleLicensingInfo .
 
 
+# General vocabulary
+
+mg:hasItems a rdfs:Property ;
+    rdfs:range rdf:List .
+
 # Vocabulary of Action
 
 mg:Action a rdfs:Class ;
@@ -18,6 +23,10 @@ mg:Action a rdfs:Class ;
 mg:yieldOutputWork a rdfs:Property ;
     rdfs:domain mg:Action ;
     rdfs:range mg:Action .
+
+mg:targetAction a rdfs:Property ;
+    rdfs:range mg:Action ;
+    rdfs:comment " The target Action of a request/ruling/report".
 
 mg:actionId a rdfs:Property ;
     rdfs:domain mg:Action ;
@@ -39,7 +48,7 @@ mg:targetLicense a rdfs:Property ; # The target license for register
 
 mg:targetWork a rdfs:Property ;
     rdfs:range mg:Work ;
-    rdfs:commnet "The traget work of an input/output." .
+    rdfs:commnet "The traget work of an input/output or request/ruling." .
 
 mg:targetSubwork a rdfs:Property ;
     rdfs:range mg:Work ;
@@ -287,16 +296,53 @@ mg:trademark_use a mg:Usage .
 #mg:patent_use a mg:Usage . # Equal to mg:isPatent.
 #mg:copy a mg:Usage . # A license does not grant the right to copy is meaningless.
 
+mg:LicenseRule a rdfs:Class ;
+    rdfs:label "LicenseRule"@en ;
+    rdfs:comment "This class describes the rules for output definitions (e.g., derivate, modification) corresponding to the action." .
+
+ # Be used to record the rule of input work's license and applied rule of output work.
+ mg:hasRule a rdfs:Property ;
+    rdfs:range mg:LicenseRule .
+
+mg:allowSharing a rdfs:Property ;
+    rdfs:domain mg:LicenseRule ;
+    rdfs:range xsd:boolean .
+
+mg:Restriction a rdfs:Class ;
+    rdfs:comment "This class is used to describe the restrictions that should be applied to a LicenseRule." .
+
+mg:hasRestriction a rdfs:Property ;
+    rdfs:range mg:Restriction .
+
+mg:state_changes_restriction a mg:Restriction ;
+    mg:content "This work must state changes according to related license(s)." .
+
+# Vocabulary for requesting rights of a input work raised by an action during the ML reuse process.
 mg:Request a rdfs:Class ;
-    rdfs:comment "The need to grant or reserve rights for a work depends on its method of reuse." .
+    rdfs:comment "The need to grant or reserve rights for a input work depends on its method of reuse." .
 
 mg:hasRequest a rdfs:Property ;
     rdfs:domain mg:Work ;
     rdfs:range mg:Request .
 
-mg:requestBy a rdfs:Property ;
-    rdfs:domain mg:Request ;
-    rdfs:range mg:Work .
+mg:Ruling a rdfs:Class ;
+    rdfs:comment "Record the definitions of a output work (e.g., derivatives, modification, duplication) according the rules of licenses of input works." .
+
+mg:hasRuling a rdfs:Property ;
+    rdfs:domain mg:Work ;
+    rdfs:range mg:Ruling .
+
+mg:OutputDef a rdfs:Class ; 
+    rdfs:comment "The definition of output work, it should be understood in the context of the specific license used in each input work." .
+
+mg:hasOutputDef a rdfs:Property ;
+    rdfs:domain mg:Ruling ;
+    rdfs:range mg:OutputDef .
+
+mg:duplication a mg:OutputDef .
+mg:modification a mg:OutputDef .
+mg:independent a mg:OutputDef .
+mg:derivative a mg:OutputDef .
 
 # Vocabulary of Report (notice, restriction, warning, error)
 mg:Report a rdfs:Class ;
@@ -325,7 +371,6 @@ mg:reportType a rdfs:Property ;
     rdfs:comment "The predefined type of a report, such as [License Type Mismatch] [Revocable License] [No Public License]." .
 
 mg:content a rdfs:Property ;
-    rdfs:domain mg:Report ;
     rdfs:range xsd:string .
 
 

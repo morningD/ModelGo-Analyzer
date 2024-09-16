@@ -25,6 +25,7 @@
     ?s ?A ?o .
 } .
 
+
 ####    Predefined rules set up for analysis    ####
 # An MG work has the same work type and form as its provenance work, if it exists.
 {
@@ -97,6 +98,7 @@
     ?outwork mg:workName ?new_name .
 } .
 
+
 ####   Action Reasoning rules  ####
 
 # [ResiterLicense] Reasoning rules for registering a license to a work, which
@@ -105,12 +107,12 @@
     ?action a mg:RegisterLicense . # Logical rule
     ?action!mg:hasInput mg:targetWork ?work .
     ?action!mg:hasInput mg:targetLicense ?license .
-
-    # ?work mg:workName ?wname . # Generate new work name, i.e., reg1_Whisper
-    # ?action mg:actionId ?aid . 
-    # (?aid "_" ?wname) string:concatenation ?new_name .
+    ?work mg:hasWorkType ?type .
+    ?work mg:hasWorkForm ?form .
 } => {
     _:work a mg:Work ; # Generate the hasOutput property
+        mg:hasWorkType ?type ;
+        mg:hasWorkForm ?form ;
         mg:hasProvenance ?work ;
         mg:hasLicense ?license .
     ?action!mg:hasOutput mg:targetWork _:work .
@@ -126,27 +128,36 @@
     ?action!mg:hasInput mg:targetWork ?inw .
     ?action mg:hasOutput ?out .
     # We use log:skolem to ensure that just one targetWork is created for each combine case.
-    (:action "yieldOutputWork") log:skolem ?geniri . 
+    (?action "yieldOutputWork") log:skolem ?geniri . 
 } => {
     ?out mg:targetWork ?geniri .
     ?geniri mg:hasMixwork ?inw .
 } .
+
 # [Combine] Reasoning rules for determination the type and form of output work.
-{ # Mix-type case
+{ # Collect all input works' types
     ?action a mg:Combine .
     ?action!mg:hasInput mg:targetWork ?inw .
+    ?inw mg:hasWorkType ?t .
+    (?action "types") log:skolem ?geniri .
+} => {
+    ?geniri mg:is ?t .
+} .
+{ # Mixed-type case;
+    ?action a mg:Combine .
     ?action!mg:hasOutput mg:targetWork ?outw .
-    ( ?type { ?inw mg:hasWorkType ?type .} ?types ) log:collectAllIn _:x .
+    (?action "types") log:skolem ?geniri .
+    ( ?t { ?geniri mg:is ?t . } ?types ) log:collectAllIn _:x .
     ?types list:length ?len .
     ?len math:greaterThan "1"^^<xsd:int> . # More than one input work type
 } => {
     ?outw mg:hasWorkType mg:mixed-type .
 } .
-{ # Else, single work type case
+{ # Else, single work type case.
     ?action a mg:Combine .
-    ?action!mg:hasInput mg:targetWork ?inw .
     ?action!mg:hasOutput mg:targetWork ?outw .
-    ( ?type { ?inw mg:hasWorkType ?type .} ?types ) log:collectAllIn _:x .
+    (?action "types") log:skolem ?geniri .
+    ( ?t { ?geniri mg:is ?t . } ?types ) log:collectAllIn _:x .
     ?types list:length ?len .
     ?len math:equalTo "1"^^<xsd:int> . # Only one input work type
     ?types list:first ?type .
@@ -154,8 +165,59 @@
     ?outw mg:hasWorkType ?type .
 } .
 
+{ # Collect all input works' forms and broader forms
+    ?action a mg:Combine .
+    ?action!mg:hasInput mg:targetWork ?inw .
+    ?inw mg:hasWorkForm ?f .
+    ?f mg:broader ?bf .
+    (?action "forms") log:skolem ?gen1 .
+    (?action "broader_forms") log:skolem ?gen2 .
+} => {
+    ?gen1 mg:is ?f.
+    ?gen2 mg:is ?bf.
+} .
+{  # Single work form case;
+    ?action a mg:Combine .
+    ?action!mg:hasOutput mg:targetWork ?outw .
+    (?action "forms") log:skolem ?gen1 .
+    ( ?f { ?gen1 mg:is ?f . } ?forms ) log:collectAllIn _:x .
+    ?forms list:length ?len .
+    ?len math:equalTo "1"^^<xsd:int> . # Only one input work form
+    ?forms list:first ?form .
+} => {
+    ?outw mg:hasWorkForm ?form .
+} . 
+{ # Else, try to use the common broader form
+    ?action a mg:Combine .
+    ?action!mg:hasOutput mg:targetWork ?outw .
+    (?action "forms") log:skolem ?gen1 .
+    ( ?f { ?gen1 mg:is ?f . } ?forms ) log:collectAllIn _:x .
+    ?forms list:length ?len1 .
+    ?len1 math:greaterThan "1"^^<xsd:int> . # More than one input work form
+    (?action "broader_forms") log:skolem ?gen2 .
+    ( ?bf { ?gen2 mg:is ?bf . } ?bforms ) log:collectAllIn _:x .
+    ?bforms list:length ?len2 .
+    ?len2 math:equalTo "1"^^<xsd:int> . # Only one boarder form
+    ?bforms list:first ?bform .
+} => {
+    ?outw mg:hasWorkForm ?bform .
+} . 
+{ # Else, if there is more than one broader form, use a mixed form
+    ?action a mg:Combine .
+    ?action!mg:hasOutput mg:targetWork ?outw .
+    (?action "forms") log:skolem ?gen1 .
+    ( ?f { ?gen1 mg:is ?f . } ?forms ) log:collectAllIn _:x .
+    ?forms list:length ?len1 .
+    ?len1 math:greaterThan "1"^^<xsd:int> . # More than one input work form
+    (?action "broader_forms") log:skolem ?gen2 .
+    ( ?bf { ?gen2 mg:is ?bf . } ?bforms ) log:collectAllIn _:x .
+    ?bforms list:length ?len2 .
+    ?len2 math:greaterThan "1"^^<xsd:int> . # More than one boarder form
+} => {
+    ?outw mg:hasWorkForm mg:mixed-form .
+} .
 
-# Combine: Request creating rule
+# [Combine] Request creating rule
 {
     ?action a mg:Combine .
     ?action!mg:hasInput mg:targetWork ?inw .
@@ -170,6 +232,7 @@
         ] .
     ?inw mg:hasRequest _:request .
 } .
+
 
 ####    Generate license analysis report rules  ####
 # Warning [License Type Mismatch]. Report a warning if the license's target work type does not match the actual work type

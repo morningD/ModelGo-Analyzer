@@ -25,9 +25,9 @@ from rdflib.namespace import RDF, RDFS
 
 # baize_model = Work('Baize', 'model', 'raw', 'GPL-3.0') # Chatbot, https://github.com/project-baize/baize-chatbot
 # stable_diffusion_mode = Work('StableDiffusion', 'model', 'raw', 'CreativeML-OpenRAIL-M') # Text2Image, https://huggingface.co/runwayml/stable-diffusion-v1-5
-whisper_model = register_license(Work('Whisper', 'model', 'raw'), target_license='MIT') # Voice2Text, https://github.com/openai/whisper
+whisper_model = register_license(Work('Whisper', 'model', 'raw-form'), target_license='MIT') # Voice2Text, https://github.com/openai/whisper
 # maskformer_model = Work('MaskFormer', 'model', 'raw', 'CC-BY-NC-4.0') # Image Segmentation, https://github.com/facebookresearch/MaskFormer/tree/da3e60d85fdeedcb31476b5edd7d328826ce56cc
-detr_model = register_license(Work('DETR', 'model', 'raw'), target_license='Apache-2.0') #Image Segmentation https://github.com/facebookresearch/detr
+detr_model = register_license(Work('DETR', 'model', 'raw-form'), target_license='Apache-2.0') #Image Segmentation https://github.com/facebookresearch/detr
 # xclip_model = Work('X-Clip', 'model', 'raw', 'MIT') # Video2Text, https://huggingface.co/microsoft/xclip-base-patch32
 # i2vgen_model = Work('I2VGen-XL', 'model', 'raw', 'CC-BY-NC-ND-4.0') # Image2Video, https://huggingface.co/damo-vilab/MS-Image2Video
 # bigtranslate_model = Work('BigTranslate', 'model', 'raw', 'GPL-3.0') # Text Translation, https://huggingface.co/James-WYang/BigTranslate

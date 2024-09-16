@@ -14,13 +14,13 @@
     mg:yieldOutputWork :combine3 .
 
 :DETR a mg:work ;
-    mg:hasWorkForm "raw" ;
-    mg:hasWorkType "model" ;
+    mg:hasWorkForm mg:raw-form ;
+    mg:hasWorkType mg:model ;
     mg:workName "DETR" .
 
 :Whisper a mg:work ;
-    mg:hasWorkForm "raw" ;
-    mg:hasWorkType "model" ;
+    mg:hasWorkForm mg:raw-form ;
+    mg:hasWorkType mg:model ;
     mg:workName "Whisper" .
 
 :combine3 a mg:Combine ;

@@ -14,6 +14,12 @@
 mg:hasItems a rdfs:Property ;
     rdfs:range rdf:List .
 
+mg:is a rdfs:Property ;
+    rdfs:comment "The value of a instance." .
+
+mg:broader a rdfs:Property ;
+    rdfs:comment "This property is used to point to an instance with a broader meaning." .
+
 # Vocabulary of Action
 
 mg:Action a rdfs:Class ;
@@ -153,44 +159,54 @@ mg:Service rdfs:subClassOf mg:WorkForm .
 mg:code a mg:Raw ;
     rdfs:formName "code" ; 
     mg:targetWorkType mg:software ;
+    mg:broader mg:raw-form ;
     rdfs:comment "Software in the form of source code." .
 mg:linguistics a mg:Raw ;
     rdfs:formName "linguistics" ; 
     mg:targetWorkType mg:dataset ;
+    mg:broader mg:raw-form ;
     rdfs:comment "Dataset in the form of linguistics resource." .
 mg:vision a mg:Raw ;
     rdfs:formName "vision" ; 
     mg:targetWorkType mg:dataset ;
+    mg:broader mg:raw-form ;
     rdfs:comment "Dataset in the form of vision resource." . 
 mg:weights a mg:Raw ;
     rdfs:formName "weights" ; 
     mg:targetWorkType mg:model ;
+    mg:broader mg:raw-form ;
     rdfs:comment "ML model in the form of model weights (parameters)." .
 mg:raw-form a mg:Raw ;
     rdfs:formName "raw-form" ; 
     #mg:targetWorkType mg:software, mg:dataset, mg:model, mg:mixed-type ; #NOTE: General work form that does not have a specific target work type.
+    mg:broader mg:raw-form ;
     rdfs:comment "General raw form for unspecified resource." .
 
 mg:exe a mg:Binary ;
     rdfs:formName "exe" ;
     mg:targetWorkType mg:software ;
+    mg:broader mg:binary-form ;
     rdfs:comment "Software as a compiled program." .
 mg:binary-form a mg:Binary ;
     rdfs:formName "binary-form" ;
     #mg:targetWorkType mg:softwar, mg:dataset, mg:model, mg:mixed-type ;
+    mg:broader mg:binary-form ;
     rdfs:comment "General binary form for unspecified resource." .
 
 mg:saas a mg:Service ;
     rdfs:formName "saas" ;
     mg:targetWorkType mg:software ;
+    mg:broader mg:service-form ;
     rdfs:comment "Software as a SaaS." .
 mg:service-form a mg:Service ;
     rdfs:formName "service-form" ;
     #mg:targetWorkType mg:software, mg:dataset, mg:model, mg:mixed-type ;
+    mg:broader mg:service-form ;
     rdfs:comment "General service form for unspecified resource." .
 
 mg:mixed-form a mg:WorkForm ;
     rdfs:formName "mixed-form" ;
+    mg:broader mg:mixed-form ;
     rdfs:comment "Mixed form for a collection of resources in different forms." .
 
 # Vocabulary of Licenses

@@ -75,8 +75,8 @@ def register_license(target_work: Work, target_license: str='Unlicense', action_
     # Add the Work subject in a new RDF graph
     g.add((wiri, RDF.type, MG.work))
     g.add((wiri, MG.workName, Literal(target_work.name)))
-    g.add((wiri, MG.hasWorkType, Literal(target_work.type)))
-    g.add((wiri, MG.hasWorkForm, Literal(target_work.form)))
+    g.add((wiri, MG.hasWorkType, MG[target_work.type]))
+    g.add((wiri, MG.hasWorkForm, MG[target_work.form]))
     
     # Add the Register action in this graph
     action_id = action_label + str(anum())

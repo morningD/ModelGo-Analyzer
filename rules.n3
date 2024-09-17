@@ -69,26 +69,7 @@
     ?input mg:targetWork ?work .
 } .
 
-# Assign the workname of output according the work names of inputs and action id
-# Generate new work name, i.e., [reg1_Whisper], [combine1_[reg1_Wikipedia][reg1_FreeLaw]].
-# However, this approach can result in excessively long work names as the length of the ML workflow increases.
-# {   
-#     ?action a mg:Action .
-#     ?action mg:actionId ?aid .
-#     ?action!mg:hasOutput mg:targetWork ?outwork .
-#     ( ?wname 
-#         {   
-#             ?action!mg:hasInput mg:targetWork ?inwork .
-#             ?inwork mg:workName ?wname .
-#         }
-#     ?wnames ) log:collectAllIn _:x .
-#     ?wnames string:concatenation ?wnames_str .
-#     ("[" ?aid "_" ?wnames_str "]") string:concatenation ?new_name .
-# } => {
-#     ?outwork mg:workName ?new_name .
-# } .
-
-# We use a simplier name method instead.
+# Output work name assignment. We use a simplier name method instead.
 {
     ?action a mg:Action .
     ?action mg:actionId ?aid .
@@ -98,6 +79,31 @@
     ?outwork mg:workName ?new_name .
 } .
 
+# Ruling Initialization. Add Ruling according to the license rules of the input works.
+{
+    ?action a mg:Action .
+    ?action!mg:hasInput mg:targetWork ?inw .
+    ?inw mg:hasLicense ?linfo .
+    ?linfo mg:hasRule ?rule .
+    ?action!mg:hasOutput mg:targetWork ?outw .
+} => {
+    _:ruling a mg:Ruling ;
+        mg:targetWork ?inw ;
+        mg:targetAction ?action ;
+        mg:hasRule ?rule .
+    ?outw mg:hasRuling _:ruling .
+} .
+
+# Ruling Completion. Reasoning rules for filling the OutputDef in the Ruling. # NOTE: ?x <- :hasFather ?y.
+{
+    ?ruling a mg:Ruling .
+    ?ruling mg:targetAction ?action .
+    ?ruling mg:hasRule ?rule .
+    ?ruling^mg:hasRuling mg:hasWorkForm ?inwf .
+} => {
+    ?ruling mg:hasOutputDef ?outputDef .
+} .
+
 
 ####   Action Reasoning rules  ####
 
@@ -105,21 +111,32 @@
 # adds the 'hasProvenance' and 'hasLicense' properties to the output.
 {
     ?action a mg:RegisterLicense . # Logical rule
-    ?action!mg:hasInput mg:targetWork ?work .
+    ?action!mg:hasInput mg:targetWork ?inw .
     ?action!mg:hasInput mg:targetLicense ?license .
-    ?work mg:hasWorkType ?type .
-    ?work mg:hasWorkForm ?form .
 } => {
     _:work a mg:Work ; # Generate the hasOutput property
-        mg:hasWorkType ?type ;
-        mg:hasWorkForm ?form ;
-        mg:hasProvenance ?work ;
+        mg:hasProvenance ?inw ;
         mg:hasLicense ?license .
     ?action!mg:hasOutput mg:targetWork _:work .
 } .
 
-    # ?action mg:actionId ?aid .
-    # (: ?aid "_out") string:concatenation ?newWork .
+# [Copy] Reasoning rules for copying a work, which
+# adds the 'hasMixwork' property to the output.
+{
+    ?action a mg:Copy .
+    ?action!mg:hasInput mg:targetWork ?inw .
+    ?action mg:hasOutput ?out .
+    ?inw mg:hasWorkForm ?wf .
+    ?inw mg:hasWorkType ?wt .
+    ?inw mg:hasLicenseInfo ?linfo .
+} => {
+    _:work a mg:Work ; # Hold same work form, type, and license info as the input work
+        mg:hasMixwork ?inw ;
+        mg:hasWorkForm ?wf ;
+        mg:hasWorkType ?wt ;
+        mg:hasLicenseInfo ?linfo .
+    ?out mg:targetWork _:work .
+} .
 
 # [Combine] Reasoning rules for combine multiple works, which
 # creates a new output work and adds the 'hasMixwork' to this output.

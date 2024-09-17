@@ -93,6 +93,22 @@ def register_license(target_work: Work, target_license: str='Unlicense', action_
 
     return flow
 
+def copy(target_flow: Workflow, action_label='copy') -> Workflow:
+    g = target_flow.graph
+
+    # Add the Copy Action in this graph
+    action_id = action_label + str(anum())
+    airi = EX[action_id]
+
+    g.add((airi, RDF.type, MG.Copy))
+    g.add((airi, MG.actionId, Literal(action_id)))
+    g.add((airi, MG.hasInput, BNode())) # Add a blank node as input, which will be populated later by N3 rules
+    g.add((airi, MG.hasOutput, BNode())) # Add this blank node as placeholder for output
+    g.add((EX[target_flow.latest_action_id], MG.yieldOutputWork, airi))
+    target_flow.update_action_id(airi)
+
+    return target_flow
+
 def combine(target_flows: Iterable[Workflow], action_label='combine') -> Workflow:
     flow = Workflow() # Create a new empty workflow
     flow.merge(target_flows) # Add the graphs from targetflows to new workflow
@@ -101,16 +117,11 @@ def combine(target_flows: Iterable[Workflow], action_label='combine') -> Workflo
     # Add the Combine Action in the new graph
     action_id = action_label + str(anum())
     airi = EX[action_id]
-    wiri = EX[action_id + "_out"]
 
     g.add((airi, RDF.type, MG.Combine))
     g.add((airi, MG.actionId, Literal(action_id)))
-    #bn = BNode()
     g.add((airi, MG.hasInput, BNode())) # Add a blank node as input, which will be populated later by N3 rules
-    #bn, bn_work = BNode(), BNode()
     g.add((airi, MG.hasOutput, BNode())) # Add this blank node as placeholder for output
-    #g.add((bn, MG.targetWork, bn_work))
-    #g.add((bn_work, RDF.type, MG.Work))
     # Create the yieldOutputWork links from latest actions in target_flows to this Combine action
     for f in target_flows: 
         g.add((EX[f.latest_action_id], MG.yieldOutputWork, airi))

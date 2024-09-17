@@ -60,3 +60,4 @@ mg:Unlicense a mg:LicenseInfo ;
         mg:hasRightPrefix mg:mg:any-person ;
         mg:hasUsage mg:use, mg:modify, mg:merge, mg:redistribute, mg:sublicense, mg:commercial_use
     ] .
+    

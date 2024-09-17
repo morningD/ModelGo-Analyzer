@@ -74,6 +74,11 @@ mg:Combine a rdfs:Class ;
     rdfs:lable "Combine"@en ;
     rdfs:comment "This action attempts to bundle multiple works to construct a new work." .
 
+mg:Copy a rdfs:Class ;
+    rdfs:subClassOf mg:Action ;
+    rdfs:lable "Copy"@en ;
+    rdfs:comment "This action attempts to copy a work, there has a need to check the right of making ducplication." .
+
 # Vocabulary of Work
 
 ## Definitions of work
@@ -312,17 +317,37 @@ mg:trademark_use a mg:Usage .
 #mg:patent_use a mg:Usage . # Equal to mg:isPatent.
 #mg:copy a mg:Usage . # A license does not grant the right to copy is meaningless.
 
+# Vocabulary of License Rule
 mg:LicenseRule a rdfs:Class ;
     rdfs:label "LicenseRule"@en ;
     rdfs:comment "This class describes the rules for output definitions (e.g., derivate, modification) corresponding to the action." .
 
- # Be used to record the rule of input work's license and applied rule of output work.
- mg:hasRule a rdfs:Property ;
+# Be used to record the rule of input work's license and applied rule of output work.
+mg:hasRule a rdfs:Property ;
     rdfs:range mg:LicenseRule .
+
+mg:targetInputWorkForm a rdfs:Property ;
+    rdfs:domain mg:LicenseRule ;
+    rdfs:range mg:WorkForm .
+
+mg:targetOutputWorkForm a rdfs:Property ;
+    rdfs:domain mg:LicenseRule ;
+    rdfs:range mg:WorkForm .
 
 mg:allowSharing a rdfs:Property ;
     rdfs:domain mg:LicenseRule ;
     rdfs:range xsd:boolean .
+
+mg:relicense a rdfs:Property ;
+    rdfs:domain mg:LicenseRule ;
+    rdfs:range mg:LicenseCategory .
+
+mg:LicenseCategory a rdfs:Class ;
+    rdfs:comment "This class is used to classify the category of licenses." .
+
+mg:any-license a mg:LicenseCategory .
+mg:none-license a mg:LicenseCategory .
+mg:compatible-license a mg:LicenseCategory . # It is a concept which depends on practical license.
 
 mg:Restriction a rdfs:Class ;
     rdfs:comment "This class is used to describe the restrictions that should be applied to a LicenseRule." .
@@ -359,6 +384,7 @@ mg:duplication a mg:OutputDef .
 mg:modification a mg:OutputDef .
 mg:independent a mg:OutputDef .
 mg:derivative a mg:OutputDef .
+mg:nodefinition a mg:OutputDef .
 
 # Vocabulary of Report (notice, restriction, warning, error)
 mg:Report a rdfs:Class ;

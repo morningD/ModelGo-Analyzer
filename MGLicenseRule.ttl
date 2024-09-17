@@ -4,7 +4,7 @@
 # Apache-2.0 Rules
 mg:Apache-2.0-duplication-rule a mg:Rule ;
     mg:hasOutputDef mg:duplication ;
-    mg:targetAction mg:Copy ;
+    mg:targetActionType mg:Copy ;
     mg:targetInputWorkForm mg:code, mg:exe ;
     mg:targetOutputWorkForm mg:code, mg:exe ;
     mg:relicense mg:none-license ; # It means the output work cannot be relicensed to another license.
@@ -12,7 +12,7 @@ mg:Apache-2.0-duplication-rule a mg:Rule ;
     
 mg:Apache-2.0-duplication-fuzz-rule a mg:Rule ; # Fuzz matching of input and output work forms (according to our purposed taxonomy)
     mg:hasOutputDef mg:duplication ;
-    mg:targetAction mg:Copy ;
+    mg:targetActionType mg:Copy ;
     mg:targetInputWorkForm mg:linguistics, mg:vision, mg:weights, mg:raw-form, mg:binary-form ; # Fuzz match to raw forms and binary forms of dataset and models.
     mg:targetOutputWorkForm mg:linguistics, mg:vision, mg:weights, mg:raw-form, mg:binary-form ;
     mg:relicense mg:none-license ; 
@@ -20,7 +20,7 @@ mg:Apache-2.0-duplication-fuzz-rule a mg:Rule ; # Fuzz matching of input and out
 
 mg:Apache-2.0-independent-rule a mg:Rule ;
     mg:hasOutputDef mg:independent ;
-    mg:targetAction mg:Combine ;
+    mg:targetActionType mg:Combine ;
     mg:targetInputWorkForm mg:code, mg:exe ;
     mg:targetOutputWorkForm mg:code, mg:exe ;
     mg:relicense mg:any-license ;
@@ -28,7 +28,7 @@ mg:Apache-2.0-independent-rule a mg:Rule ;
 
 mg:Apache-2.0-independent-fuzz-rule a mg:Rule ;
     mg:hasOutputDef mg:independent ;
-    mg:targetAction mg:Combine ;
+    mg:targetActionType mg:Combine ;
     mg:targetInputWorkForm mg:linguistics, mg:vision, mg:weights, mg:raw-form, mg:binary-form ;
     mg:targetOutputWorkForm mg:linguistics, mg:vision, mg:weights, mg:raw-form, mg:binary-form ;
     mg:relicense mg:any-license ;
@@ -37,7 +37,7 @@ mg:Apache-2.0-independent-fuzz-rule a mg:Rule ;
 # MIT Rules
 mg:MIT-independent-rule a mg:Rule ;
     mg:hasOutputDef mg:independent ;
-    mg:targetAction mg:Combine ;
+    mg:targetActionType mg:Combine ;
     mg:targetInputWorkForm mg:code, mg:exe ;
     mg:targetOutputWorkForm mg:code, mg:exe ;
     mg:relicense mg:any-license ;
@@ -45,7 +45,7 @@ mg:MIT-independent-rule a mg:Rule ;
 
 mg:MIT-independent-fuzz-rule a mg:Rule ;
     mg:hasOutputDef mg:independent ;
-    mg:targetAction mg:Combine ;
+    mg:targetActionType mg:Combine ;
     mg:targetInputWorkForm mg:linguistics, mg:vision, mg:weights, mg:raw-form, mg:binary-form ;
     mg:targetOutputWorkForm mg:linguistics, mg:vision, mg:weights, mg:raw-form, mg:binary-form ;
     mg:relicense mg:any-license ;

@@ -81,26 +81,35 @@
 
 # Ruling Initialization. Add Ruling according to the license rules of the input works.
 {
-    ?action a mg:Action .
+    ?actionType rdfs:subClassOf mg:Action .
+    ?actionType log:notEqualTo mg:RegisterLicense . # Skip RegisterLicense
+    ?action a ?actionType .
     ?action!mg:hasInput mg:targetWork ?inw .
     ?inw mg:hasLicense ?linfo .
-    ?linfo mg:hasRule ?rule .
     ?action!mg:hasOutput mg:targetWork ?outw .
 } => {
     _:ruling a mg:Ruling ;
         mg:targetWork ?inw ;
         mg:targetAction ?action ;
-        mg:hasRule ?rule .
+        mg:hasLicense ?linfo .
     ?outw mg:hasRuling _:ruling .
 } .
 
-# Ruling Completion. Reasoning rules for filling the OutputDef in the Ruling. # NOTE: ?x <- :hasFather ?y.
+# Ruling Completion. Find the matching LicenseRule for each ruling
 {
     ?ruling a mg:Ruling .
-    ?ruling mg:targetAction ?action .
-    ?ruling mg:hasRule ?rule .
+    ?ruling mg:hasLicense ?linfo .
+    ?linfo mg:hasRule ?rule . # Get the License Rules
     ?ruling^mg:hasRuling mg:hasWorkForm ?inwf .
+    ?ruling!mg:targetWork mg:hasWorkForm ?outwf .
+    ?ruling mg:targetAction ?action .
+    ?rule mg:targetActionType ?atype .
+    ?action a ?atype .
+    ?rule mg:targetInputWorkForm ?inwf .
+    ?rule mg:targetOutputWorkForm ?outwf .
+    ?rule mg:hasOutputDef ?outputDef .
 } => {
+    ?ruling mg:hasRule ?rule .
     ?ruling mg:hasOutputDef ?outputDef .
 } .
 

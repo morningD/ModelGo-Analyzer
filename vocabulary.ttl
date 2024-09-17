@@ -334,6 +334,10 @@ mg:targetOutputWorkForm a rdfs:Property ;
     rdfs:domain mg:LicenseRule ;
     rdfs:range mg:WorkForm .
 
+mg:targetActionType a rdfs:Property ;
+    rdfs:domain mg:LicenseRule ;
+    rdfs:range rdfs:Class .
+
 mg:allowSharing a rdfs:Property ;
     rdfs:domain mg:LicenseRule ;
     rdfs:range xsd:boolean .

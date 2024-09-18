@@ -187,7 +187,7 @@ mg:raw-form a mg:Raw ;
     mg:broader mg:raw-form ;
     rdfs:comment "General raw form for unspecified resource." .
 
-mg:exe a mg:Binary ;
+mg:exe a mg:Binary ; # Also known as package
     rdfs:formName "exe" ;
     mg:targetWorkType mg:software ;
     mg:broader mg:binary-form ;
@@ -293,7 +293,7 @@ mg:worldwide a mg:RightPrefix .
 mg:non-exclusive a mg:RightPrefix .
 mg:exclusive a mg:RightPrefix .
 mg:royalty-free a mg:RightPrefix .
-mg:no-charge a mg:RightPrefix .
+mg:no-charge a mg:RightPrefix . # also called free-of-charge
 mg:perpetual a mg:RightPrefix .
 mg:any-person a mg:RightPrefix .
 mg:sublicensable a mg:RightPrefix .
@@ -312,8 +312,14 @@ mg:merge a mg:Usage .
 mg:redistribute a mg:Usage .
 mg:commercial_use a mg:Usage .
 mg:patent a mg:Usage .
+mg:copyright a mg:Usage .
 mg:trademark a mg:Usage .
 mg:trademark_use a mg:Usage .
+mg:sublicense a mg:Usage .
+# Note: We distinct auto-license and sublicense because they have different license text,
+# however they make no difference in the license analysis process.
+mg:auto-license a mg:Usage . 
+
 #mg:patent_use a mg:Usage . # Equal to mg:isPatent.
 #mg:copy a mg:Usage . # A license does not grant the right to copy is meaningless.
 
@@ -360,6 +366,10 @@ mg:hasRestriction a rdfs:Property ;
 mg:state_changes_restriction a mg:Restriction ; # It is a template for such kind of restriction.
     mg:reportType "State Changes" ;
     mg:content "This work must state changes according to the related license." .
+
+mg:disclose_self_restriction a mg:Restriction ; # It is a template for such kind of restriction.
+    mg:reportType "Disclose Self" ;
+    mg:content "This work must remain open source or provide a readable copy of the source code according to the related license." .
 
 mg:include_license_restriction a mg:Restriction ; # It is a template for such kind of restriction.
     mg:reportType "Include License" ;

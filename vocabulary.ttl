@@ -352,15 +352,30 @@ mg:LicenseCategory a rdfs:Class ;
 mg:any-license a mg:LicenseCategory .
 mg:none-license a mg:LicenseCategory .
 mg:compatible-license a mg:LicenseCategory . # It is a concept which depends on practical license.
-
-mg:Restriction a rdfs:Class ;
-    rdfs:comment "This class is used to describe the restrictions that should be applied to a LicenseRule." .
+#mg:tbd-license a mg:LicenseCategory . # The final license is not determined yet, need to be decided by the logic rules (N3).
 
 mg:hasRestriction a rdfs:Property ;
     rdfs:range mg:Restriction .
 
-mg:state_changes_restriction a mg:Restriction ;
-    mg:content "This work must state changes according to related license(s)." .
+mg:state_changes_restriction a mg:Restriction ; # It is a template for such kind of restriction.
+    mg:reportType "State Changes" ;
+    mg:content "This work must state changes according to the related license." .
+
+mg:include_license_restriction a mg:Restriction ; # It is a template for such kind of restriction.
+    mg:reportType "Include License" ;
+    mg:content "This work must retain the original license file according to the related license." .
+
+mg:include_notice_restriction a mg:Restriction ; # It is a template for such kind of restriction.
+    mg:reportType "Include Notice" ;
+    mg:content "This work must retain all notice files (may contain copyright, patent, trademark and attribution) according to the related license." .
+
+mg:use_behavior_restriction a mg:Restriction ; # It is a template for such kind of restriction.
+    mg:reportType "Use Behavior" ;
+    mg:content "This work must comply with the use restriction terms according to related license." .
+
+mg:runtime_restriction a mg:Restriction ; # It is a template for such kind of restriction.
+    mg:reportType "Runtime Restrictions" ;
+    mg:content "This work contains runtime restrictions to restrict your use to make sure you don't violate its license terms or you are using the latest version." .
 
 # Vocabulary for requesting rights of a input work raised by an action during the ML reuse process.
 mg:Request a rdfs:Class ;

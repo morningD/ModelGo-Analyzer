@@ -104,13 +104,31 @@
     ?ruling!mg:targetWork mg:hasWorkForm ?outwf .
     ?ruling mg:targetAction ?action .
     ?rule mg:targetActionType ?atype .
-    ?action a ?atype .
-    ?rule mg:targetInputWorkForm ?inwf .
-    ?rule mg:targetOutputWorkForm ?outwf .
-    ?rule mg:hasOutputDef ?outputDef .
+    ?action a ?atype . # Matching action type
+    ?rule mg:targetInputWorkForm ?inwf . # Matching input work form
+    ?rule mg:targetOutputWorkForm ?outwf . # Matching output work form
+    ?rule mg:hasOutputDef ?outputDef . # Find the matching output definition
 } => {
-    ?ruling mg:hasRule ?rule .
-    ?ruling mg:hasOutputDef ?outputDef .
+    ?ruling mg:hasRule ?rule . # Bind the triggered rule to the ruling
+    ?ruling mg:hasOutputDef ?outputDef . # Bind the output definition to the ruling
+} .
+
+# Ruling Proliferation. Add the work's ruling to the work that contains this work as Mixwork
+{
+    ?ruling a mg:Ruling .
+    ?ruling <- mg:hasRuling ?mixwork .
+    ?mixwork <- mg:hasMixwork ?work .
+} => {
+    ?work mg:hasRuling ?ruling .
+} .
+
+# Reuqest Proliferation. Add the work's request to its Mixwork
+{
+    ?request a mg:Request .
+    ?request <- mg:hasRequest ?work .
+    ?work mg:hasMixwork ?mixwork .
+} => {
+    ?mixwork mg:hasRequest ?request .
 } .
 
 

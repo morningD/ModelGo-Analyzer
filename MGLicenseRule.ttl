@@ -34,6 +34,31 @@ mg:Apache-2.0-independent-fuzz-rule a mg:Rule ;
     mg:relicense mg:any-license ;
     mg:allowSharing true .
 
+mg:Apache-2.0-derivative-rule a mg:Rule ;
+    mg:hasOutputDef mg:derivative ;
+    mg:targetActionType mg:Amalgamate, mg:Modify ;
+    mg:targetInputWorkForm mg:code, mg:exe ;
+    mg:targetOutputWorkForm mg:code, mg:exe ;
+    mg:relicense mg:any-license ;
+    mg:hasRestriction mg:state_changes_restriction ;
+    mg:allowSharing true .
+
+mg:Apache-2.0-nodefinition-rule a mg:Rule ;
+    mg:hasOutputDef mg:nodefinition ;
+    mg:targetActionType mg:Train, mg:Distill, mg:Generate, mg:Embed ;
+    mg:targetInputWorkForm mg:code, mg:exe ;
+    mg:targetOutputWorkForm mg:code, mg:exe ;
+    mg:relicense mg:any-license ;
+    mg:allowSharing true .
+
+mg:Apache-2.0-nodefinition-fuzz-rule a mg:Rule ;
+    mg:hasOutputDef mg:nodefinition ;
+    mg:targetActionType mg:Train, mg:Distill, mg:Generate, mg:Embed ;
+    mg:targetInputWorkForm mg:linguistics, mg:vision, mg:weights, mg:raw-form, mg:binary-form ;
+    mg:targetOutputWorkForm mg:linguistics, mg:vision, mg:weights, mg:raw-form, mg:binary-form ;
+    mg:relicense mg:any-license ;
+    mg:allowSharing true .
+
 # MIT Rules
 mg:MIT-independent-rule a mg:Rule ;
     mg:hasOutputDef mg:independent ;

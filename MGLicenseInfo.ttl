@@ -23,7 +23,7 @@ mg:Apache-2.0 a mg:LicenseInfo ;
         a mg:Right ;
         mg:hasUsage mg:trademark_use, mg:copyright, mg:patent, mg:trademark
     ] ;
-    mg:hasRule mg:Apache-2.0-duplication-rule, mg:Apache-2.0-independent-rule, mg:Apache-2.0-duplication-fuzz-rule, mg:Apache-2.0-independent-fuzz-rule .
+    mg:hasRule mg:Apache-2.0-duplication-rule, mg:Apache-2.0-independent-rule, mg:Apache-2.0-duplication-fuzz-rule, mg:Apache-2.0-independent-fuzz-rule , mg:Apache-2.0-nodefinition-rule, mg:Apache-2.0-nodefinition-fuzz-rule .
 
 mg:MIT a mg:LicenseInfo ;
     mg:licenseId "MIT" ;
@@ -61,4 +61,3 @@ mg:Unlicense a mg:LicenseInfo ;
         mg:hasRightPrefix mg:mg:any-person ;
         mg:hasUsage mg:use, mg:modify, mg:merge, mg:redistribute, mg:sublicense, mg:commercial_use
     ] .
-    

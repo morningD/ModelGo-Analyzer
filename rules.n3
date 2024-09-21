@@ -79,20 +79,42 @@
     ?outwork mg:workName ?new_name .
 } .
 
-# Ruling Initialization. Add Ruling according to the license rules of the input works.
+# Ruling Creation. Add a new ruling to the output work for each action.
 {
-    ?actionType rdfs:subClassOf mg:Action .
+    ?actionType rdfs:subClassOf mg:Action . 
     ?actionType log:notEqualTo mg:RegisterLicense . # Skip RegisterLicense
-    ?action a ?actionType .
+    ?action a ?actionType . # For each action
     ?action!mg:hasInput mg:targetWork ?inw .
-    ?inw mg:hasLicense ?linfo .
+    ?inw mg:hasLicense ?linfo . # Ensure that the input work has a license
     ?action!mg:hasOutput mg:targetWork ?outw .
+    (?action ?inw ?outw "ruling") log:skolem ?geniri . # Ensure that only one ruling is created for each (action, input work, output work) tuple
 } => {
-    _:ruling a mg:Ruling ;
+    ?geniri a mg:Ruling ;
         mg:targetWork ?inw ;
         mg:targetAction ?action ;
         mg:hasLicense ?linfo .
-    ?outw mg:hasRuling _:ruling .
+    ?outw mg:hasRuling ?geniri .
+} .
+
+# Ruling Proliferation. Add a new ruling with the same action to the work's all mixworks
+{
+    ?ruling a mg:Ruling .
+    ?ruling mg:targetAction ?action .
+    ?actionType rdfs:subClassOf mg:Action . 
+    # Copy and Redistribute will not proliferate to the mixworks due to the output def no longer being duplication,
+    # but we still check the right granting of them by proliferating their request to the mixworks.
+    ?actionType log:notEqualTo mg:Copy, mg:Redistribute .
+    ?action a ?actionType .
+    ?ruling <- mg:hasRuling ?work .
+    ?work mg:hasMixwork ?mixwork .
+    ?mixwork mg:hasLicense ?linfo . # The new ruling is according to the license info of the mixwork
+    (?action ?mixwork ?work "ruling") log:skolem ?geniri . # Ensure that only one ruling is created for each (action, mixwork, work) tuple
+} => {
+    ?geniri a mg:Ruling ;
+        mg:targetWork ?mixwork ;
+        mg:targetAction ?action ;
+        mg:hasLicense ?linfo .
+    ?work mg:hasRuling ?geniri .
 } .
 
 # Ruling Completion. Find the matching LicenseRule for each ruling
@@ -111,15 +133,6 @@
 } => {
     ?ruling mg:hasRule ?rule . # Bind the triggered rule to the ruling
     ?ruling mg:hasOutputDef ?outputDef . # Bind the output definition to the ruling
-} .
-
-# Ruling Proliferation. Add the work's ruling to the work that contains this work as Mixwork
-{
-    ?ruling a mg:Ruling .
-    ?ruling <- mg:hasRuling ?mixwork .
-    ?mixwork <- mg:hasMixwork ?work .
-} => {
-    ?work mg:hasRuling ?ruling .
 } .
 
 # Reuqest Proliferation. Add the work's request to its Mixwork

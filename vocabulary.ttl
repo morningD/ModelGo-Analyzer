@@ -79,6 +79,11 @@ mg:Copy a rdfs:Class ;
     rdfs:lable "Copy"@en ;
     rdfs:comment "This action attempts to copy a work, there has a need to check the right of making ducplication." .
 
+mg:Publish a rdfs:Class ;
+    rdfs:subClassOf mg:Action ;
+    rdfs:lable "Publish"@en ;
+    rdfs:comment "This action attempts to publish a work." .
+
 # Vocabulary of Work
 
 ## Definitions of work
@@ -309,7 +314,6 @@ mg:use a mg:Usage .
 mg:modify a mg:Usage .
 mg:redistribute a mg:Usage .
 mg:merge a mg:Usage .
-mg:redistribute a mg:Usage .
 mg:commercial_use a mg:Usage .
 mg:patent a mg:Usage .
 mg:copyright a mg:Usage .
@@ -363,6 +367,12 @@ mg:compatible-license a mg:LicenseCategory . # It is a concept which depends on 
 mg:hasRestriction a rdfs:Property ;
     rdfs:range mg:Restriction .
 
+mg:hasPublishRestriction rdfs:subPropertyOf mg:hasRestriction ;
+    rdfs:domain mg:Restriction .
+
+mg:hasUseRestriction rdfs:subPropertyOf mg:hasRestriction ;
+    rdfs:domain mg:Restriction .
+
 mg:state_changes_restriction a mg:Restriction ; # It is a template for such kind of restriction.
     mg:reportType "State Changes" ;
     mg:content "This work must state changes according to the related license." .
@@ -370,6 +380,10 @@ mg:state_changes_restriction a mg:Restriction ; # It is a template for such kind
 mg:disclose_self_restriction a mg:Restriction ; # It is a template for such kind of restriction.
     mg:reportType "Disclose Self" ;
     mg:content "This work must remain open source or provide a readable copy of the source code according to the related license." .
+
+mg:disclose_unmodified_source_restriction a mg:Restriction ; # It is a template for such kind of restriction.
+    mg:reportType "Disclose Unmodified Source" ;
+    mg:content "This work must provide a readable copy of the unmodified source code of original work according to the related license." .
 
 mg:include_license_restriction a mg:Restriction ; # It is a template for such kind of restriction.
     mg:reportType "Include License" ;
@@ -414,6 +428,7 @@ mg:modification a mg:OutputDef .
 mg:independent a mg:OutputDef .
 mg:derivative a mg:OutputDef .
 mg:nodefinition a mg:OutputDef .
+mg:republication a mg:OutputDef .
 
 # Vocabulary of Report (notice, restriction, warning, error)
 mg:Report a rdfs:Class ;

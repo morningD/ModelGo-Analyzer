@@ -9,7 +9,7 @@ mg:Apache-2.0-duplication-rule a mg:Rule ;
     mg:targetActionType mg:Copy ;
     mg:targetInputWorkForm mg:code, mg:exe ;
     mg:targetOutputWorkForm mg:code, mg:exe ;
-    mg:relicense mg:none-license ; # It means the output work cannot be relicensed to another license.
+    mg:relicense mg:none-license ; # It means the vebatim copy cannot be relicensed to another license.
     mg:allowSharing true . # It means the output work can be shared with third parties.
     
 mg:Apache-2.0-duplication-fuzz-rule a mg:Rule ; # Fuzz matching of input and output work forms (according to our purposed taxonomy)
@@ -41,8 +41,8 @@ mg:Apache-2.0-derivative-rule a mg:Rule ;
     mg:targetActionType mg:Amalgamate, mg:Modify ;
     mg:targetInputWorkForm mg:code, mg:exe ;
     mg:targetOutputWorkForm mg:code, mg:exe ;
-    mg:relicense mg:any-license ;
-    mg:hasRestriction mg:state_changes_restriction ;
+    mg:relicense mg:any-license ; # It means the incremental efforts can be relicensed to other licenses.
+    mg:hasPublishRestriction mg:state_changes_restriction ; # You should state changes if you modify the original work.
     mg:allowSharing true .
 
 mg:Apache-2.0-nodefinition-rule a mg:Rule ;
@@ -61,6 +61,24 @@ mg:Apache-2.0-nodefinition-fuzz-rule a mg:Rule ;
     mg:relicense mg:any-license ;
     mg:allowSharing true .
 
+mg:Apache-2.0-republication-rule a mg:Rule ;
+    mg:hasOutputDef mg:republication ;
+    mg:targetActionType mg:Publish ;
+    mg:targetInputWorkForm mg:code, mg:exe ;
+    mg:targetOutputWorkForm mg:code, mg:exe ;
+    mg:relicense mg:none-license ;
+    mg:hasPublishRestriction mg:include_notice_restriction, mg:include_license_restriction ;
+    mg:allowSharing true .
+
+mg:Apache-2.0-republication-fuzz-rule a mg:Rule ;
+    mg:hasOutputDef mg:republication ;
+    mg:targetActionType mg:Publish ;
+    mg:targetInputWorkForm mg:linguistics, mg:vision, mg:weights, mg:raw-form, mg:binary-form, mg:mixed-form ;
+    mg:targetOutputWorkForm mg:linguistics, mg:vision, mg:weights, mg:raw-form, mg:binary-form, mg:mixed-form ;
+    mg:relicense mg:none-license ;
+    mg:hasPublishRestriction mg:include_notice_restriction, mg:include_license_restriction ;
+    mg:allowSharing true .
+
 
 ###################    MIT Rules    ###################
 mg:MIT-duplication-rule a mg:Rule ;
@@ -69,35 +87,39 @@ mg:MIT-duplication-rule a mg:Rule ;
     mg:targetInputWorkForm mg:code, mg:exe ;
     mg:targetOutputWorkForm mg:code, mg:exe ;
     mg:relicense mg:none-license ;
+    mg:hasUseRestriction mg:include_notice_restriction, mg:include_license_restriction ; # According to MIT license, you should include the license and notice if you hold the copy of the work (No matter you publish it or not).
     mg:allowSharing true .
-
-mg:MIT-duplication-fuzz-rule a mg:Rule ;
+    
+mg:MIT-duplication-fuzz-rule a mg:Rule ; # Fuzz matching of input and output work forms (according to our purposed taxonomy)
     mg:hasOutputDef mg:duplication ;
     mg:targetActionType mg:Copy ;
-    mg:targetInputWorkForm mg:linguistics, mg:vision, mg:weights, mg:raw-form, mg:binary-form, mg:mixed-form ;
+    mg:targetInputWorkForm mg:linguistics, mg:vision, mg:weights, mg:raw-form, mg:binary-form, mg:mixed-form ; # Fuzz match to raw forms and binary forms of dataset and models.
     mg:targetOutputWorkForm mg:linguistics, mg:vision, mg:weights, mg:raw-form, mg:binary-form, mg:mixed-form ;
-    mg:relicense mg:none-license ;
+    mg:relicense mg:none-license ; 
+    mg:hasUseRestriction mg:include_notice_restriction, mg:include_license_restriction ;
     mg:allowSharing true .
 
 mg:MIT-independent-rule a mg:Rule ;
     mg:hasOutputDef mg:independent ;
-    mg:targetActionType mg:Combine ;
+    mg:targetActionType mg:Combine, mg:Amalgamate, mg:Modify ;
     mg:targetInputWorkForm mg:code, mg:exe ;
     mg:targetOutputWorkForm mg:code, mg:exe ;
     mg:relicense mg:any-license ;
+    mg:hasUseRestriction mg:include_notice_restriction, mg:include_license_restriction ;
     mg:allowSharing true .
 
 mg:MIT-independent-fuzz-rule a mg:Rule ;
     mg:hasOutputDef mg:independent ;
-    mg:targetActionType mg:Combine ;
+    mg:targetActionType mg:Combine, mg:Amalgamate, mg:Modify ;
     mg:targetInputWorkForm mg:linguistics, mg:vision, mg:weights, mg:raw-form, mg:binary-form, mg:mixed-form ;
     mg:targetOutputWorkForm mg:linguistics, mg:vision, mg:weights, mg:raw-form, mg:binary-form, mg:mixed-form ;
     mg:relicense mg:any-license ;
+    mg:hasUseRestriction mg:include_notice_restriction, mg:include_license_restriction ;
     mg:allowSharing true .
 
 mg:MIT-nodefinition-rule a mg:Rule ;
     mg:hasOutputDef mg:nodefinition ;
-    mg:targetActionType mg:Amalgamate, mg:Modify, mg:Train, mg:Distill, mg:Generate, mg:Embed ;
+    mg:targetActionType mg:Train, mg:Distill, mg:Generate, mg:Embed ;
     mg:targetInputWorkForm mg:code, mg:exe ;
     mg:targetOutputWorkForm mg:code, mg:exe ;
     mg:relicense mg:any-license ;
@@ -105,10 +127,28 @@ mg:MIT-nodefinition-rule a mg:Rule ;
 
 mg:MIT-nodefinition-fuzz-rule a mg:Rule ;
     mg:hasOutputDef mg:nodefinition ;
-    mg:targetActionType mg:Amalgamate, mg:Modify, mg:Train, mg:Distill, mg:Generate, mg:Embed ;
+    mg:targetActionType mg:Train, mg:Distill, mg:Generate, mg:Embed ;
     mg:targetInputWorkForm mg:linguistics, mg:vision, mg:weights, mg:raw-form, mg:binary-form, mg:mixed-form ;
     mg:targetOutputWorkForm mg:linguistics, mg:vision, mg:weights, mg:raw-form, mg:binary-form, mg:mixed-form ;
     mg:relicense mg:any-license ;
+    mg:allowSharing true .
+
+mg:MIT-republication-rule a mg:Rule ;
+    mg:hasOutputDef mg:republication ;
+    mg:targetActionType mg:Publish ;
+    mg:targetInputWorkForm mg:code, mg:exe ;
+    mg:targetOutputWorkForm mg:code, mg:exe ;
+    mg:relicense mg:any-license ; # Only require to include the license and notice.
+    mg:hasPublishRestriction mg:include_notice_restriction, mg:include_license_restriction ;
+    mg:allowSharing true .
+
+mg:MIT-republication-fuzz-rule a mg:Rule ;
+    mg:hasOutputDef mg:republication ;
+    mg:targetActionType mg:Publish ;
+    mg:targetInputWorkForm mg:linguistics, mg:vision, mg:weights, mg:raw-form, mg:binary-form, mg:mixed-form ;
+    mg:targetOutputWorkForm mg:linguistics, mg:vision, mg:weights, mg:raw-form, mg:binary-form, mg:mixed-form ;
+    mg:relicense mg:any-license ;
+    mg:hasPublishRestriction mg:include_notice_restriction, mg:include_license_restriction ;
     mg:allowSharing true .
     
 ###################    Unlicense Rules    ###################
@@ -121,6 +161,13 @@ mg:Unlicense-independent-rule a mg:Rule ;
     mg:relicense mg:any-license ;
     mg:allowSharing true .
 
+mg:Unlicense-republication-rule a mg:Rule ;
+    mg:hasOutputDef mg:republication ;
+    mg:targetActionType mg:Publish ;
+    mg:targetInputWorkForm mg:code, mg:exe, mg:linguistics, mg:vision, mg:weights, mg:raw-form, mg:binary-form, mg:saas, mg:service-form, mg:mixed-form ;
+    mg:targetOutputWorkForm mg:code, mg:exe, mg:linguistics, mg:vision, mg:weights, mg:raw-form, mg:binary-form, mg:saas, mg:service-form, mg:mixed-form ;
+    mg:relicense mg:any-license ; # Note that, it only means that the incremental efforts can be relicensed to other licenses.
+    mg:allowSharing true .
 
 ###################    AFL-3.0 Rules    ###################
 mg:AFL-3.0-duplication-rule a mg:Rule ;
@@ -129,7 +176,6 @@ mg:AFL-3.0-duplication-rule a mg:Rule ;
     mg:targetInputWorkForm mg:code, mg:exe, mg:saas ;
     mg:targetOutputWorkForm mg:code, mg:exe, mg:saas ;
     mg:relicense mg:none-license ;
-    mg:hasRestriction mg:disclose_self_restriction ;
     mg:allowSharing true .
 
 mg:AFL-3.0-duplication-fuzz-rule a mg:Rule ;
@@ -138,30 +184,29 @@ mg:AFL-3.0-duplication-fuzz-rule a mg:Rule ;
     mg:targetInputWorkForm mg:linguistics, mg:vision, mg:weights, mg:raw-form, mg:binary-form, mg:service-form, mg:mixed-form ;
     mg:targetOutputWorkForm mg:linguistics, mg:vision, mg:weights, mg:raw-form, mg:binary-form, mg:service-form, mg:mixed-form ;
     mg:relicense mg:none-license ;
-    mg:hasRestriction mg:disclose_self_restriction ;
     mg:allowSharing true .
 
 mg:AFL-3.0-derivative-rule a mg:Rule ;
     mg:hasOutputDef mg:derivative ;
-    mg:targetActionType mg:Amalgamate, mg:Modify ;
+    mg:targetActionType mg:Amalgamate, mg:Modify, mg:Embed, mg:Combine ;
     mg:targetInputWorkForm mg:code, mg:exe, mg:saas ;
     mg:targetOutputWorkForm mg:code, mg:exe, mg:saas ;
     mg:relicense mg:any-license ;
-    mg:hasRestriction mg:disclose_self_restriction, mg:state_changes_restriction ;
+    mg:hasUseRestriction mg:include_notice_restriction, mg:include_license_restriction, mg:state_changes_restriction ;
     mg:allowSharing true .
 
 mg:AFL-3.0-derivative-fuzz-rule a mg:Rule ;
     mg:hasOutputDef mg:derivative ;
-    mg:targetActionType mg:Amalgamate, mg:Modify;
+    mg:targetActionType mg:Amalgamate, mg:Modify, mg:Embed, mg:Combine ;
     mg:targetInputWorkForm mg:linguistics, mg:vision, mg:weights, mg:raw-form, mg:binary-form, mg:service-form, mg:mixed-form ;
     mg:targetOutputWorkForm mg:linguistics, mg:vision, mg:weights, mg:raw-form, mg:binary-form, mg:service-form, mg:mixed-form ;
     mg:relicense mg:any-license ;
-    mg:hasRestriction mg:disclose_self_restriction, mg:state_changes_restriction ;
+    mg:hasUseRestriction mg:include_notice_restriction, mg:include_license_restriction, mg:state_changes_restriction ;
     mg:allowSharing true .
 
 mg:AFL-3.0-nodefinition-rule a mg:Rule ;
     mg:hasOutputDef mg:nodefinition ;
-    mg:targetActionType mg:Combine, mg:Train, mg:Distill, mg:Generate, mg:Embed ;
+    mg:targetActionType mg:Train, mg:Distill, mg:Generate ;
     mg:targetInputWorkForm mg:code, mg:exe, mg:saas ;
     mg:targetOutputWorkForm mg:code, mg:exe, mg:saas ;
     mg:relicense mg:any-license ;
@@ -169,9 +214,17 @@ mg:AFL-3.0-nodefinition-rule a mg:Rule ;
 
 mg:AFL-3.0-nodefinition-fuzz-rule a mg:Rule ;
     mg:hasOutputDef mg:nodefinition ;
-    mg:targetActionType mg:Combine, mg:Train, mg:Distill, mg:Generate, mg:Embed ;
+    mg:targetActionType mg:Train, mg:Distill, mg:Generate ;
     mg:targetInputWorkForm mg:linguistics, mg:vision, mg:weights, mg:raw-form, mg:binary-form, mg:service-form, mg:mixed-form ;
     mg:targetOutputWorkForm mg:linguistics, mg:vision, mg:weights, mg:raw-form, mg:binary-form, mg:service-form, mg:mixed-form ;
+    mg:relicense mg:any-license ;
+    mg:allowSharing true .
+
+mg:AFL-3.0-republication-rule a mg:Rule ;
+    mg:hasOutputDef mg:republication ;
+    mg:targetActionType mg:Publish ;
+    mg:targetInputWorkForm mg:code, mg:exe, mg:saas ;
+    mg:targetOutputWorkForm mg:code, mg:exe, mg:saas ;
     mg:relicense mg:any-license ;
     mg:allowSharing true .
 
@@ -384,7 +437,80 @@ mg:GPL-3.0-nodefinition-fuzz-rule a mg:Rule ;
     mg:targetOutputWorkForm mg:linguistics, mg:vision, mg:weights, mg:binary-form, mg:mixed-form ;
     mg:relicense mg:any-license ;
     mg:allowSharing true .
-    
+
+
+###################    AGPL-3.0 Rules    ###################
+mg:AGPL-3.0-duplication-rule a mg:Rule ;
+    mg:hasOutputDef mg:duplication ;
+    mg:targetActionType mg:Copy ;
+    mg:targetInputWorkForm mg:code, mg:exe, mg:saas ;
+    mg:targetOutputWorkForm mg:code, mg:exe, mg:saas ;
+    mg:relicense mg:none-license ;
+    mg:hasRestriction mg:disclose_self_restriction ;
+    mg:allowSharing true .
+
+mg:AGPL-3.0-duplication-fuzz-rule a mg:Rule ;
+    mg:hasOutputDef mg:duplication ;
+    mg:targetActionType mg:Copy ;
+    mg:targetInputWorkForm mg:linguistics, mg:vision, mg:weights, mg:raw-form, mg:binary-form, mg:service-form, mg:mixed-form ;
+    mg:targetOutputWorkForm mg:linguistics, mg:vision, mg:weights, mg:raw-form, mg:binary-form, mg:service-form, mg:mixed-form ;
+    mg:relicense mg:none-license ;
+    mg:hasRestriction mg:disclose_self_restriction ;
+    mg:allowSharing true .
+
+mg:AGPL-3.0-independent-rule a mg:Rule ;
+    mg:hasOutputDef mg:independent ;
+    mg:targetActionType mg:Combine ;
+    mg:targetInputWorkForm mg:exe, mg:saas ;
+    mg:targetOutputWorkForm mg:exe, mg:saas ;
+    mg:relicense mg:any-license ;
+    mg:allowSharing true .
+
+mg:AGPL-3.0-independent-fuzz-rule a mg:Rule ;
+    mg:hasOutputDef mg:independent ;
+    mg:targetActionType mg:Combine ;
+    mg:targetInputWorkForm mg:binary-form, mg:service-form, mg:mixed-form ;
+    mg:targetOutputWorkForm mg:binary-form, mg:service-form, mg:mixed-form ;
+    mg:relicense mg:any-license ;
+    mg:allowSharing true .
+
+mg:AGPL-3.0-derivative-rule a mg:Rule ;
+    mg:hasOutputDef mg:derivative ;
+    mg:targetActionType mg:Amalgamate, mg:Modify ;
+    mg:targetInputWorkForm mg:code, mg:exe, mg:saas ;
+    mg:targetOutputWorkForm mg:code, mg:exe, mg:saas ;
+    mg:relicense mg:none-license ;
+    mg:hasRestriction mg:state_changes_restriction ;
+    mg:allowSharing true .
+
+mg:AGPL-3.0-derivative-fuzz-rule a mg:Rule ;
+    mg:hasOutputDef mg:derivative ;
+    mg:targetActionType mg:Amalgamate, mg:Modify ;
+    mg:targetInputWorkForm mg:linguistics, mg:vision, mg:weights, mg:binary-form, mg:service-form, mg:mixed-form ;
+    mg:targetOutputWorkForm mg:linguistics, mg:vision, mg:weights, mg:binary-form, mg:service-form, mg:mixed-form ;
+    mg:relicense mg:none-license ;
+    mg:hasRestriction mg:state_changes_restriction ;
+    mg:allowSharing true .
+
+mg:AGPL-3.0-nodefinition-rule a mg:Rule ;
+    mg:hasOutputDef mg:nodefinition ;
+    mg:targetActionType mg:Train, mg:Embed ;
+    mg:targetInputWorkForm mg:code, mg:exe, mg:saas ;
+    mg:targetOutputWorkForm mg:code, mg:exe, mg:saas ;
+    mg:relicense mg:any-license ;
+    mg:allowSharing true .
+
+mg:AGPL-3.0-nodefinition-fuzz-rule a mg:Rule ;
+    mg:hasOutputDef mg:nodefinition ;
+    mg:targetActionType mg:Train, mg:Embed ;
+    mg:targetInputWorkForm mg:linguistics, mg:vision, mg:weights, mg:binary-form, mg:service-form, mg:mixed-form ;
+    mg:targetOutputWorkForm mg:linguistics, mg:vision, mg:weights, mg:binary-form, mg:service-form, mg:mixed-form ;
+    mg:relicense mg:any-license ;
+    mg:allowSharing true .
+
+# AGPL-3.0-derivative-rule-2 a mg:Rule ; -> GPL-3.0-derivative-rule-1
+# AGPL-3.0-derivative-fuzz-rule-2 a mg:Rule ; -> GPL-3.0-derivative-fuzz-rule-1
+
 
 ###################    LGPL-3.0 Rules    ###################
 mg:LGPL-3.0-duplication-rule a mg:Rule ;
@@ -405,55 +531,132 @@ mg:LGPL-3.0-duplication-fuzz-rule a mg:Rule ;
     # mg:hasRestriction mg:disclose_self_restriction ; # LGPL-3.0 does not require disclose self compare to GPL-3.0
     mg:allowSharing true .
 
-mg:LGPL-3.0-independent-rule a mg:Rule ;
+mg:LGPL-3.0-independent-rule-1 a mg:Rule ;
     mg:hasOutputDef mg:independent ;
     mg:targetActionType mg:Combine ;
+    mg:targetInputWorkForm mg:code ;
+    mg:targetOutputWorkForm mg:code ;
+    mg:relicense mg:any-license ;
+    mg:hasRestriction mg:disclose_unmodified_source_restriction, mg:include_license_restriction ;
+    mg:allowSharing true .
+
+mg:LGPL-3.0-independent-fuzz-rule-1 a mg:Rule ;
+    mg:hasOutputDef mg:independent ;
+    mg:targetActionType mg:Combine ;
+    mg:targetInputWorkForm mg:linguistics, mg:vision, mg:weights, mg:raw-form;
+    mg:targetOutputWorkForm mg:linguistics, mg:vision, mg:weights, mg:raw-form ;
+    mg:relicense mg:any-license ;
+    mg:hasRestriction mg:disclose_unmodified_source_restriction, mg:include_license_restriction ;
+    mg:allowSharing true .
+
+mg:LGPL-3.0-independent-rule-2 a mg:Rule ;
+    mg:hasOutputDef mg:independent ;
+    mg:targetActionType mg:Combine ;
+    mg:targetInputWorkForm mg:exe ; # Link
+    mg:targetOutputWorkForm mg:exe ;
+    mg:relicense mg:any-license ;
+    mg:hasRestriction mg:include_notice_restriction ;
+    mg:allowSharing true .
+
+mg:LGPL-3.0-independent-fuzz-rule-2 a mg:Rule ;
+    mg:hasOutputDef mg:independent ;
+    mg:targetActionType mg:Combine ;
+    mg:targetInputWorkForm mg:binary-form, mg:mixed-form ;
+    mg:targetOutputWorkForm mg:binary-form, mg:mixed-form ;
+    mg:relicense mg:any-license ;
+    mg:hasRestriction mg:include_notice_restriction ;
+    mg:allowSharing true .
+    
+mg:LGPL-3.0-derivative-rule a mg:Rule ;
+    mg:hasOutputDef mg:derivative ;
+    mg:targetActionType mg:Amalgamate, mg:Modify ;
+    mg:targetInputWorkForm mg:code, mg:exe ;
+    mg:targetOutputWorkForm mg:code, mg:exe ;
+    mg:relicense mg:compatible-license ;
+    mg:hasRestriction mg:disclose_self_restriction, mg:include_license_restriction, mg:include_notice_restriction ;
+    mg:allowSharing true .
+
+mg:LGPL-3.0-derivative-fuzz-rule a mg:Rule ;
+    mg:hasOutputDef mg:derivative ;
+    mg:targetActionType mg:Amalgamate, mg:Modify ;
+    mg:targetInputWorkForm mg:linguistics, mg:vision, mg:weights, mg:binary-form, mg:mixed-form ;
+    mg:targetOutputWorkForm mg:linguistics, mg:vision, mg:weights, mg:binary-form, mg:mixed-form ;
+    mg:relicense mg:compatible-license ;
+    mg:hasRestriction mg:disclose_self_restriction, mg:include_license_restriction, mg:include_notice_restriction ;
+    mg:allowSharing true .
+
+# mg:LGPL-3.0-independent-rule-3 -> mg:GPL-3.0-independent-rule-2
+# mg:LGPL-3.0-independent-fuzz-rule-3 -> mg:GPL-3.0-independent-fuzz-rule-2
+# mg:GPL-3.0-nodefinition-rule ->  mg:GPL-3.0-nodefinition-rule
+# mg:GPL-3.0-nodefinition-fuzz-rule -> mg:GPL-3.0-nodefinition-fuzz-rule
+
+###################    LGPL-2.1 Rules    ###################
+# We can reuse all rules from LGPL-3.0
+
+
+###################    BSD-3-Clause Rules    ###################
+# mg:BSD-3-Clause-duplication-rule -> mg:Apache-2.0-duplication-rule
+
+# mg:BSD-3-Clause-duplication-fuzz-rule -> mg:Apache-2.0-duplication-fuzz-rule
+
+mg:BSD-3-Clause-derivative-rule a mg:Rule ;
+    mg:hasOutputDef mg:derivative ;
+    mg:targetActionType mg:Amalgamate, mg:Modify ;
     mg:targetInputWorkForm mg:code, mg:exe ;
     mg:targetOutputWorkForm mg:code, mg:exe ;
     mg:relicense mg:any-license ;
     mg:allowSharing true .
 
-mg:LGPL-3.0-independent-fuzz-rule a mg:Rule ;
-    mg:hasOutputDef mg:independent ;
-    mg:targetActionType mg:Combine ;
-    mg:targetInputWorkForm mg:linguistics, mg:vision, mg:weights, mg:raw-form, mg:binary-form, mg:mixed-form ;
-    mg:targetOutputWorkForm mg:linguistics, mg:vision, mg:weights, mg:raw-form, mg:binary-form, mg:mixed-form ;
+mg:BSD-3-Clause-derivative-fuzz-rule a mg:Rule ;
+    mg:hasOutputDef mg:derivative ;
+    mg:targetActionType mg:Amalgamate, mg:Modify ;
+    mg:targetInputWorkForm mg:linguistics, mg:vision, mg:weights, mg:binary-form, mg:mixed-form ;
+    mg:targetOutputWorkForm mg:linguistics, mg:vision, mg:weights, mg:binary-form, mg:mixed-form ;
+    mg:relicense mg:any-license ;
+    mg:allowSharing true .
+
+mg:BSD-3-Clause-nodefinition-rule a mg:Rule ;
+    mg:hasOutputDef mg:nodefinition ;
+    mg:targetActionType mg:Combine, mg:Distill, mg:Generate, mg:Train, mg:Embed ;
+    mg:targetInputWorkForm mg:code, mg:exe ;
+    mg:targetOutputWorkForm mg:code, mg:exe ;
     mg:relicense mg:any-license ;
     mg:allowSharing true .
     
-mg:LGPL-3.0-derivative-rule-1 a mg:Rule ;
-    mg:hasOutputDef mg:derivative ;
-    mg:targetActionType mg:Amalgamate ;
-    mg:targetInputWorkForm mg:code, mg:exe ;
-    mg:targetOutputWorkForm mg:code, mg:exe ;
-    mg:relicense mg:compatible-license ;
-    mg:hasRestriction mg:state_changes_restriction ;
-    mg:allowSharing true .
-
-mg:LGPL-3.0-derivative-fuzz-rule-1 a mg:Rule ;
-    mg:hasOutputDef mg:derivative ;
-    mg:targetActionType mg:Amalgamate ;
+mg:BSD-3-Clause-nodefinition-fuzz-rule a mg:Rule ;
+    mg:hasOutputDef mg:nodefinition ;
+    mg:targetActionType mg:Combine, mg:Distill, mg:Generate, mg:Train, mg:Embed ;
     mg:targetInputWorkForm mg:linguistics, mg:vision, mg:weights, mg:binary-form, mg:mixed-form ;
     mg:targetOutputWorkForm mg:linguistics, mg:vision, mg:weights, mg:binary-form, mg:mixed-form ;
-    mg:relicense mg:compatible-license ;
-    mg:hasRestriction mg:state_changes_restriction ;
+    mg:relicense mg:any-license ;
     mg:allowSharing true .
 
-mg:LGPL-3.0-derivative-fuzz-rule-2 a mg:Rule ;
-    mg:hasOutputDef mg:derivative ;
-    mg:targetActionType mg:Modify ;
+mg:BSD-3-Clause-republication-rule a mg:Rule ;
+    mg:hasOutputDef mg:republication ;
+    mg:targetActionType mg:Publish ;
     mg:targetInputWorkForm mg:code, mg:exe ;
     mg:targetOutputWorkForm mg:code, mg:exe ;
-    mg:relicense mg:none-license ;
-    mg:hasRestriction mg:state_changes_restriction ;
+    mg:relicense mg:any-license ;
+    mg:hasRestriction mg:include_notice_restriction, mg:include_license_restriction ;
+    mg:allowSharing true .
+    
+mg:BSD-3-Clause-republication-fuzz-rule a mg:Rule ;
+    mg:hasOutputDef mg:republication ;
+    mg:targetActionType mg:Publish ;
+    mg:targetInputWorkForm mg:linguistics, mg:vision, mg:weights, mg:raw-form, mg:binary-form, mg:saas, mg:service-form, mg:mixed-form ;
+    mg:targetOutputWorkForm mg:linguistics, mg:vision, mg:weights, mg:raw-form, mg:binary-form, mg:saas, mg:service-form, mg:mixed-form ;
+    mg:relicense mg:any-license ;
+    mg:hasRestriction mg:include_notice_restriction, mg:include_license_restriction ;
     mg:allowSharing true .
 
-mg:LGPL-3.0-derivative-fuzz-rule-2 a mg:Rule ;
-    mg:hasOutputDef mg:derivative ;
-    mg:targetActionType mg:Modify ;
-    mg:targetInputWorkForm mg:linguistics, mg:vision, mg:weights, mg:binary-form, mg:mixed-form ;
-    mg:targetOutputWorkForm mg:linguistics, mg:vision, mg:weights, mg:binary-form, mg:mixed-form ;
-    mg:relicense mg:none-license ;
-    mg:hasRestriction mg:state_changes_restriction ;
-    mg:allowSharing true .
+
+###################    BSD-3-Clause-Clear Rules    ###################
+# We can reuse all rules from BSD-3-Clause
+
+
+###################    WTFPL-2.0 Rules    ###################
+# We can reuse all rules from Unlicense-independent-rule
+
+
+###################    OSL-3.0 Rules    ###################
 

@@ -6,7 +6,7 @@ mg:Apache-2.0 a mg:LicenseInfo ;
     mg:licenseId "Apache-2.0" ;
     mg:licenseName "Apache License 2.0" ;
     mg:targetWorkType mg:dataset ;
-    mg:licenseVersion 2.0 ;
+    mg:licenseVersion "2.0"^^xsd:float ;
     mg:isFsfLibre true ;
     mg:isOsiApproved true ;
     mg:isPermissive true ;
@@ -25,8 +25,8 @@ mg:Apache-2.0 a mg:LicenseInfo ;
         mg:hasUsage mg:trademark_use, mg:copyright, mg:patent, mg:trademark
     ] ;
     
-    mg:hasRule mg:Apache-2.0-duplication-rule, mg:Apache-2.0-independent-rule, mg:Apache-2.0-nodefinition-rule ;
-    mg:hasRule mg:Apache-2.0-duplication-fuzz-rule, mg:Apache-2.0-independent-fuzz-rule, mg:Apache-2.0-nodefinition-fuzz-rule ; # Fuzz rules
+    mg:hasRule mg:Apache-2.0-duplication-rule, mg:Apache-2.0-independent-rule, mg:Apache-2.0-nodefinition-rule, mg:Apache-2.0-republication-rule ;
+    mg:hasRule mg:Apache-2.0-duplication-fuzz-rule, mg:Apache-2.0-independent-fuzz-rule, mg:Apache-2.0-nodefinition-fuzz-rule, mg:Apache-2.0-republication-fuzz-rule ; # Fuzz rules
     
     mg:licenseUrl <https://www.apache.org/licenses/LICENSE-2.0> . # We place the URL link at the tail to make it more robust to comment.
 
@@ -48,10 +48,10 @@ mg:MIT a mg:LicenseInfo ;
         mg:isCopyright true ;
         mg:hasRightPrefix mg:no-charge, mg:mg:any-person ;
         mg:hasUsage mg:use, mg:modify, mg:merge, mg:redistribute, mg:sublicense, mg:commercial_use
-    ] ; # No rights are reserved under the MIT License; however, generally speaking, patent, trademark, and copyright rights are implicitly reserved.
+    ] ; # No rights are reserved under MIT License; however, generally speaking, patent, trademark, and copyright rights are implicitly reserved.
     
-    mg:hasRule mg:MIT-duplication-rule, mg:MIT-independent-rule, mg:MIT-nodefinition-rule ;
-    mg:hasRule mg:MIT-duplication-fuzz-rule, mg:MIT-independent-fuzz-rule, mg:MIT-nodefinition-fuzz-rule ; # Fuzz rules
+    mg:hasRule mg:MIT-duplication-rule, mg:MIT-independent-rule, mg:MIT-nodefinition-rule, mg:MIT-republication-rule ;
+    mg:hasRule mg:MIT-duplication-fuzz-rule, mg:MIT-independent-fuzz-rule, mg:MIT-nodefinition-fuzz-rule, mg:MIT-republication-fuzz-rule ; # Fuzz rules
     
     mg:licenseUrl <https://opensource.org/license/mit/> .
 
@@ -76,7 +76,7 @@ mg:Unlicense a mg:LicenseInfo ;
         mg:hasUsage mg:use, mg:modify, mg:merge, mg:redistribute, mg:sublicense, mg:commercial_use, mg:copyright # Unlicense also grants you the copyright of work
     ] ;
     
-    mg:hasRule mg:Unlicense-independent-rule ;
+    mg:hasRule mg:Unlicense-independent-rule, mg:Unlicense-republication-rule ;
     
     mg:licenseUrl <https://opensource.org/license/unlicense/> .
 
@@ -86,7 +86,7 @@ mg:AFL-3.0 a mg:LicenseInfo ;
     mg:licenseId "AFL-3.0" ;
     mg:licenseName "Academic Free License v3.0" ;
     mg:targetWorkType mg:software ;
-    mg:licenseVersion 3.0 ;
+    mg:licenseVersion "3.0"^^xsd:float ;
     mg:isFsfLibre true ;
     mg:isOsiApproved true ;
     mg:isPermissive true ;
@@ -98,7 +98,7 @@ mg:AFL-3.0 a mg:LicenseInfo ;
         mg:isCopyright true ;
         mg:isPatent true ;
         mg:hasRightPrefix mg:perpetual, mg:worldwide, mg:royalty-free, mg:non-exclusive, mg:sublicensable ;
-        mg:hasUsage mg:use, mg:modify, mg:merge, mg:redistribute, mg:sublicense, mg:commercial_use, mg:patent_use
+        mg:hasUsage mg:use, mg:modify, mg:merge, mg:redistribute, mg:sublicense, mg:commercial_use
     ] ;
     mg:reserve [
         a mg:Right ;
@@ -116,7 +116,7 @@ mg:Artistic-2.0 a mg:LicenseInfo ;
     mg:licenseId "Artistic-2.0" ;
     mg:licenseName "Artistic License v2.0" ;
     mg:targetWorkType mg:software ;
-    mg:licenseVersion 2.0 ;
+    mg:licenseVersion "2.0"^^xsd:float ;
     mg:isFsfLibre true ;
     mg:isOsiApproved true ;
     mg:isPermissive true ;
@@ -145,7 +145,7 @@ mg:GPL-3.0 a mg:LicenseInfo ;
     mg:licenseId "GPL-3.0" ;
     mg:licenseName "GNU General Public License v3.0" ;
     mg:targetWorkType mg:software ;
-    mg:licenseVersion 3.0 ;
+    mg:licenseVersion "3.0"^^xsd:float ;
     mg:isFsfLibre true ;
     mg:isOsiApproved true ;
     # mg:isPermissive false ;
@@ -157,7 +157,7 @@ mg:GPL-3.0 a mg:LicenseInfo ;
         mg:isCopyright true ;
         mg:isPatent true ;
         mg:hasRightPrefix mg:non-exclusive, mg:worldwide, mg:royalty-free, mg:irrevocable ; 
-        mg:hasUsage mg:use, mg:modify, mg:merge, mg:redistribute, mg:auto-license, mg:commercial_use, mg:patent_use
+        mg:hasUsage mg:use, mg:modify, mg:merge, mg:redistribute, mg:auto-license, mg:commercial_use
     ] ;
     mg:reserve [
         a mg:Right ;
@@ -170,12 +170,103 @@ mg:GPL-3.0 a mg:LicenseInfo ;
     mg:licenseUrl <https://www.gnu.org/licenses/gpl-3.0.en.html> .
 
 
+###################    AGPL-3.0    ###################
+mg:AGPL-3.0 a mg:LicenseInfo ;
+    mg:licenseId "AGPL-3.0" ;
+    mg:licenseName "GNU Affero General Public License v3.0" ;
+    mg:targetWorkType mg:software ;
+    mg:licenseVersion "3.0"^^xsd:float ;
+    mg:isFsfLibre true ;
+    mg:isOsiApproved true ;
+    # mg:isPermissive false ;
+    # mg:isOpenDomain false ;
+    mg:isCopyleft true ;
+    
+    mg:grant [
+        a mg:Right ;
+        mg:isCopyright true ;
+        mg:isPatent true ;
+        mg:hasRightPrefix mg:non-exclusive, mg:worldwide, mg:royalty-free, mg:irrevocable ; 
+        mg:hasUsage mg:use, mg:modify, mg:merge, mg:redistribute, mg:auto-license, mg:commercial_use
+    ] ;
+    mg:reserve [
+        a mg:Right ;
+        mg:hasUsage mg:patent, mg:copyright, mg:trademark, mg:trademark_use, mg:sublicense
+    ] ;
+    
+    mg:hasRule mg:AGPL-3.0-duplication-rule, mg:AGPL-3.0-independent-rule, mg:AGPL-3.0-derivative-rule, mg:AGPL-3.0-nodefinition-rule, mg:GPL-3.0-derivative-rule-1 ; # We reuse one rule from GPL-3.0
+    mg:hasRule mg:AGPL-3.0-duplication-fuzz-rule, mg:AGPL-3.0-independent-fuzz-rule, mg:AGPL-3.0-derivative-fuzz-rule, mg:AGPL-3.0-nodefinition-fuzz-rule, mg:GPL-3.0-derivative-fuzz-rule-1 ; # Fuzz rules
+    
+    mg:licenseUrl <https://www.gnu.org/licenses/agpl-3.0.en.html> .
+
+
 ###################    LGPL-3.0    ###################  
+# Note that LGPL-3.0 incorporates terms and conditions of GPL-3.0.
 mg:LGPL-3.0 a mg:LicenseInfo ;
     mg:licenseId "LGPL-3.0" ;
     mg:licenseName "GNU Lesser General Public License v3.0" ;
     mg:targetWorkType mg:software ;
-    mg:licenseVersion 3.0 ;
+    mg:licenseVersion "3.0"^^xsd:float ;
+    mg:isFsfLibre true ;
+    mg:isOsiApproved true ;
+    # mg:isPermissive false ;
+    # mg:isOpenDomain false ;
+    mg:isCopyleft true ;
+    
+    mg:grant [
+        a mg:Right ;
+        mg:isCopyright true ;
+        mg:isPatent true ;
+        mg:hasRightPrefix mg:non-exclusive, mg:worldwide, mg:royalty-free, mg:irrevocable ;
+        mg:hasUsage mg:use, mg:modify, mg:merge, mg:redistribute, mg:auto-license, mg:commercial_use
+    ] ;
+    mg:reserve [
+        a mg:Right ;
+        mg:hasUsage mg:patent, mg:copyright, mg:trademark, mg:trademark_use, mg:sublicense
+    ] ;
+    
+    mg:hasRule mg:LGPL-3.0-duplication-rule, mg:LGPL-3.0-independent-rule-1, mg:LGPL-3.0-independent-rule-2, mg:GPL-3.0-independent-rule-2, mg:LGPL-3.0-derivative-rule, mg:GPL-3.0-nodefinition-fuzz-rule ; # We reuse two coincident rules from GPL-3.0
+    mg:hasRule mg:LGPL-3.0-duplication-fuzz-rule, mg:LGPL-3.0-independent-fuzz-rule-1, mg:LGPL-3.0-independent-fuzz-rule-2, mg:GPL-3.0-independent-fuzz-rule-2, mg:LGPL-3.0-derivative-fuzz-rule, mg:GPL-3.0-nodefinition-fuzz-rule;
+    
+    mg:licenseUrl <https://www.gnu.org/licenses/lgpl-3.0.en.html> .
+
+
+###################    LGPL-2.1    ###################
+mg:LGPL-2.1 a mg:LicenseInfo ;
+    mg:licenseId "LGPL-2.1" ;
+    mg:licenseName "GNU Lesser General Public License v2.1" ;
+    mg:targetWorkType mg:software ;
+    mg:licenseVersion "2.1"^^xsd:float ;
+    mg:isFsfLibre true ;
+    mg:isOsiApproved true ;
+    # mg:isPermissive false ;
+    # mg:isOpenDomain false ;
+    mg:isCopyleft true ;
+    
+    mg:grant [ # Same as LGPL-3.0
+        a mg:Right ;
+        mg:isCopyright true ;
+        mg:isPatent true ;
+        mg:hasRightPrefix mg:non-exclusive, mg:worldwide, mg:royalty-free, mg:irrevocable ;
+        mg:hasUsage mg:use, mg:modify, mg:merge, mg:redistribute, mg:auto-license, mg:commercial_use
+    ] ;
+    mg:reserve [ # Same as LGPL-3.0
+        a mg:Right ;
+        mg:hasUsage mg:patent, mg:copyright, mg:trademark, mg:trademark_use, mg:sublicense
+    ] ;
+    
+    mg:hasRule mg:LGPL-3.0-duplication-rule, mg:LGPL-3.0-independent-rule-1, mg:LGPL-3.0-independent-rule-2, mg:GPL-3.0-independent-rule-2, mg:LGPL-3.0-derivative-rule, mg:GPL-3.0-nodefinition-fuzz-rule ; # Same as LGPL-3.0
+    mg:hasRule mg:LGPL-3.0-duplication-fuzz-rule, mg:LGPL-3.0-independent-fuzz-rule-1, mg:LGPL-3.0-independent-fuzz-rule-2, mg:GPL-3.0-independent-fuzz-rule-2, mg:LGPL-3.0-derivative-fuzz-rule, mg:GPL-3.0-nodefinition-fuzz-rule; # Same as LGPL-3.0
+
+    mg:licenseUrl <https://www.gnu.org/licenses/old-licenses/lgpl-2.1.en.html> .
+
+
+###################    BSD-3-Clause    ###################
+mg:BSD-3-Clause a mg:LicenseInfo ;
+    mg:licenseId "BSD-3-Clause" ;
+    mg:licenseName "The 3-Clause BSD License" ;
+    mg:targetWorkType mg:software ;
+    mg:licenseVersion "NaN"^^xsd:float ;
     mg:isFsfLibre true ;
     mg:isOsiApproved true ;
     mg:isPermissive true ;
@@ -185,16 +276,125 @@ mg:LGPL-3.0 a mg:LicenseInfo ;
     mg:grant [
         a mg:Right ;
         mg:isCopyright true ;
-        mg:isPatent true ;
-        mg:hasRightPrefix mg:non-exclusive, mg:worldwide, mg:royalty-free, mg:irrevocable ; 
-        mg:hasUsage mg:use, mg:modify, mg:merge, mg:redistribute, mg:commercial_use, mg:patent_use
+        # mg:hasRightPrefix ;
+        mg:hasUsage mg:use, mg:modify, mg:merge, mg:redistribute, mg:sublicense, mg:commercial_use # BSD licenses are general considered sublicensable even though it does not explicitly mention it.
     ] ;
     mg:reserve [
         a mg:Right ;
-        mg:hasUsage mg:patent, mg:copyright, mg:trademark, mg:trademark_use, mg:sublicense
+        mg:hasUsage mg:trademark_use
     ] ;
     
-    mg:hasRule mg:LGPL-3.0-duplication-rule, mg:LGPL-3.0-independent-rule, mg:GPL-3.0-independent-rule-2, mg:LGPL-3.0-derivative-rule-1, mg:LGPL-3.0-derivative-rule-2, mg:GPL-3.0-nodefinition-fuzz-rule ; # We reuse two coincident rules from GPL-3.0
-    mg:hasRule mg:LGPL-3.0-duplication-fuzz-rule, mg:LGPL-3.0-independent-fuzz-rule, mg:GPL-3.0-independent-fuzz-rule-2, mg:LGPL-3.0-derivative-fuzz-rule-1, mg:LGPL-3.0-derivative-fuzz-rule-2, mg:GPL-3.0-nodefinition-fuzz-rule;
+    mg:hasRule mg:Apache-2.0-duplication-rule, mg:BSD-3-Clause-independent-rule, mg:BSD-3-Clause-derivative-rule, mg:BSD-3-Clause-nodefinition-rule, mg:BSD-3-Clause-republication-rule ;
+    mg:hasRule mg:Apache-2.0-duplication-fuzz-rule, mg:BSD-3-Clause-independent-fuzz-rule, mg:BSD-3-Clause-derivative-fuzz-rule, mg:BSD-3-Clause-nodefinition-fuzz-rule, mg:BSD-3-Clause-republication-fuzz-rule ; # Fuzz rules
     
-    mg:licenseUrl <https://www.gnu.org/licenses/lgpl-3.0.en.html> .
+    mg:licenseUrl <https://opensource.org/license/bsd-3-clause/> .
+
+
+###################    BSD-3-Clause-Clear    ###################
+mg:BSD-3-Clause-Clear a mg:LicenseInfo ;
+    mg:licenseId "BSD-3-Clause-Clear" ;
+    mg:licenseName "BSD 3-Clause Clear License" ;
+    mg:targetWorkType mg:software ;
+    mg:licenseVersion "NaN"^^xsd:float ;
+    mg:isFsfLibre true ;
+    mg:isOsiApproved false ;
+    mg:isPermissive true ;
+    # mg:isOpenDomain false ;
+    # mg:isCopyleft false ;
+    
+    mg:grant [
+        a mg:Right ;
+        mg:isCopyright true ;
+        # mg:hasRightPrefix ;
+        mg:hasUsage mg:use, mg:modify, mg:merge, mg:redistribute, mg:sublicense, mg:commercial_use
+    ] ;
+    mg:reserve [
+        a mg:Right ;
+        mg:hasUsage mg:trademark_use, mg:patent # Patent right is reserved under BSD-3-Clause-Clear License; however, generally speaking, copyright right is implicitly reserved.
+    ] ;
+    
+    mg:hasRule mg:Apache-2.0-duplication-rule, mg:BSD-3-Clause-independent-rule, mg:BSD-3-Clause-derivative-rule, mg:BSD-3-Clause-nodefinition-rule, mg:BSD-3-Clause-republication-rule ; # Same as BSD-3-Clause
+    mg:hasRule mg:Apache-2.0-duplication-fuzz-rule, mg:BSD-3-Clause-independent-fuzz-rule, mg:BSD-3-Clause-derivative-fuzz-rule, mg:BSD-3-Clause-nodefinition-fuzz-rule, mg:BSD-3-Clause-republication-fuzz-rule ; # Fuzz rules
+    
+    mg:licenseUrl <https://spdx.org/licenses/BSD-3-Clause-Clear.html> .
+
+
+###################    BSD-2-Clause    ###################
+mg:BSD-2-Clause a mg:LicenseInfo ;
+    mg:licenseId "BSD-2-Clause" ;
+    mg:licenseName "The 2-Clause BSD License" ;
+    mg:targetWorkType mg:software ;
+    mg:licenseVersion "NaN"^^xsd:float ;
+    mg:isFsfLibre true ;
+    mg:isOsiApproved true ;
+    mg:isPermissive true ;
+    # mg:isOpenDomain false ;
+    # mg:isCopyleft false ;
+    
+    mg:grant [
+        a mg:Right ;
+        mg:isCopyright true ;
+        # mg:hasRightPrefix ;
+        mg:hasUsage mg:use, mg:modify, mg:merge, mg:redistribute, mg:sublicense, mg:commercial_use
+    ] ;
+    # No rights are reserved under BSD-2-Clause License; however, generally speaking, patent, trademark, and copyright rights are implicitly reserved.
+    
+    mg:hasRule mg:Apache-2.0-duplication-rule, mg:BSD-3-Clause-independent-rule, mg:BSD-3-Clause-derivative-rule, mg:BSD-3-Clause-nodefinition-rule, mg:BSD-3-Clause-republication-rule ; # Same as BSD-3-Clause
+    mg:hasRule mg:Apache-2.0-duplication-fuzz-rule, mg:BSD-3-Clause-independent-fuzz-rule, mg:BSD-3-Clause-derivative-fuzz-rule, mg:BSD-3-Clause-nodefinition-fuzz-rule, mg:BSD-3-Clause-republication-fuzz-rule ; # Fuzz rules
+    
+    mg:licenseUrl <https://opensource.org/license/bsd-2-clause/> .
+
+
+###################    WTFPL-2.0    ###################
+mg:WTFPL-2.0 a mg:LicenseInfo ;
+    mg:licenseId "WTFPL-2.0" ;
+    mg:licenseName "Do What The Fuck You Want To Public License v2.0" ;
+    mg:targetWorkType mg:software ;
+    mg:licenseVersion "NaN"^^xsd:float ;
+    mg:isFsfLibre true ;
+    mg:isOsiApproved false ;
+    mg:isPermissive true ;
+    mg:isOpenDomain true ;
+    # mg:isCopyleft false ;
+    
+    mg:grant [
+        a mg:Right ;
+        mg:isCopyright true ;
+        #mg:hasRightPrefix ;
+        mg:hasUsage mg:use, mg:modify, mg:merge, mg:sublicense, mg:redistribute, mg:commercial_use, mg:copyright # Even though this license does not explicitly mention sublicensing, it is generally understood that the public domain license allows for sublicensing.
+    ] ;
+    
+    mg:hasRule mg:Unlicense-independent-rule ;
+    
+    mg:licenseUrl <https://spdx.org/licenses/WTFPL.html> .
+
+
+###################    OSL-3.0    ###################
+mg:OSL-3.0 a mg:LicenseInfo ;
+    mg:licenseId "OSL-3.0" ;
+    mg:licenseName "Open Software License v3.0" ;
+    mg:targetWorkType mg:software ;
+    mg:licenseVersion "3.0"^^xsd:float ;
+    mg:isFsfLibre true ;
+    mg:isOsiApproved true ;
+    # mg:isPermissive false ;
+    # mg:isOpenDomain false ;
+    mg:isCopyleft true ;
+    
+    mg:grant [
+        a mg:Right ;
+        mg:isCopyright true ;
+        mg:isPatent true ;
+        mg:hasRightPrefix mg:worldwide, mg:royalty-free, mg:non-exclusive, mg:sublicensable ;
+        mg:hasUsage mg:use, mg:modify, mg:merge, mg:redistribute, mg:sublicense, mg:commercial_use
+    ] ;
+    mg:reserve [
+        a mg:Right ;
+        mg:hasUsage mg:patent, mg:copyright, mg:trademark, mg:trademark_use
+    ] ;
+    
+    mg:hasRule mg:OSL-3.0-duplication-rule, mg:OSL-3.0-independent-rule, mg:OSL-3.0-derivative-rule, mg:OSL-3.0-nodefinition-rule ;
+    mg:hasRule mg:OSL-3.0-duplication-fuzz-rule, mg:OSL-3.0-independent-fuzz-rule, mg:OSL-3.0-derivative-fuzz-rule, mg:OSL-3.0-nodefinition-fuzz-rule ; # Fuzz rules
+    
+    mg:licenseUrl <https://opensource.org/license/osl-3-0-php/> .
+    

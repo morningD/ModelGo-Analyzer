@@ -25,8 +25,8 @@ mg:Apache-2.0 a mg:LicenseInfo ;
         mg:hasUsage mg:trademark_use, mg:copyright, mg:patent, mg:trademark
     ] ;
     
-    mg:hasRule mg:Apache-2.0-duplication-rule, mg:Apache-2.0-independent-rule, mg:Apache-2.0-nodefinition-rule, mg:Apache-2.0-republication-rule ;
-    mg:hasRule mg:Apache-2.0-duplication-fuzz-rule, mg:Apache-2.0-independent-fuzz-rule, mg:Apache-2.0-nodefinition-fuzz-rule, mg:Apache-2.0-republication-fuzz-rule ; # Fuzz rules
+    mg:hasRule mg:Apache-2.0-duplication-rule, mg:Apache-2.0-independent-rule, mg:Apache-2.0-nodefinition-rule, mg:Apache-2.0-republication-rule-1, mg:Apache-2.0-republication-rule-2 ;
+    mg:hasRule mg:Apache-2.0-duplication-fuzz-rule, mg:Apache-2.0-independent-fuzz-rule, mg:Apache-2.0-nodefinition-fuzz-rule, mg:Apache-2.0-republication-fuzz-rule-1 ; # Fuzz rules
     
     mg:licenseUrl <https://www.apache.org/licenses/LICENSE-2.0> . # We place the URL link at the tail to make it more robust to comment.
 
@@ -50,8 +50,8 @@ mg:MIT a mg:LicenseInfo ;
         mg:hasUsage mg:use, mg:modify, mg:merge, mg:redistribute, mg:sublicense, mg:commercial_use
     ] ; # No rights are reserved under MIT License; however, generally speaking, patent, trademark, and copyright rights are implicitly reserved.
     
-    mg:hasRule mg:MIT-duplication-rule, mg:MIT-independent-rule, mg:MIT-nodefinition-rule, mg:MIT-republication-rule ;
-    mg:hasRule mg:MIT-duplication-fuzz-rule, mg:MIT-independent-fuzz-rule, mg:MIT-nodefinition-fuzz-rule, mg:MIT-republication-fuzz-rule ; # Fuzz rules
+    mg:hasRule mg:MIT-duplication-rule, mg:MIT-independent-rule, mg:MIT-nodefinition-rule, mg:MIT-republication-rule-1, mg:MIT-republication-rule-2 ;
+    mg:hasRule mg:MIT-duplication-fuzz-rule, mg:MIT-independent-fuzz-rule, mg:MIT-nodefinition-fuzz-rule-1, mg:MIT-republication-fuzz-rule-1 ; # Fuzz rules
     
     mg:licenseUrl <https://opensource.org/license/mit/> .
 
@@ -105,8 +105,8 @@ mg:AFL-3.0 a mg:LicenseInfo ;
         mg:hasUsage mg:patent, mg:copyright, mg:trademark, mg:trademark_use
     ] ;
     
-    mg:hasRule mg:AFL-3.0-duplication-rule, mg:AFL-3.0-derivative-rule, mg:AFL-3.0-nodefinition-rule ;
-    mg:hasRule mg:AFL-3.0-duplication-fuzz-rule, mg:AFL-3.0-derivative-fuzz-rule, mg:AFL-3.0-nodefinition-fuzz-rule ; # Fuzz rules
+    mg:hasRule mg:AFL-3.0-duplication-rule, mg:AFL-3.0-derivative-rule, mg:AFL-3.0-nodefinition-rule, mg:AFL-3.0-republication-rule ;
+    mg:hasRule mg:AFL-3.0-duplication-fuzz-rule, mg:AFL-3.0-derivative-fuzz-rule, mg:AFL-3.0-nodefinition-fuzz-rule, mg:AFL-3.0-republication-fuzz-rule ; # Fuzz rules
     
     mg:licenseUrl <https://opensource.org/license/afl-3-0-php> .
 
@@ -134,8 +134,8 @@ mg:Artistic-2.0 a mg:LicenseInfo ;
         mg:hasUsage mg:patent, mg:copyright, mg:trademark, mg:trademark_use
     ] ;
     
-    mg:hasRule mg:Artistic-2.0-duplication-rule, mg:Artistic-2.0-independent-rule, mg:Artistic-2.0-derivative-rule-1, mg:Artistic-2.0-derivative-rule-2, mg:Artistic-2.0-nodefinition-rule ;
-    mg:hasRule mg:Artistic-2.0-duplication-fuzz-rule, mg:Artistic-2.0-independent-fuzz-rule, mg:Artistic-2.0-derivative-fuzz-rule-1, mg:Artistic-2.0-derivative-fuzz-rule-2, mg:Artistic-2.0-nodefinition-fuzz-rule ; # Fuzz rules
+    mg:hasRule mg:Artistic-2.0-duplication-rule-1, mg:Artistic-2.0-duplication-rule-2, mg:Artistic-2.0-independent-rule, mg:Artistic-2.0-derivative-rule-1, mg:Artistic-2.0-derivative-rule-2, mg:Artistic-2.0-nodefinition-rule , mg:AFL-3.0-republication-rule;
+    mg:hasRule mg:Artistic-2.0-duplication-fuzz-rule-1, mg:Artistic-2.0-duplication-fuzz-rule-2, mg:Artistic-2.0-independent-fuzz-rule, mg:Artistic-2.0-derivative-fuzz-rule-1, mg:Artistic-2.0-derivative-fuzz-rule-2, mg:Artistic-2.0-nodefinition-fuzz-rule , mg:AFL-3.0-republication-fuzz-rule; # Fuzz rules
     
     mg:licenseUrl <https://opensource.org/license/artistic-2-0/> .
 

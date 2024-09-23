@@ -373,6 +373,12 @@ mg:hasPublishRestriction rdfs:subPropertyOf mg:hasRestriction ;
 mg:hasUseRestriction rdfs:subPropertyOf mg:hasRestriction ;
     rdfs:domain mg:Restriction .
 
+mg:banUseRestriction rdfs:subPropertyOf mg:hasRestriction ;
+    rdfs:domain mg:Restriction .
+
+mg:banPublishRestriction rdfs:subPropertyOf mg:hasRestriction ;
+    rdfs:domain mg:Restriction .
+
 mg:state_changes_restriction a mg:Restriction ; # It is a template for such kind of restriction.
     mg:reportType "State Changes" ;
     mg:content "This work must state changes according to the related license." .
@@ -400,6 +406,10 @@ mg:use_behavior_restriction a mg:Restriction ; # It is a template for such kind 
 mg:runtime_restriction a mg:Restriction ; # It is a template for such kind of restriction.
     mg:reportType "Runtime Restrictions" ;
     mg:content "This work contains runtime restrictions to restrict your use to make sure you don't violate its license terms or you are using the latest version." .
+
+mg:ensure_integrality_restriction a mg:Restriction ; # It is a template for such kind of restriction.
+    mg:reportType "Ensure Integrality" ;
+    mg:content "This work must ensure the functional integrity of the original work according to the related license." .
 
 # Vocabulary for requesting rights of a input work raised by an action during the ML reuse process.
 mg:Request a rdfs:Class ;

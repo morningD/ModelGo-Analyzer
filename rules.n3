@@ -101,9 +101,9 @@
     ?ruling a mg:Ruling .
     ?ruling mg:targetAction ?action .
     ?actionType rdfs:subClassOf mg:Action . 
-    # Copy and Redistribute will not proliferate to the mixworks due to the output def no longer being duplication,
+    # Copy will not proliferate to the mixworks due to the output def no longer being duplication,
     # but we still check the right granting of them by proliferating their request to the mixworks.
-    ?actionType log:notEqualTo mg:Copy, mg:Redistribute .
+    ?actionType log:notEqualTo mg:Copy .
     ?action a ?actionType .
     ?ruling <- mg:hasRuling ?work .
     ?work mg:hasMixwork ?mixwork .

@@ -243,22 +243,52 @@ mg:LGPL-2.1 a mg:LicenseInfo ;
     # mg:isOpenDomain false ;
     mg:isCopyleft true ;
     
-    mg:grant [ # Same as LGPL-3.0
+    mg:grant [
         a mg:Right ;
         mg:isCopyright true ;
         mg:isPatent true ;
-        mg:hasRightPrefix mg:non-exclusive, mg:worldwide, mg:royalty-free, mg:irrevocable ;
+        # mg:hasRightPrefix ;
         mg:hasUsage mg:use, mg:modify, mg:merge, mg:redistribute, mg:auto-license, mg:commercial_use
     ] ;
-    mg:reserve [ # Same as LGPL-3.0
+    mg:reserve [
         a mg:Right ;
         mg:hasUsage mg:patent, mg:copyright, mg:trademark, mg:trademark_use, mg:sublicense
     ] ;
     
-    mg:hasRule mg:LGPL-3.0-duplication-rule, mg:LGPL-3.0-independent-rule-1, mg:LGPL-3.0-independent-rule-2, mg:GPL-3.0-independent-rule-2, mg:LGPL-3.0-derivative-rule, mg:GPL-3.0-nodefinition-fuzz-rule ; # Same as LGPL-3.0
-    mg:hasRule mg:LGPL-3.0-duplication-fuzz-rule, mg:LGPL-3.0-independent-fuzz-rule-1, mg:LGPL-3.0-independent-fuzz-rule-2, mg:GPL-3.0-independent-fuzz-rule-2, mg:LGPL-3.0-derivative-fuzz-rule, mg:GPL-3.0-nodefinition-fuzz-rule; # Same as LGPL-3.0
+    mg:hasRule mg:LGPL-3.0-duplication-rule, mg:LGPL-3.0-independent-rule-1, mg:LGPL-3.0-independent-rule-2, mg:GPL-3.0-independent-rule-2, mg:LGPL-3.0-derivative-rule, mg:GPL-3.0-nodefinition-fuzz-rule ; 
+    mg:hasRule mg:LGPL-3.0-duplication-fuzz-rule, mg:LGPL-3.0-independent-fuzz-rule-1, mg:LGPL-3.0-independent-fuzz-rule-2, mg:GPL-3.0-independent-fuzz-rule-2, mg:LGPL-3.0-derivative-fuzz-rule, mg:GPL-3.0-nodefinition-fuzz-rule;
 
     mg:licenseUrl <https://www.gnu.org/licenses/old-licenses/lgpl-2.1.en.html> .
+
+
+###################    GPL-2.0    ###################
+mg:GPL-2.0 a mg:LicenseInfo ;
+    mg:licenseId "GPL-2.0" ;
+    mg:licenseName "GNU General Public License v2.0" ;
+    mg:targetWorkType mg:software ;
+    mg:licenseVersion "2.0"^^xsd:float ;
+    mg:isFsfLibre true ;
+    mg:isOsiApproved true ;
+    # mg:isPermissive false ;
+    # mg:isOpenDomain false ;
+    mg:isCopyleft true ;
+    
+    mg:grant [
+        a mg:Right ;
+        mg:isCopyright true ;
+        mg:isPatent true ;
+        # mg:hasRightPrefix ; 
+        mg:hasUsage mg:use, mg:modify, mg:merge, mg:redistribute, mg:auto-license, mg:commercial_use
+    ] ;
+    mg:reserve [
+        a mg:Right ;
+        mg:hasUsage mg:patent, mg:copyright, mg:trademark, mg:trademark_use, mg:sublicense # The auto-license can waive the requirement of sublicense.
+    ] ;
+
+    mg:hasRule mg:GPL-2.0-duplication-rule, mg:GPL-2.0-independent-rule, mg:GPL-2.0-derivative-rule, mg:GPL-2.0-nodefinition-rule ;
+    mg:hasRule mg:GPL-2.0-duplication-fuzz-rule, mg:GPL-2.0-independent-fuzz-rule, mg:GPL-2.0-derivative-fuzz-rule, mg:GPL-2.0-nodefinition-fuzz-rule ; # Fuzz rules
+    
+    mg:licenseUrl <https://www.gnu.org/licenses/old-licenses/gpl-2.0.en.html> .
 
 
 ###################    BSD-3-Clause    ###################
@@ -360,7 +390,7 @@ mg:WTFPL-2.0 a mg:LicenseInfo ;
     mg:grant [
         a mg:Right ;
         mg:isCopyright true ;
-        #mg:hasRightPrefix ;
+        # mg:hasRightPrefix ;
         mg:hasUsage mg:use, mg:modify, mg:merge, mg:sublicense, mg:redistribute, mg:commercial_use, mg:copyright # Even though this license does not explicitly mention sublicensing, it is generally understood that the public domain license allows for sublicensing.
     ] ;
     

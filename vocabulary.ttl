@@ -380,11 +380,11 @@ mg:hasPublishRestriction rdfs:subPropertyOf mg:hasRestriction ;
 mg:hasUseRestriction rdfs:subPropertyOf mg:hasRestriction ;
     rdfs:domain mg:Restriction .
 
-mg:banUseRestriction rdfs:subPropertyOf mg:hasRestriction ;
-    rdfs:domain mg:Restriction .
+# mg:banUseRestriction rdfs:subPropertyOf mg:hasRestriction ;
+#     rdfs:domain mg:Restriction .
 
-mg:banPublishRestriction rdfs:subPropertyOf mg:hasRestriction ;
-    rdfs:domain mg:Restriction .
+# mg:banPublishRestriction rdfs:subPropertyOf mg:hasRestriction ;
+#     rdfs:domain mg:Restriction .
 
 mg:state_changes_restriction a mg:Restriction ; # It is a template for such kind of restriction.
     mg:reportType "State Changes" ;
@@ -413,6 +413,18 @@ mg:use_behavior_restriction a mg:Restriction ; # It is a template for such kind 
 mg:runtime_restriction a mg:Restriction ; # It is a template for such kind of restriction.
     mg:reportType "Runtime Restrictions" ;
     mg:content "This work contains runtime restrictions to restrict your use to make sure you don't violate its license terms or you are using the latest version." .
+
+mg:no_other_conditions_restriction a mg:Restriction ; # It is a template for such kind of restriction.
+    mg:reportType "No Other Conditions" ;
+    mg:content "This work must not contain other license restrictions except the this license." .
+
+mg:gnu_freedom_restriction a mg:Restriction ; # It is a template for such kind of restriction.
+    mg:reportType "GNU Freedom" ;
+    mg:content "This work must be GNU freedom (no addtional download and use restrictions) according to the related license." .
+
+mg:cc_freedom_restriction a mg:Restriction ; # It is a template for such kind of restriction.
+    mg:reportType "CC Freedom" ;
+    mg:content "This work must be CC freedom (no addtional download and use restrictions) according to the related license." .
 
 mg:ensure_integrality_restriction a mg:Restriction ; # It is a template for such kind of restriction.
     mg:reportType "Ensure Integrality" ;

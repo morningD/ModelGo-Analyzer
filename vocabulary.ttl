@@ -171,16 +171,21 @@ mg:code a mg:Raw ;
     mg:targetWorkType mg:software ;
     mg:broader mg:raw-form ;
     rdfs:comment "Software in the form of source code." .
-mg:linguistics a mg:Raw ;
-    rdfs:formName "linguistics" ; 
+mg:literary a mg:Raw ;
+    rdfs:formName "literary" ; 
     mg:targetWorkType mg:dataset ;
     mg:broader mg:raw-form ;
-    rdfs:comment "Dataset in the form of linguistics resource." .
+    rdfs:comment "Dataset in the form of literary resource." .
 mg:vision a mg:Raw ;
     rdfs:formName "vision" ; 
     mg:targetWorkType mg:dataset ;
     mg:broader mg:raw-form ;
     rdfs:comment "Dataset in the form of vision resource." . 
+mg:acoustics a mg:Raw ;
+    rdfs:formName "acoustics" ; 
+    mg:targetWorkType mg:dataset ;
+    mg:broader mg:raw-form ;
+    rdfs:comment "Dataset in the form of acoustics resource." . 
 mg:weights a mg:Raw ;
     rdfs:formName "weights" ; 
     mg:targetWorkType mg:model ;
@@ -302,6 +307,8 @@ mg:no-charge a mg:RightPrefix . # also called free-of-charge
 mg:perpetual a mg:RightPrefix .
 mg:any-person a mg:RightPrefix .
 mg:sublicensable a mg:RightPrefix .
+mg:non-sublicensable a mg:RightPrefix .
+mg:non-transferable a mg:RightPrefix .
 
 mg:Usage a rdfs:Class ;
     rdfs:comment "The allow/not allow usages according the granting terms, i.e., use, redistribute, modify." .
@@ -401,7 +408,7 @@ mg:include_notice_restriction a mg:Restriction ; # It is a template for such kin
 
 mg:use_behavior_restriction a mg:Restriction ; # It is a template for such kind of restriction.
     mg:reportType "Use Behavior" ;
-    mg:content "This work must comply with the use restriction terms according to related license." .
+    mg:content "This work must comply with the use restriction terms (e.g., no commercial use, no medical use, no military use) according to related license." .
 
 mg:runtime_restriction a mg:Restriction ; # It is a template for such kind of restriction.
     mg:reportType "Runtime Restrictions" ;

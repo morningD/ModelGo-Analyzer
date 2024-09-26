@@ -458,3 +458,149 @@ mg:ECL-2.0 a mg:LicenseInfo ;
     mg:hasRule mg:ECL-2.0-duplication-fuzz-rule, mg:Apache-2.0-independent-fuzz-rule, mg:ECL-2.0-derivative-fuzz-rule, mg:LGPL-2.1-nodefinition-fuzz-rule, mg:AFL-3.0-republication-fuzz-rule ; # Fuzz rules
     
     mg:licenseUrl <https://opensource.org/license/ecl-2-0> .
+
+
+###################    CC0-1.0    ###################
+mg:CC0-1.0 a mg:LicenseInfo ;
+    mg:licenseId "CC0-1.0" ;
+    mg:licenseName "Creative Commons CC0 1.0" ;
+    mg:targetWorkType mg:dataset ;
+    mg:licenseVersion "1.0"^^xsd:float ;
+    mg:isFsfLibre true ;
+    mg:isOsiApproved false ;
+    mg:isPermissive true ;
+    mg:isOpenDomain true ;
+    # mg:isCopyleft false ;
+    
+    mg:grant [
+        a mg:Right ;
+        mg:isCopyright true ;
+        mg:isPatent true ; # Related right
+        mg:hasRightPrefix mg:worldwide, mg:royalty-free, mg:non-transferable, mg:non-sublicensable, mg:non-exclusive, mg:irrevocable ;
+        mg:hasUsage mg:use, mg:modify, mg:merge, mg:redistribute, mg:sublicense, mg:commercial_use
+    ] ;
+    mg:reserve [
+        a mg:Right ;
+        mg:hasUsage mg:patent, mg:copyright, mg:trademark, mg:trademark_use
+    ] ;
+    
+    mg:hasRule mg:Unlicense-independent-rule, mg:Unlicense-republication-rule ;
+    
+    mg:licenseUrl <https://creativecommons.org/publicdomain/zero/1.0/> .
+
+###################    CC-BY-4.0    ###################
+mg:CC-BY-4.0 a mg:LicenseInfo ;
+    mg:licenseId "CC-BY-4.0" ;
+    mg:licenseName "Creative Commons Attribution 4.0" ;
+    mg:targetWorkType mg:dataset ;
+    mg:licenseVersion "4.0"^^xsd:float ;
+    mg:isFsfLibre true ;
+    mg:isOsiApproved false ;
+    mg:isPermissive true ;
+    # mg:isOpenDomain false ;
+    # mg:isCopyleft false ;
+    
+    mg:grant [
+        a mg:Right ;
+        mg:isCopyright true ;
+        mg:isPatent true ;
+        mg:hasRightPrefix mg:worldwide, mg:royalty-free, mg:non-exclusive, mg:no-charge, mg:irrevocable ;
+        mg:hasUsage mg:use, mg:modify, mg:merge, mg:redistribute, mg:auto-license, mg:commercial_use
+    ] ;
+    mg:reserve [
+        a mg:Right ;
+        mg:hasUsage mg:patent, mg:copyright, mg:trademark, mg:trademark_use
+    ] ;
+    
+    mg:hasRule mg:CC-BY-4.0-duplication-rule, mg:CC-BY-4.0-independent-rule, mg:CC-BY-4.0-derivative-rule-1, mg:CC-BY-4.0-derivative-rule-2, mg:CC-BY-4.0-nodefinition-rule, mg:CC-BY-4.0-republication-rule ;
+    mg:hasRule mg:CC-BY-4.0-duplication-fuzz-rule, mg:CC-BY-4.0-independent-fuzz-rule, mg:CC-BY-4.0-derivative-fuzz-rule-1, mg:CC-BY-4.0-derivative-fuzz-rule-2, mg:CC-BY-4.0-nodefinition-fuzz-rule, mg:CC-BY-4.0-republication-fuzz-rule ; # Fuzz rules
+    
+    mg:licenseUrl <https://creativecommons.org/licenses/by/4.0/> .
+
+###################    CC-BY-SA-4.0    ###################
+mg:CC-BY-SA-4.0 a mg:LicenseInfo ;
+    mg:licenseId "CC-BY-SA-4.0" ;
+    mg:licenseName "Creative Commons Attribution Share Alike 4.0" ;
+    mg:targetWorkType mg:dataset ;
+    mg:licenseVersion "4.0"^^xsd:float ;
+    mg:isFsfLibre true ;
+    mg:isOsiApproved false ;
+    mg:isPermissive true ;
+    # mg:isOpenDomain false ;
+    mg:isCopyleft true ;
+    
+    mg:grant [
+        a mg:Right ;
+        mg:isCopyright true ;
+        mg:isPatent true ;
+        mg:hasRightPrefix mg:worldwide, mg:royalty-free, mg:non-exclusive, mg:no-charge, mg:irrevocable ;
+        mg:hasUsage mg:use, mg:modify, mg:merge, mg:redistribute, mg:auto-license, mg:commercial_use
+    ] ;
+    mg:reserve [
+        a mg:Right ;
+        mg:hasUsage mg:patent, mg:copyright, mg:trademark, mg:trademark_use
+    ] ;
+    
+    mg:hasRule mg:CC-BY-4.0-duplication-rule, mg:CC-BY-4.0-independent-rule, mg:CC-BY-SA-4.0-derivative-rule, mg:CC-BY-4.0-nodefinition-rule, mg:CC-BY-4.0-republication-rule ; # Only the derivative rule is different from CC-BY-4.0
+    mg:hasRule mg:CC-BY-4.0-duplication-fuzz-rule, mg:CC-BY-4.0-independent-fuzz-rule, mg:CC-BY-SA-4.0-derivative-fuzz-rule, mg:CC-BY-4.0-nodefinition-fuzz-rule, mg:CC-BY-4.0-republication-fuzz-rule ; # Fuzz rules
+    mg:licenseUrl <https://creativecommons.org/licenses/by-sa/4.0/> .
+
+
+###################    CC-BY-NC-4.0    ###################
+mg:CC-BY-NC-4.0 a mg:LicenseInfo ;
+    mg:licenseId "CC-BY-NC-4.0" ;
+    mg:licenseName "Creative Commons Attribution Non Commercial 4.0" ;
+    mg:targetWorkType mg:dataset ;
+    mg:licenseVersion "4.0"^^xsd:float ;
+    mg:isFsfLibre false ;
+    mg:isOsiApproved false ;
+    mg:isPermissive true ;
+    # mg:isOpenDomain false ;
+    # mg:isCopyleft false ;
+    
+    mg:grant [
+        a mg:Right ;
+        mg:isCopyright true ;
+        mg:isPatent true ;
+        mg:hasRightPrefix mg:worldwide, mg:royalty-free, mg:non-exclusive, mg:no-charge, mg:irrevocable ;
+        mg:hasUsage mg:use, mg:modify, mg:merge, mg:redistribute, mg:auto-license
+    ] ;
+    mg:reserve [
+        a mg:Right ;
+        mg:hasUsage mg:patent, mg:copyright, mg:trademark, mg:trademark_use, mg:commercial_use # Prohibit commercial use
+    ] ;
+    
+    mg:hasRule mg:CC-BY-NC-4.0-duplication-rule, mg:CC-BY-NC-4.0-independent-rule, mg:CC-BY-NC-4.0-derivative-rule-1, mg:CC-BY-NC-4.0-derivative-rule-2, mg:CC-BY-4.0-nodefinition-rule, mg:CC-BY-NC-4.0-republication-rule ; # Add the use behavior restriction (No commercial use) in the rules
+    mg:hasRule mg:CC-BY-NC-4.0-duplication-fuzz-rule, mg:CC-BY-NC-4.0-independent-fuzz-rule, mg:CC-BY-NC-4.0-derivative-fuzz-rule-1, mg:CC-BY-NC-4.0-derivative-fuzz-rule-2, mg:CC-BY-4.0-nodefinition-fuzz-rule, mg:CC-BY-NC-4.0-republication-fuzz-rule ; # Fuzz rules
+    
+    mg:licenseUrl <https://creativecommons.org/licenses/by-nc/4.0/> .
+
+
+###################    CC-BY-ND-4.0    ###################
+mg:CC-BY-ND-4.0 a mg:LicenseInfo ;
+    mg:licenseId "CC-BY-ND-4.0" ;
+    mg:licenseName "Creative Commons Attribution No Derivatives 4.0" ;
+    mg:targetWorkType mg:dataset ;
+    mg:licenseVersion "4.0"^^xsd:float ;
+    mg:isFsfLibre false ;
+    mg:isOsiApproved false ;
+    mg:isPermissive true ;
+    # mg:isOpenDomain false ;
+    # mg:isCopyleft false ;
+    
+    mg:grant [
+        a mg:Right ;
+        mg:isCopyright true ;
+        mg:isPatent true ;
+        mg:hasRightPrefix mg:worldwide, mg:royalty-free, mg:non-exclusive, mg:no-charge, mg:irrevocable ;
+        mg:hasUsage mg:use, mg:modify, mg:merge, mg:redistribute, mg:auto-license
+    ] ;
+    mg:reserve [
+        a mg:Right ;
+        mg:hasUsage mg:patent, mg:copyright, mg:trademark, mg:trademark_use, mg:commercial_use # Prohibit commercial use
+    ] ;
+    
+    mg:hasRule mg:CC-BY-4.0-duplication-rule, mg:CC-BY-4.0-independent-rule, mg:CC-BY-ND-4.0-derivative-rule, mg:CC-BY-4.0-nodefinition-rule, mg:CC-BY-ND-4.0-republication-rule ; # No sharing of derivative
+    mg:hasRule mg:CC-BY-4.0-duplication-fuzz-rule, mg:CC-BY-4.0-independent-fuzz-rule, mg:CC-BY-ND-4.0-derivative-fuzz-rule, mg:CC-BY-4.0-nodefinition-fuzz-rule, mg:CC-BY-ND-4.0-republication-fuzz-rule ; # Fuzz rules
+    
+    mg:licenseUrl <https://creativecommons.org/licenses/by-nd/4.0/> .

@@ -759,14 +759,16 @@ mg:GFDL-1.3 a mg:LicenseInfo ;
     mg:targetWorkType mg:dataset ;
     mg:licenseVersion "1.3"^^xsd:float ;
     mg:isFsfLibre true ;
-    mg:isOsiApproved true ;
-    mg:isPermissive true ;
+    mg:isOsiApproved false ;
+    # mg:isPermissive false ;
+    # mg:isOpenDomain false ;
+    mg:isCopyleft true ;
     
     mg:grant [
         a mg:Right ;
         mg:isCopyright true ;
         mg:hasRightPrefix mg:worldwide, mg:royalty-free, mg:non-exclusive, mg:no-charge, mg:irrevocable ;
-        mg:hasUsage mg:use, mg:modify, mg:merge, mg:redistribute, mg:sublicense, mg:commercial_use, mg:auto-license
+        mg:hasUsage mg:use, mg:modify, mg:merge, mg:redistribute, mg:commercial_use, mg:auto-license
     ] ;
     mg:reserve [
         a mg:Right ;
@@ -777,3 +779,152 @@ mg:GFDL-1.3 a mg:LicenseInfo ;
     mg:hasRule mg:GFDL-1.3-duplication-fuzz-rule-1, mg:GFDL-1.3-duplication-fuzz-rule-2, mg:GFDL-1.3-independent-fuzz-rule, mg:GFDL-1.3-derivative-fuzz-rule-1, mg:GFDL-1.3-derivative-fuzz-rule-2, mg:GFDL-1.3-nodefinition-fuzz-rule, mg:GFDL-1.3-republication-fuzz-rule ;
     
     mg:licenseUrl <https://www.gnu.org/licenses/fdl-1.3.html> .
+
+
+###################    OpenRAIL-M    ###################
+mg:OpenRAIL-M a mg:LicenseInfo ;
+    mg:licenseId "OpenRAIL-M" ;
+    mg:licenseName "CreativeML Open RAIL-M" ;
+    mg:targetWorkType mg:model ;
+    mg:licenseVersion "NaN"^^xsd:float ;
+    mg:isFsfLibre false ;
+    mg:isOsiApproved false ;
+    mg:isPermissive false ; # OpenRAIL is not considered a permissive license
+    mg:isOpenDomain false ;
+    mg:isCopyleft false ; # It contains copyleft-style use behavior restrictions
+    
+    mg:grant [
+        a mg:Right ;
+        mg:isCopyright true ;
+        mg:isPatent true ;
+        mg:hasRightPrefix mg:perpetual, mg:worldwide, mg:non-exclusive, mg:no-charge, mg:royalty-free, mg:irrevocable ;
+        mg:hasUsage mg:use, mg:modify, mg:merge, mg:redistribute, mg:sublicense, mg:commercial_use
+    ] ;
+    mg:reserve [
+        a mg:Right ;
+        mg:hasUsage mg:patent, mg:copyright, mg:trademark, mg:trademark_use
+    ] ;
+
+    mg:hasRule mg:OpenRAIL-M-duplication-rule, mg:OpenRAIL-M-derivative-rule, mg:OpenRAIL-M-republication-rule ;
+    mg:hasRule mg:OpenRAIL-M-duplication-fuzz-rule, mg:OpenRAIL-M-derivative-fuzz-rule, mg:OpenRAIL-M-republication-fuzz-rule ;
+    
+    mg:licenseUrl <https://huggingface.co/spaces/CompVis/stable-diffusion-license> .
+
+# There is no fundamental difference between this license and <OpenRAIL++>, <BigScience RAIL License v1.0> and <BigScience Open RAIL-M License>, so we cover them by this license. Please ref: 
+# OpenRAIL++ <https://huggingface.co/stabilityai/stable-diffusion-2/blob/main/LICENSE-MODEL>,
+# BigScience RAIL License v1.0 <https://bigscience.huggingface.co/blog/the-bigscience-rail-license>,
+# BigScience Open RAIL-M License <https://bigscience.huggingface.co/blog/bigscience-openrail-m>
+
+
+###################    Llama2    ###################
+mg:Llama2 a mg:LicenseInfo ;
+    mg:licenseId "Llama2" ;
+    mg:licenseName "Llama 2 Community License Agreement" ;
+    mg:targetWorkType mg:model ;
+    mg:licenseVersion "2023-07-18"^^xsd:date ; # July 18 2023 Version
+    mg:isFsfLibre false ;
+    mg:isOsiApproved false ;
+    mg:isPermissive false ;
+    mg:isOpenDomain false ;
+    mg:isCopyleft false ; # It contains copyleft-style use behavior restrictions
+
+    mg:grant [
+        a mg:Right ;
+        mg:hasRightPrefix mg:non-exclusive, mg:worldwide, mg:non-transferable, mg:royalty-free ;
+        mg:hasUsage mg:use, mg:modify, mg:merge, mg:redistribute, mg:commercial_use # Commercial use with no greater than 700 million monthly active users
+    ] ;
+    mg:reserve [
+        a mg:Right ;
+        mg:hasUsage mg:patent, mg:copyright, mg:trademark, mg:trademark_use, mg:sublicense
+    ] ;
+    
+    mg:hasRule mg:Llama2-duplication-rule, mg:Llama2-independent-rule, mg:Llama2-derivative-rule, mg:Llama2-republication-rule-1, mg:Llama2-republication-rule-2 ;
+    mg:hasRule mg:Llama2-duplication-fuzz-rule, mg:Llama2-independent-fuzz-rule, mg:Llama2-derivative-fuzz-rule, mg:Llama2-republication-fuzz-rule-1, mg:Llama2-republication-fuzz-rule-2 ;
+
+
+    mg:licenseUrl <https://ai.meta.com/llama/license/> .
+
+
+###################    Llama3    ###################
+mg:Llama3 a mg:LicenseInfo ;
+    mg:licenseId "Llama3" ;
+    mg:licenseName "Meta Llama 3 Community License Agreement" ;
+    mg:targetWorkType mg:model ;
+    mg:licenseVersion "2024-04-18"^^xsd:date ; # April 18 2024 Version
+    mg:isFsfLibre false ;
+    mg:isOsiApproved false ;
+    mg:isPermissive false ;
+    mg:isOpenDomain false ;
+    mg:isCopyleft false ; # It contains copyleft-style use behavior restrictions
+
+    mg:grant [
+        a mg:Right ;
+        mg:hasRightPrefix mg:non-exclusive, mg:worldwide, mg:non-transferable, mg:royalty-free ; # Same as Llama2
+        mg:hasUsage mg:use, mg:modify, mg:merge, mg:redistribute, mg:commercial_use # Commercial use with no greater than 700 million monthly active users
+    ] ;
+    mg:reserve [
+        a mg:Right ;
+        mg:hasUsage mg:patent, mg:copyright, mg:trademark, mg:trademark_use, mg:sublicense
+    ] ;
+    
+    mg:hasRule mg:Llama3-duplication-rule, mg:Llama3-independent-rule, mg:Llama3-derivative-rule, mg:Llama3-republication-rule ;
+    mg:hasRule mg:Llama3-duplication-fuzz-rule, mg:Llama3-independent-fuzz-rule, mg:Llama3-derivative-fuzz-rule, mg:Llama3-republication-fuzz-rule ;
+
+
+    mg:licenseUrl <https://www.llama.com/llama3/license/> .
+
+
+###################    Llama3.1    ###################
+mg:Llama3.1 a mg:LicenseInfo ;
+    mg:licenseId "Llama3.1" ; # There is no fundamental difference between this license and <Llama3.2>.
+    mg:licenseName "Llama 3.1 Community License Agreement" ;
+    mg:targetWorkType mg:model ;
+    mg:licenseVersion "2024-07-23"^^xsd:date ; # July 23 2024 Version
+    mg:isFsfLibre false ;
+    mg:isOsiApproved false ;
+    mg:isPermissive false ;
+    mg:isOpenDomain false ;
+    mg:isCopyleft false ; # It contains copyleft-style use behavior restrictions
+
+    mg:grant [
+        a mg:Right ;
+        mg:hasRightPrefix mg:non-exclusive, mg:worldwide, mg:non-transferable, mg:royalty-free ; # Same as Llama2
+        mg:hasUsage mg:use, mg:modify, mg:merge, mg:redistribute, mg:commercial_use # Commercial use with no greater than 700 million monthly active users
+    ] ;
+    mg:reserve [
+        a mg:Right ;
+        mg:hasUsage mg:patent, mg:copyright, mg:trademark, mg:trademark_use, mg:sublicense
+    ] ;
+    
+    mg:hasRule mg:Llama3.1-duplication-rule, mg:Llama3.1-independent-rule, mg:Llama3.1-derivative-rule, mg:Llama3.1-republication-rule ;
+    mg:hasRule mg:Llama3.1-duplication-fuzz-rule, mg:Llama3.1-independent-fuzz-rule, mg:Llama3.1-derivative-fuzz-rule, mg:Llama3.1-republication-fuzz-rule ;
+
+    mg:licenseUrl <https://www.llama.com/llama3_1/license/> .
+
+
+###################    Gemma    ###################    
+mg:Gemma a mg:LicenseInfo ;
+    mg:licenseId "Gemma" ; # Very similar to <Llama3.1>, the only difference is the derivatives should state changes
+    mg:licenseName "Gemma Terms of Use" ;
+    mg:targetWorkType mg:model ;
+    mg:licenseVersion "2024-04-01"^^xsd:date ; # April 1 2024 Version
+    mg:isFsfLibre false ;
+    mg:isOsiApproved false ;
+    mg:isPermissive false ;
+    mg:isOpenDomain false ;
+    mg:isCopyleft false ; # It contains copyleft-style use behavior restrictions
+
+    mg:grant [
+        a mg:Right ;
+        mg:hasRightPrefix mg:non-exclusive, mg:worldwide, mg:non-transferable, mg:royalty-free ; # Same as Llama2
+        mg:hasUsage mg:use, mg:modify, mg:merge, mg:redistribute # Commercial_use is not explicitly granted
+    ] ;
+    mg:reserve [
+        a mg:Right ;
+        mg:hasUsage mg:patent, mg:copyright, mg:trademark, mg:trademark_use, mg:sublicense
+    ] ;
+    
+    mg:hasRule mg:Llama3.1-duplication-rule, mg:Llama3.1-independent-rule, mg:Gemma-derivative-rule, mg:Llama3.1-republication-rule ;
+    mg:hasRule mg:Llama3.1-duplication-fuzz-rule, mg:Llama3.1-independent-fuzz-rule, mg:Gemma-derivative-fuzz-rule, mg:Llama3.1-republication-fuzz-rule ;
+
+    mg:licenseUrl <https://ai.google.dev/gemma/terms> .

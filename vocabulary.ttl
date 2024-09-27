@@ -426,6 +426,14 @@ mg:cc_freedom_restriction a mg:Restriction ; # It is a template for such kind of
     mg:reportType "CC Freedom" ;
     mg:content "This work must be CC freedom (no addtional download and use restrictions) according to the related license." .
 
+mg:llama2_exclusive_use_restriction a mg:Restriction ; # It is a template for such kind of restriction.
+    mg:reportType "Llama2 Exclusive Use" ;
+    mg:content "This work only can be reused by Llama2 and its derivatives." .
+
+mg:llama3_exclusive_use_restriction a mg:Restriction ; # It is a template for such kind of restriction.
+    mg:reportType "Llama3 Exclusive Use" ;
+    mg:content "This work only can be reused by Llama3 and its derivatives." .
+
 mg:ensure_integrality_restriction a mg:Restriction ; # It is a template for such kind of restriction.
     mg:reportType "Ensure Integrality" ;
     mg:content "This work must ensure the functional integrity of the original work according to the related license." .

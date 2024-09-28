@@ -781,6 +781,34 @@ mg:GFDL-1.3 a mg:LicenseInfo ;
     mg:licenseUrl <https://www.gnu.org/licenses/fdl-1.3.html> .
 
 
+###################    ODC-By-1.0    ###################
+mg:ODC-By-1.0 a mg:LicenseInfo ;
+    mg:licenseId "ODC-By-1.0" ;
+    mg:licenseName "Open Data Commons Attribution License v1.0" ;
+    mg:targetWorkType mg:dataset ;
+    mg:licenseVersion "1.0"^^xsd:float ;
+    mg:isFsfLibre false ;
+    mg:isOsiApproved true ;
+    mg:isPermissive true ;
+    mg:isOpenDomain true ;
+
+    mg:grant [
+        a mg:Right ;
+        mg:isCopyright true ;
+        mg:hasRightPrefix mg:worldwide, mg:royalty-free, mg:non-exclusive ;
+        mg:hasUsage mg:use, mg:modify, mg:merge, mg:redistribute, mg:auto-license, mg:commercial_use
+    ] ;
+    mg:reserve [
+        a mg:Right ;
+        mg:hasUsage mg:patent, mg:copyright, mg:trademark, mg:trademark_use, mg:sublicense
+    ] ;
+    
+    mg:hasRule mg:ODC-By-1.0-duplication-rule, mg:ODC-By-1.0-independent-rule, mg:ODC-By-1.0-derivative-rule, mg:ODC-By-1.0-nodefinition-rule, mg:ODC-By-1.0-republication-rule ;
+    mg:hasRule mg:ODC-By-1.0-duplication-fuzz-rule, mg:ODC-By-1.0-independent-fuzz-rule, mg:ODC-By-1.0-derivative-fuzz-rule, mg:ODC-By-1.0-nodefinition-fuzz-rule, mg:ODC-By-1.0-republication-fuzz-rule ;
+    
+    mg:licenseUrl <https://opendatacommons.org/licenses/by/1-0/> .
+
+
 ###################    OpenRAIL-M    ###################
 mg:OpenRAIL-M a mg:LicenseInfo ;
     mg:licenseId "OpenRAIL-M" ;

@@ -1,0 +1,18 @@
+####    Global rules    ####
+# Inheritance of class membership (rdfs:subClassOf)
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+
+{
+  ?b a ?B .
+  ?B rdfs:subClassOf ?A .
+} => {
+  ?b a ?A .
+} .
+
+# rdfs:subPropertyOf
+{
+    ?B rdfs:subPropertyOf ?A .
+    ?s ?B ?o .
+} => {
+    ?s ?A ?o .
+} .

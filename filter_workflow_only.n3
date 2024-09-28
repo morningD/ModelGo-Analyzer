@@ -1,0 +1,80 @@
+@prefix math: <http://www.w3.org/2000/10/swap/math#> .
+@prefix list: <http://www.w3.org/2000/10/swap/list#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix string: <http://www.w3.org/2000/10/swap/string#> .
+@prefix log: <http://www.w3.org/2000/10/swap/log#> .
+@prefix mg: <http://www.modelgo.li/rdf/terms#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix : <http://example.org/ns#>.
+
+
+{ # Get all action types and ids
+    ?actionType rdfs:subClassOf mg:Action . 
+    ?a a ?actionType .
+    ?a mg:actionId ?aid .
+} log:query {
+    ?a a ?actionType .
+    ?a mg:actionId ?aid .
+} .
+
+{   # Input name
+    ?actionType rdfs:subClassOf mg:Action . 
+    ?a a ?actionType .
+    ?a mg:hasInput ?input .
+    ?input mg:targetWork ?inw .
+    ?inw a mg:Work .
+    ?inw mg:workName ?iname .
+} log:query {
+    ?a a ?actionType .
+    ?a mg:hasInput ?input .
+    ?input mg:targetWork ?inw .
+    ?inw a mg:Work .
+    ?inw mg:workName ?iname .
+} .
+
+{   # Output name
+    ?actionType rdfs:subClassOf mg:Action . 
+    ?a a ?actionType .
+    ?a mg:hasOutput ?output .
+    ?output mg:targetWork ?outw .
+    ?outw a mg:Work .
+    ?outw mg:WorkName ?oname .
+} log:query {
+    ?a a ?actionType .
+    ?a mg:hasOutput ?output .
+    ?output mg:targetWork ?outw .
+    ?outw a mg:Work .
+    ?outw mg:workName ?oname .
+} .
+
+{ # Work's license info
+    ?work a mg:Work .
+    ?work mg:hasLicense ?linfo .
+} log:query {
+    ?work a mg:Work .
+    ?work mg:hasLicense ?linfo .
+} .
+
+{   # Work's type
+    ?work a mg:Work .
+    ?work mg:hasWorkType ?type .
+} log:query {
+    ?work a mg:Work .
+    ?work mg:hasWorkType ?type .
+} .
+
+{   # Work's form
+    ?work a mg:Work .
+    ?work mg:hasWorkForm ?form .
+} log:query {
+    ?work a mg:Work .
+    ?work mg:hasWorkForm ?form .
+} .
+
+{   # Action flow info
+    ?a a mg:Action .
+    ?a mg:yieldOutputWork ?next .
+} log:query {
+    ?a mg:yieldOutputWork ?next .
+} .

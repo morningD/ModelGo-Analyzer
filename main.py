@@ -1,6 +1,7 @@
 from actions import *
 from rdflib import Graph, URIRef, Literal, Namespace
 from rdflib.namespace import RDF, RDFS
+import subprocess
 
 # 6 Corpus, 5 Image DS, 2 Music DS, 1 3D DS, 1 Video DS, 10 Models
 
@@ -39,3 +40,26 @@ flow = combine([whisper_model, detr_model])
 
 # Save the gen graph to a new Turtle file
 flow.graph.serialize(destination="gen.ttl", format="ttl")
+
+
+# Reasoning by N3 Rules
+g = Graph()
+#result = subprocess.run(["eye", "--quiet", "--nope", "--pass", "vocabulary.ttl", "MGLicenseInfo.ttl", "MGLicenseRule.ttl", "gen.ttl", "rules_init.n3"], stdout=subprocess.PIPE, check=True)
+
+#g.parse(data=result.stdout, format="n3")
+#g.serialize(destination="out_init.ttl", format="ttl")
+
+#result = subprocess.run(["eye", "--quiet", "--nope", "--pass-only-new", "vocabulary.ttl", "MGLicenseInfo.ttl", "MGLicenseRule.ttl", "out_init.ttl", "rules_construct.n3"], stdout=subprocess.PIPE, check=True)
+result = subprocess.run(["eye", "--quiet", "--nope", "--pass", 
+                         "vocabulary.ttl", "MGLicenseInfo.ttl", "MGLicenseRule.ttl", "gen.ttl",
+                         "rules_init.n3", "rules_construct.n3"], 
+                         stdout=subprocess.PIPE, check=True)
+g.parse(data=result.stdout, format="n3").serialize(destination="out_construct.ttl", format="ttl")
+
+filter_result = subprocess.run(["eye", "--quiet", "--nope",
+                         "out_construct.ttl", "--query", "filter_workflow_only.n3"], 
+                         stdout=subprocess.PIPE, check=True)
+
+Graph().parse(data=filter_result.stdout, format="n3").serialize(destination="out_filter.ttl", format="ttl")
+
+# eye --quiet --nope --pass-only-new vocabulary.ttl MGLicenseInfo.ttl MGLicenseRule.ttl out_construct.ttl filter_workflow_only.n3

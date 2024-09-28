@@ -1034,53 +1034,53 @@ mg:CC-BY-4.0-independent-fuzz-rule a mg:Rule ;
 
 mg:CC-BY-4.0-derivative-rule-1 a mg:Rule ;
     mg:hasOutputDef mg:derivative ;
-    mg:targetActionType mg:Train, mg:Modify, mg:Embed ;
+    mg:targetActionType mg:Amalgamate ;
     mg:targetInputWorkForm mg:literary, mg:vision, mg:acoustics ;
     mg:targetOutputWorkForm mg:literary, mg:vision, mg:acoustics ;
-    mg:relicense mg:any-license ;
+    mg:relicense mg:compatible-license ;
     mg:hasPublishRestriction mg:include_notice_restriction, mg:include_license_restriction, mg:cc_freedom_restriction ;
     mg:allowSharing true .
 
 mg:CC-BY-4.0-derivative-fuzz-rule-1 a mg:Rule ;
     mg:hasOutputDef mg:derivative ;
-    mg:targetActionType mg:Train, mg:Modify, mg:Embed ;
+    mg:targetActionType mg:Amalgamate ;
     mg:targetInputWorkForm mg:code, mg:weights, mg:raw-form, mg:exe, mg:binary-form, mg:mixed-form ;
     mg:targetOutputWorkForm mg:code, mg:weights, mg:raw-form, mg:exe, mg:binary-form, mg:mixed-form ;
-    mg:relicense mg:any-license ;
+    mg:relicense mg:compatible-license ;
     mg:hasPublishRestriction mg:include_notice_restriction, mg:include_license_restriction, mg:cc_freedom_restriction ;
     mg:allowSharing true .
 
 mg:CC-BY-4.0-derivative-rule-2 a mg:Rule ;
     mg:hasOutputDef mg:derivative ;
-    mg:targetActionType mg:Amalgamate ;
+    mg:targetActionType mg:Train, mg:Modify, mg:Embed, mg:Distill ;
     mg:targetInputWorkForm mg:literary, mg:vision, mg:acoustics ;
-    mg:targetOutputWorkForm mg:literary, mg:vision, mg:acoustics ;
-    mg:relicense mg:compatible-license ;
+    mg:targetOutputWorkForm mg:literary, mg:vision, mg:acoustics, mg:raw-form ;
+    mg:relicense mg:any-license ;
     mg:hasPublishRestriction mg:include_notice_restriction, mg:include_license_restriction, mg:cc_freedom_restriction ;
     mg:allowSharing true .
 
 mg:CC-BY-4.0-derivative-fuzz-rule-2 a mg:Rule ;
     mg:hasOutputDef mg:derivative ;
-    mg:targetActionType mg:Amalgamate ;
+    mg:targetActionType mg:Train, mg:Modify, mg:Embed, mg:Distill ;
     mg:targetInputWorkForm mg:code, mg:weights, mg:raw-form, mg:exe, mg:binary-form, mg:mixed-form ;
     mg:targetOutputWorkForm mg:code, mg:weights, mg:raw-form, mg:exe, mg:binary-form, mg:mixed-form ;
-    mg:relicense mg:compatible-license ;
+    mg:relicense mg:any-license ;
     mg:hasPublishRestriction mg:include_notice_restriction, mg:include_license_restriction, mg:cc_freedom_restriction ;
     mg:allowSharing true .
 
 mg:CC-BY-4.0-nodefinition-rule a mg:Rule ;
     mg:hasOutputDef mg:nodefinition ;
-    mg:targetActionType mg:Gen, mg:Distill ;
+    mg:targetActionType mg:Gen ;
     mg:targetInputWorkForm mg:literary, mg:vision, mg:acoustics ;
-    mg:targetOutputWorkForm mg:literary, mg:vision, mg:acoustics ;
+    mg:targetOutputWorkForm mg:literary, mg:vision, mg:acoustics, mg:code, mg:weights, mg:raw-form, mg:exe, mg:binary-form, mg:mixed-form ;
     mg:relicense mg:any-license ;
     mg:allowSharing true .
 
 mg:CC-BY-4.0-nodefinition-fuzz-rule a mg:Rule ;
     mg:hasOutputDef mg:nodefinition ;
-    mg:targetActionType mg:Gen, mg:Distill ;
+    mg:targetActionType mg:Gen ;
     mg:targetInputWorkForm mg:code, mg:weights, mg:raw-form, mg:exe, mg:binary-form, mg:mixed-form ;
-    mg:targetOutputWorkForm mg:code, mg:weights, mg:raw-form, mg:exe, mg:binary-form, mg:mixed-form ;
+    mg:targetOutputWorkForm mg:literary, mg:vision, mg:acoustics, mg:code, mg:weights, mg:raw-form, mg:exe, mg:binary-form, mg:mixed-form ;
     mg:relicense mg:any-license ;
     mg:allowSharing true .
 
@@ -1110,16 +1110,16 @@ mg:CC-BY-4.0-republication-fuzz-rule a mg:Rule ;
 
 mg:CC-BY-SA-4.0-derivative-rule a mg:Rule ;
     mg:hasOutputDef mg:derivative ;
-    mg:targetActionType mg:Amalgamate, mg:Train, mg:Modify, mg:Embed ;
+    mg:targetActionType mg:Amalgamate, mg:Train, mg:Modify, mg:Embed, mg:Distill ;
     mg:targetInputWorkForm mg:literary, mg:vision, mg:acoustics ;
-    mg:targetOutputWorkForm mg:literary, mg:vision, mg:acoustics ;
+    mg:targetOutputWorkForm mg:literary, mg:vision, mg:acoustics, mg:raw-form ;
     mg:relicense mg:compatible-license ;
     mg:hasPublishRestriction mg:include_notice_restriction, mg:include_license_restriction, mg:cc_freedom_restriction ;
     mg:allowSharing true .
 
 mg:CC-BY-SA-4.0-derivative-fuzz-rule a mg:Rule ;
     mg:hasOutputDef mg:derivative ;
-    mg:targetActionType mg:Amalgamate, mg:Train, mg:Modify, mg:Embed ;
+    mg:targetActionType mg:Amalgamate, mg:Train, mg:Modify, mg:Embed, mg:Distill ;
     mg:targetInputWorkForm mg:code, mg:weights, mg:raw-form, mg:exe, mg:binary-form, mg:mixed-form ;
     mg:targetOutputWorkForm mg:code, mg:weights, mg:raw-form, mg:exe, mg:binary-form, mg:mixed-form ;
     mg:relicense mg:compatible-license ;
@@ -1172,9 +1172,9 @@ mg:CC-BY-NC-4.0-independent-fuzz-rule a mg:Rule ;
 
 mg:CC-BY-NC-4.0-derivative-rule-1 a mg:Rule ;
     mg:hasOutputDef mg:derivative ;
-    mg:targetActionType mg:Train, mg:Modify, mg:Embed ;
+    mg:targetActionType mg:Train, mg:Modify, mg:Embed, mg:Distill ;
     mg:targetInputWorkForm mg:literary, mg:vision, mg:acoustics ;
-    mg:targetOutputWorkForm mg:literary, mg:vision, mg:acoustics ;
+    mg:targetOutputWorkForm mg:literary, mg:vision, mg:acoustics, mg:raw-form ;
     mg:relicense mg:any-license ;
     mg:hasPublishRestriction mg:include_notice_restriction, mg:include_license_restriction, mg:cc_freedom_restriction ;
     mg:hasUseRestriction mg:use_behavior_restriction ; # No commercial use only
@@ -1182,7 +1182,7 @@ mg:CC-BY-NC-4.0-derivative-rule-1 a mg:Rule ;
 
 mg:CC-BY-NC-4.0-derivative-fuzz-rule-1 a mg:Rule ;
     mg:hasOutputDef mg:derivative ;
-    mg:targetActionType mg:Train, mg:Modify, mg:Embed ;
+    mg:targetActionType mg:Train, mg:Modify, mg:Embed, mg:Distill ;
     mg:targetInputWorkForm mg:code, mg:weights, mg:raw-form, mg:exe, mg:binary-form, mg:mixed-form ;
     mg:targetOutputWorkForm mg:code, mg:weights, mg:raw-form, mg:exe, mg:binary-form, mg:mixed-form ;
     mg:relicense mg:any-license ;
@@ -1240,15 +1240,15 @@ mg:CC-BY-NC-4.0-republication-fuzz-rule a mg:Rule ;
 
 mg:CC-BY-ND-4.0-derivative-rule a mg:Rule ;
     mg:hasOutputDef mg:derivative ;
-    mg:targetActionType mg:Amalgamate, mg:Modify, mg:Train, mg:Embed ;
+    mg:targetActionType mg:Amalgamate, mg:Modify, mg:Train, mg:Embed, mg:Distill ;
     mg:targetInputWorkForm mg:literary, mg:vision, mg:acoustics ;
-    mg:targetOutputWorkForm mg:literary, mg:vision, mg:acoustics ;
+    mg:targetOutputWorkForm mg:literary, mg:vision, mg:acoustics, mg:raw-form ;
     mg:relicense mg:none-license ;
     mg:allowSharing false . # No sharing of derivative works
 
 mg:CC-BY-ND-4.0-derivative-fuzz-rule a mg:Rule ;
     mg:hasOutputDef mg:derivative ;
-    mg:targetActionType mg:Amalgamate, mg:Modify, mg:Train, mg:Embed ;
+    mg:targetActionType mg:Amalgamate, mg:Modify, mg:Train, mg:Embed, mg:Distills ;
     mg:targetInputWorkForm mg:code, mg:weights, mg:raw-form, mg:exe, mg:binary-form, mg:mixed-form ;
     mg:targetOutputWorkForm mg:code, mg:weights, mg:raw-form, mg:exe, mg:binary-form, mg:mixed-form ;
     mg:relicense mg:none-license ;
@@ -1283,16 +1283,16 @@ mg:CC-BY-ND-4.0-republication-fuzz-rule a mg:Rule ;
 
 mg:CC-BY-NC-ND-4.0-derivative-rule a mg:Rule ;
     mg:hasOutputDef mg:derivative ;
-    mg:targetActionType mg:Amalgamate, mg:Modify, mg:Train, mg:Embed ;
+    mg:targetActionType mg:Amalgamate, mg:Modify, mg:Train, mg:Embed, mg:Distill ;
     mg:targetInputWorkForm mg:literary, mg:vision, mg:acoustics ;
-    mg:targetOutputWorkForm mg:literary, mg:vision, mg:acoustics ;
+    mg:targetOutputWorkForm mg:literary, mg:vision, mg:acoustics, mg:raw-form ;
     mg:relicense mg:none-license ;
     mg:hasUseRestriction mg:use_behavior_restriction ; # No commercial use only
     mg:allowSharing false . # No sharing of derivative works
 
 mg:CC-BY-NC-ND-4.0-derivative-fuzz-rule a mg:Rule ;
     mg:hasOutputDef mg:derivative ;
-    mg:targetActionType mg:Amalgamate, mg:Modify, mg:Train, mg:Embed ;
+    mg:targetActionType mg:Amalgamate, mg:Modify, mg:Train, mg:Embed, mg:Distill ;
     mg:targetInputWorkForm mg:code, mg:weights, mg:raw-form, mg:exe, mg:binary-form, mg:mixed-form ;
     mg:targetOutputWorkForm mg:code, mg:weights, mg:raw-form, mg:exe, mg:binary-form, mg:mixed-form ;
     mg:relicense mg:none-license ;
@@ -1330,9 +1330,9 @@ mg:CC-BY-NC-ND-4.0-republication-fuzz-rule a mg:Rule ;
 
 mg:CC-BY-NC-SA-4.0-derivative-rule a mg:Rule ;
     mg:hasOutputDef mg:derivative ;
-    mg:targetActionType mg:Amalgamate, mg:Modify, mg:Train, mg:Embed ;
+    mg:targetActionType mg:Amalgamate, mg:Modify, mg:Train, mg:Embed, mg:Distill ;
     mg:targetInputWorkForm mg:literary, mg:vision, mg:acoustics ;
-    mg:targetOutputWorkForm mg:literary, mg:vision, mg:acoustics ;
+    mg:targetOutputWorkForm mg:literary, mg:vision, mg:acoustics, mg:raw-form ;
     mg:relicense mg:none-license ;
     mg:hasPublishRestriction mg:include_notice_restriction, mg:include_license_restriction, mg:cc_freedom_restriction ;
     mg:hasUseRestriction mg:use_behavior_restriction ; # No commercial use only
@@ -1340,7 +1340,7 @@ mg:CC-BY-NC-SA-4.0-derivative-rule a mg:Rule ;
 
 mg:CC-BY-NC-SA-4.0-derivative-fuzz-rule a mg:Rule ;
     mg:hasOutputDef mg:derivative ;
-    mg:targetActionType mg:Amalgamate, mg:Modify, mg:Train, mg:Embed ;
+    mg:targetActionType mg:Amalgamate, mg:Modify, mg:Train, mg:Embed, mg:Distill ;
     mg:targetInputWorkForm mg:code, mg:weights, mg:raw-form, mg:exe, mg:binary-form, mg:mixed-form ;
     mg:targetOutputWorkForm mg:code, mg:weights, mg:raw-form, mg:exe, mg:binary-form, mg:mixed-form ;
     mg:relicense mg:none-license ;
@@ -1659,6 +1659,79 @@ mg:GFDL-1.3-republication-fuzz-rule a mg:Rule ;
     mg:hasPublishRestriction mg:include_notice_restriction, mg:include_license_restriction, mg:disclose_self_restriction ;
     mg:allowSharing true .
 
+
+###################    ODC-By-1.0    ###################
+mg:ODC-By-1.0-duplication-rule a mg:Rule ;
+    mg:hasOutputDef mg:duplication ;
+    mg:targetActionType mg:Copy ;
+    mg:targetInputWorkForm mg:literary, mg:vision, mg:acoustics, mg:binary-form, mg:service-form ;
+    mg:targetOutputWorkForm mg:literary, mg:vision, mg:acoustics, mg:binary-form, mg:service-form ;
+    mg:relicense mg:none-license ;
+    mg:hasPublishRestriction mg:include_notice_restriction, mg:include_license_restriction ;
+    mg:allowSharing true .
+
+mg:ODC-By-1.0-duplication-fuzz-rule a mg:Rule ;
+    mg:hasOutputDef mg:duplication ;
+    mg:targetActionType mg:Copy ;
+    mg:targetInputWorkForm mg:code, mg:weights, mg:raw-form, mg:exe, mg:saas, mg:mixed-form ;
+    mg:targetOutputWorkForm mg:code, mg:weights, mg:raw-form, mg:exe, mg:saas, mg:mixed-form ;
+    mg:relicense mg:none-license ;
+    mg:hasPublishRestriction mg:include_notice_restriction, mg:include_license_restriction ;
+    mg:allowSharing true .
+
+mg:ODC-By-1.0-independent-rule a mg:Rule ;
+    mg:hasOutputDef mg:independent ;
+    mg:targetActionType mg:Generate ;
+    mg:targetInputWorkForm mg:literary, mg:vision, mg:acoustics, mg:binary-form, mg:service-form ;
+    mg:targetOutputWorkForm mg:literary, mg:vision, mg:acoustics, mg:code, mg:weights, mg:raw-form, mg:exe, mg:binary-form, mg:saas, mg:service-form, mg:mixed-form ;
+    mg:relicense mg:any-license ;
+    mg:hasPublishRestriction mg:include_notice_restriction ;
+    mg:allowSharing true .
+
+mg:ODC-By-1.0-independent-fuzz-rule a mg:Rule ;
+    mg:hasOutputDef mg:independent ;
+    mg:targetActionType mg:Generate ;
+    mg:targetInputWorkForm mg:code, mg:weights, mg:raw-form, mg:exe, mg:saas, mg:mixed-form ;
+    mg:targetOutputWorkForm mg:literary, mg:vision, mg:acoustics, mg:code, mg:weights, mg:raw-form, mg:exe, mg:binary-form, mg:saas, mg:service-form, mg:mixed-form ;
+    mg:relicense mg:any-license ;
+    mg:hasPublishRestriction mg:include_notice_restriction ;
+    mg:allowSharing true .
+
+mg:ODC-By-1.0-derivative-rule a mg:Rule ;
+    mg:hasOutputDef mg:derivative ;
+    mg:targetActionType mg:Amalgamate, mg:Combine, mg:Modify, mg:Train, mg:Distill, mg:Embed ;
+    mg:targetInputWorkForm mg:literary, mg:vision, mg:acoustics, mg:binary-form, mg:service-form ;
+    mg:targetOutputWorkForm mg:literary, mg:vision, mg:acoustics, mg:binary-form, mg:service-form ;
+    mg:relicense mg:none-license ;
+    mg:hasPublishRestriction mg:include_notice_restriction, mg:include_license_restriction ;
+    mg:allowSharing true .
+
+mg:ODC-By-1.0-derivative-fuzz-rule a mg:Rule ;
+    mg:hasOutputDef mg:derivative ;
+    mg:targetActionType mg:Amalgamate, mg:Combine, mg:Modify, mg:Train, mg:Distill, mg:Embed ;
+    mg:targetInputWorkForm mg:code, mg:weights, mg:raw-form, mg:exe, mg:saas, mg:mixed-form ;
+    mg:targetOutputWorkForm mg:code, mg:weights, mg:raw-form, mg:exe, mg:saas, mg:mixed-form ;
+    mg:relicense mg:none-license ;
+    mg:hasPublishRestriction mg:include_notice_restriction, mg:include_license_restriction ;
+    mg:allowSharing true .
+
+mg:ODC-By-1.0-republication-rule a mg:Rule ;
+    mg:hasOutputDef mg:republication ;
+    mg:targetActionType mg:Publish ;
+    mg:targetInputWorkForm mg:literary, mg:vision, mg:acoustics, mg:binary-form, mg:service-form ;
+    mg:targetOutputWorkForm mg:literary, mg:vision, mg:acoustics, mg:binary-form, mg:service-form ;
+    mg:relicense mg:none-license ;
+    mg:hasPublishRestriction mg:include_notice_restriction, mg:include_license_restriction ;
+    mg:allowSharing true .
+
+mg:ODC-By-1.0-republication-fuzz-rule a mg:Rule ;
+    mg:hasOutputDef mg:republication ;
+    mg:targetActionType mg:Publish ;
+    mg:targetInputWorkForm mg:code, mg:weights, mg:raw-form, mg:exe, mg:saas, mg:mixed-form ;
+    mg:targetOutputWorkForm mg:code, mg:weights, mg:raw-form, mg:exe, mg:saas, mg:mixed-form ;
+    mg:relicense mg:none-license ;
+    mg:hasPublishRestriction mg:include_notice_restriction, mg:include_license_restriction ;
+    mg:allowSharing true .
 
 ###################    OpenRAIL-M    ###################
 mg:OpenRAIL-M-duplication-rule a mg:Rule ;

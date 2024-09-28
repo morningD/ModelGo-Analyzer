@@ -1,0 +1,274 @@
+@prefix math: <http://www.w3.org/2000/10/swap/math#> .
+@prefix list: <http://www.w3.org/2000/10/swap/list#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix string: <http://www.w3.org/2000/10/swap/string#> .
+@prefix log: <http://www.w3.org/2000/10/swap/log#> .
+@prefix mg: <http://www.modelgo.li/rdf/terms#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix : <http://example.org/ns#>.
+
+
+####    Predefined rules set up for analysis    ####
+# An MG work has the same work type and form as its provenance work, if it exists.
+{
+    ?work a mg:Work .
+    ?work mg:hasProvenance ?pwork .
+    ?pwork mg:hasWorkType ?wtype .
+    ?pwork mg:hasWorkForm ?wform .
+} => {
+    ?work mg:hasWorkType ?wtype .
+    ?work mg:hasWorkForm ?wform .
+} .
+
+# Collect all known work forms to a list mg:all_work_forms
+#{ (?form {?form a mg:WorkForm .} ?forms) log:collectAllIn _:x . } => { mg:all_work_forms mg:hasItems ?forms } .
+
+####    ML workflow eatablishing rules  ####
+# Add the 'hasSubwork' property to the output if 'targetSubwork' is provided through the input.
+{
+    ?action a mg:Action .
+    ?action!mg:hasInput mg:targetSubwork ?work .
+    ?action!mg:hasOutput mg:targetWork ?output .
+} => {
+    ?output mg:hasSubwork ?work .
+} .
+# Add the 'hasAuxwork' property to the output.
+{
+    ?action a mg:Action .
+    ?action!mg:hasInput mg:targetAuxwork ?work .
+    ?action!mg:hasOutput mg:targetWork ?output .
+} => {
+    ?output mg:hasSubwork ?work .
+} .
+
+# Add the TargetWork from hasOutput to the next action's hasInput if "yieldOutputWork" is provided.
+{
+    ?action a mg:Action .
+    ?action mg:yieldOutputWork ?next_action .
+    ?action!mg:hasOutput mg:targetWork ?work .
+    ?next_action mg:hasInput ?input .
+} => {
+    ?input mg:targetWork ?work .
+} .
+
+# Output work name assignment. We use a simplier name method instead.
+{
+    ?action a mg:Action .
+    ?action mg:actionId ?aid .
+    ?action!mg:hasOutput mg:targetWork ?outwork . # Note: We have not yet considered the case of multiple output works
+    (?aid "_outwork")string:concatenation ?new_name .
+} => {
+    ?outwork mg:workName ?new_name .
+} .
+
+# Ruling Creation. Add a new ruling to the output work for each action.
+{
+    ?actionType rdfs:subClassOf mg:Action . 
+    ?actionType log:notEqualTo mg:RegisterLicense . # Skip RegisterLicense
+    ?action a ?actionType . # For each action
+    ?action!mg:hasInput mg:targetWork ?inw .
+    ?inw mg:hasLicense ?linfo . # Ensure that the input work has a license
+    ?action!mg:hasOutput mg:targetWork ?outw .
+    (?action ?inw ?outw "ruling") log:skolem ?geniri . # Ensure that only one ruling is created for each (action, input work, output work) tuple
+} => {
+    ?geniri a mg:Ruling ;
+        mg:targetWork ?inw ;
+        mg:targetAction ?action ;
+        mg:hasLicense ?linfo .
+    ?outw mg:hasRuling ?geniri .
+} .
+
+# Ruling Proliferation. Add a new ruling with the same action to the work's all mixworks
+{
+    ?ruling a mg:Ruling .
+    ?ruling mg:targetAction ?action .
+    ?actionType rdfs:subClassOf mg:Action . 
+    # Copy will not proliferate to the mixworks due to the output def no longer being duplication,
+    # but we still check the right granting of them by proliferating their request to the mixworks.
+    ?actionType log:notEqualTo mg:Copy .
+    ?action a ?actionType .
+    ?ruling <- mg:hasRuling ?work .
+    ?work mg:hasMixwork ?mixwork .
+    ?mixwork mg:hasLicense ?linfo . # The new ruling is according to the license info of the mixwork
+    (?action ?mixwork ?work "ruling") log:skolem ?geniri . # Ensure that only one ruling is created for each (action, mixwork, work) tuple
+} => {
+    ?geniri a mg:Ruling ;
+        mg:targetWork ?mixwork ;
+        mg:targetAction ?action ;
+        mg:hasLicense ?linfo .
+    ?work mg:hasRuling ?geniri .
+} .
+
+# Ruling Completion. Find the matching LicenseRule for each ruling
+{
+    ?ruling a mg:Ruling .
+    ?ruling mg:hasLicense ?linfo .
+    ?linfo mg:hasRule ?rule . # Get the License Rules
+    ?ruling^mg:hasRuling mg:hasWorkForm ?inwf .
+    ?ruling!mg:targetWork mg:hasWorkForm ?outwf .
+    ?ruling mg:targetAction ?action .
+    ?rule mg:targetActionType ?atype .
+    ?action a ?atype . # Matching action type
+    ?rule mg:targetInputWorkForm ?inwf . # Matching input work form
+    ?rule mg:targetOutputWorkForm ?outwf . # Matching output work form
+    ?rule mg:hasOutputDef ?outputDef . # Find the matching output definition
+} => {
+    ?ruling mg:hasRule ?rule . # Bind the triggered rule to the ruling
+    ?ruling mg:hasOutputDef ?outputDef . # Bind the output definition to the ruling
+} .
+
+# Reuqest Proliferation. Add the work's request to its Mixwork
+{
+    ?request a mg:Request .
+    ?request <- mg:hasRequest ?work .
+    ?work mg:hasMixwork ?mixwork .
+} => {
+    ?mixwork mg:hasRequest ?request .
+} .
+
+
+####   Action Reasoning rules  ####
+
+# [ResiterLicense] Reasoning rules for registering a license to a work, which
+# adds the 'hasProvenance' and 'hasLicense' properties to the output.
+{
+    ?action a mg:RegisterLicense . # Logical rule
+    ?action!mg:hasInput mg:targetWork ?inw .
+    ?action!mg:hasInput mg:targetLicense ?license .
+} => {
+    _:work a mg:Work ; # Generate the hasOutput property
+        mg:hasProvenance ?inw ;
+        mg:hasLicense ?license .
+    ?action!mg:hasOutput mg:targetWork _:work .
+} .
+
+# [Copy] Reasoning rules for copying a work, which
+# adds the 'hasMixwork' property to the output.
+{
+    ?action a mg:Copy .
+    ?action!mg:hasInput mg:targetWork ?inw .
+    ?action mg:hasOutput ?out .
+    ?inw mg:hasWorkForm ?wf .
+    ?inw mg:hasWorkType ?wt .
+    ?inw mg:hasLicenseInfo ?linfo .
+} => {
+    _:work a mg:Work ; # Hold same work form, type, and license info as the input work
+        mg:hasMixwork ?inw ;
+        mg:hasWorkForm ?wf ;
+        mg:hasWorkType ?wt ;
+        mg:hasLicenseInfo ?linfo .
+    ?out mg:targetWork _:work .
+} .
+
+# [Combine] Reasoning rules for combine multiple works, which
+# creates a new output work and adds the 'hasMixwork' to this output.
+{
+    ?action a mg:Combine .
+    ?action!mg:hasInput mg:targetWork ?inw .
+    ?action mg:hasOutput ?out .
+    # We use log:skolem to ensure that just one targetWork is created for each combine case.
+    (?action "yieldOutputWork") log:skolem ?geniri . 
+} => {
+    ?out mg:targetWork ?geniri .
+    ?geniri mg:hasMixwork ?inw .
+} .
+
+# [Combine] Reasoning rules for determination the type and form of output work.
+{ # Collect all input works' types
+    ?action a mg:Combine .
+    ?action!mg:hasInput mg:targetWork ?inw .
+    ?inw mg:hasWorkType ?t .
+    (?action "types") log:skolem ?geniri .
+} => {
+    ?geniri mg:is ?t .
+} .
+{ # Mixed-type case;
+    ?action a mg:Combine .
+    ?action!mg:hasOutput mg:targetWork ?outw .
+    (?action "types") log:skolem ?geniri .
+    ( ?t { ?geniri mg:is ?t . } ?types ) log:collectAllIn _:x .
+    ?types list:length ?len .
+    ?len math:greaterThan "1"^^<xsd:int> . # More than one input work type
+} => {
+    ?outw mg:hasWorkType mg:mixed-type .
+} .
+{ # Else, single work type case.
+    ?action a mg:Combine .
+    ?action!mg:hasOutput mg:targetWork ?outw .
+    (?action "types") log:skolem ?geniri .
+    ( ?t { ?geniri mg:is ?t . } ?types ) log:collectAllIn _:x .
+    ?types list:length ?len .
+    ?len math:equalTo "1"^^<xsd:int> . # Only one input work type
+    ?types list:first ?type .
+} => {
+    ?outw mg:hasWorkType ?type .
+} .
+
+{ # Collect all input works' forms and broader forms
+    ?action a mg:Combine .
+    ?action!mg:hasInput mg:targetWork ?inw .
+    ?inw mg:hasWorkForm ?f .
+    ?f mg:broader ?bf .
+    (?action "forms") log:skolem ?gen1 .
+    (?action "broader_forms") log:skolem ?gen2 .
+} => {
+    ?gen1 mg:is ?f.
+    ?gen2 mg:is ?bf.
+} .
+{  # Single work form case;
+    ?action a mg:Combine .
+    ?action!mg:hasOutput mg:targetWork ?outw .
+    (?action "forms") log:skolem ?gen1 .
+    ( ?f { ?gen1 mg:is ?f . } ?forms ) log:collectAllIn _:x .
+    ?forms list:length ?len .
+    ?len math:equalTo "1"^^<xsd:int> . # Only one input work form
+    ?forms list:first ?form .
+} => {
+    ?outw mg:hasWorkForm ?form .
+} . 
+{ # Else, try to use the common broader form
+    ?action a mg:Combine .
+    ?action!mg:hasOutput mg:targetWork ?outw .
+    (?action "forms") log:skolem ?gen1 .
+    ( ?f { ?gen1 mg:is ?f . } ?forms ) log:collectAllIn _:x .
+    ?forms list:length ?len1 .
+    ?len1 math:greaterThan "1"^^<xsd:int> . # More than one input work form
+    (?action "broader_forms") log:skolem ?gen2 .
+    ( ?bf { ?gen2 mg:is ?bf . } ?bforms ) log:collectAllIn _:x .
+    ?bforms list:length ?len2 .
+    ?len2 math:equalTo "1"^^<xsd:int> . # Only one boarder form
+    ?bforms list:first ?bform .
+} => {
+    ?outw mg:hasWorkForm ?bform .
+} . 
+{ # Else, if there is more than one broader form, use a mixed form
+    ?action a mg:Combine .
+    ?action!mg:hasOutput mg:targetWork ?outw .
+    (?action "forms") log:skolem ?gen1 .
+    ( ?f { ?gen1 mg:is ?f . } ?forms ) log:collectAllIn _:x .
+    ?forms list:length ?len1 .
+    ?len1 math:greaterThan "1"^^<xsd:int> . # More than one input work form
+    (?action "broader_forms") log:skolem ?gen2 .
+    ( ?bf { ?gen2 mg:is ?bf . } ?bforms ) log:collectAllIn _:x .
+    ?bforms list:length ?len2 .
+    ?len2 math:greaterThan "1"^^<xsd:int> . # More than one boarder form
+} => {
+    ?outw mg:hasWorkForm mg:mixed-form .
+} .
+
+# [Combine] Request creating rule
+{
+    ?action a mg:Combine .
+    ?action!mg:hasInput mg:targetWork ?inw .
+    ?action!mg:hasOutput mg:targetWork ?outw .
+} => {
+    _:request a mg:Request ;
+        mg:targetWork ?outw ;
+        mg:targetAction ?action ;
+        mg:grant [ 
+            a mg:Right ;
+            mg:hasUsage mg:merge 
+        ] .
+    ?inw mg:hasRequest _:request .
+} .

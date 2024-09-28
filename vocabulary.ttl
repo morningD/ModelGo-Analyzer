@@ -438,6 +438,10 @@ mg:ensure_integrality_restriction a mg:Restriction ; # It is a template for such
     mg:reportType "Ensure Integrality" ;
     mg:content "This work must ensure the functional integrity of the original work according to the related license." .
 
+mg:report_impact_restriction a mg:Restriction ; # It is a template for such kind of restriction.
+    mg:reportType "Report Impact" ;
+    mg:content "This work requires publisher to submit a Derivative Impact Report according to the related license." .
+
 # Vocabulary for requesting rights of a input work raised by an action during the ML reuse process.
 mg:Request a rdfs:Class ;
     rdfs:comment "The need to grant or reserve rights for a input work depends on its method of reuse." .

@@ -2403,3 +2403,172 @@ mg:MG-BY-NC-ND-derivative-fuzz-rule-2 a mg:Rule ;
 
 # mg:MG-BY-NC-ND-republication-rule -> mg:Llama3.1-republication-rule
 # mg:MG-BY-NC-ND-republication-fuzz-rule -> mg:Llama3.1-republication-fuzz-rule
+
+
+###################    OPT-175B    ###################
+# mg:OPT-175B-duplication-rule -> mg:Llama3.1-duplication-rule
+# mg:OPT-175B-duplication-fuzz-rule -> mg:Llama3.1-duplication-fuzz-rule
+
+# mg:OPT-175B-independent-rule -> mg:Llama3.1-independent-rule
+# mg:OPT-175B-independent-fuzz-rule -> mg:Llama3.1-independent-fuzz-rule
+
+mg:OPT-175B-derivative-rule a mg:Rule ;
+    mg:hasOutputDef mg:derivative ;
+    mg:targetActionType mg:Amalgamate, mg:Combine, mg:Modify, mg:Train, mg:Embed, mg:Distill ;
+    mg:targetInputWorkForm mg:weights, mg:exe, mg:saas ;
+    mg:targetOutputWorkForm mg:weights, mg:exe, mg:saas ;
+    mg:relicense mg:none-license ;
+    mg:hasPublishRestriction mg:include_notice_restriction, mg:include_license_restriction ;
+    mg:hasUseRestriction mg:use_behavior_restriction ;
+    mg:allowSharing true .
+
+mg:OPT-175B-derivative-fuzz-rule a mg:Rule ;
+    mg:hasOutputDef mg:derivative ;
+    mg:targetActionType mg:Amalgamate, mg:Combine, mg:Modify, mg:Train, mg:Embed, mg:Distill ;
+    mg:targetInputWorkForm mg:code, mg:literary, mg:vision, mg:acoustics, mg:raw-form, mg:binary-form, mg:service-form, mg:mixed-form ;
+    mg:targetOutputWorkForm mg:code, mg:literary, mg:vision, mg:acoustics, mg:raw-form, mg:binary-form, mg:service-form, mg:mixed-form ;
+    mg:relicense mg:none-license ;
+    mg:hasPublishRestriction mg:include_notice_restriction, mg:include_license_restriction ;
+    mg:hasUseRestriction mg:use_behavior_restriction ;
+    mg:allowSharing true .
+
+# mg:OPT-175B-republication-rule -> mg:Llama3.1-republication-rule
+# mg:OPT-175B-republication-fuzz-rule -> mg:Llama3.1-republication-fuzz-rule
+
+
+###################    AI2-ImpACT-LR    ###################
+mg:AI2-ImpACT-LR-duplication-rule a mg:Rule ;
+    mg:hasOutputDef mg:duplication ;
+    mg:targetActionType mg:Copy ;
+    mg:targetInputWorkForm mg:weights, mg:exe, mg:saas ;
+    mg:targetOutputWorkForm mg:weights, mg:exe, mg:saas ;
+    mg:relicense mg:none-license ;
+    mg:hasPublishRestriction mg:include_notice_restriction, mg:include_license_restriction, mg:report_impact_restriction ;
+    mg:hasUseRestriction mg:use_behavior_restriction ;
+    mg:allowSharing true .
+
+mg:AI2-ImpACT-LR-duplication-fuzz-rule a mg:Rule ;
+    mg:hasOutputDef mg:duplication ;
+    mg:targetActionType mg:Copy ;
+    mg:targetInputWorkForm mg:code, mg:literary, mg:vision, mg:acoustics, mg:raw-form, mg:binary-form, mg:service-form, mg:mixed-form ;
+    mg:targetOutputWorkForm mg:code, mg:literary, mg:vision, mg:acoustics, mg:raw-form, mg:binary-form, mg:service-form, mg:mixed-form ;
+    mg:relicense mg:none-license ;
+    mg:hasPublishRestriction mg:include_notice_restriction, mg:include_license_restriction, mg:report_impact_restriction ;
+    mg:hasUseRestriction mg:use_behavior_restriction ;
+    mg:allowSharing true .
+
+# mg:AI2-ImpACT-LR-independent-rule -> mg:Llama3.1-independent-rule
+# mg:AI2-ImpACT-LR-independent-fuzz-rule -> mg:Llama3.1-independent-fuzz-rule
+
+mg:AI2-ImpACT-LR-derivative-rule a mg:Rule ;
+    mg:hasOutputDef mg:derivative ;
+    mg:targetActionType mg:Amalgamate, mg:Combine, mg:Modify, mg:Train, mg:Embed, mg:Distill ;
+    mg:targetInputWorkForm mg:weights, mg:exe, mg:saas ;
+    mg:targetOutputWorkForm mg:weights, mg:exe, mg:saas ;
+    mg:relicense mg:none-license ;
+    mg:hasPublishRestriction mg:include_notice_restriction, mg:include_license_restriction, mg:report_impact_restriction ;
+    mg:hasUseRestriction mg:use_behavior_restriction ;
+    mg:allowSharing true .
+
+mg:AI2-ImpACT-LR-derivative-fuzz-rule a mg:Rule ;
+    mg:hasOutputDef mg:derivative ;
+    mg:targetActionType mg:Amalgamate, mg:Combine, mg:Modify, mg:Train, mg:Embed, mg:Distill ;
+    mg:targetInputWorkForm mg:code, mg:literary, mg:vision, mg:acoustics, mg:raw-form, mg:binary-form, mg:service-form, mg:mixed-form ;
+    mg:targetOutputWorkForm mg:code, mg:literary, mg:vision, mg:acoustics, mg:raw-form, mg:binary-form, mg:service-form, mg:mixed-form ;
+    mg:relicense mg:none-license ;
+    mg:hasPublishRestriction mg:include_notice_restriction, mg:include_license_restriction, mg:report_impact_restriction ;
+    mg:hasUseRestriction mg:use_behavior_restriction ;
+    mg:allowSharing true .
+
+mg:AI2-ImpACT-LR-republication-rule a mg:Rule ;
+    mg:hasOutputDef mg:republication ;
+    mg:targetActionType mg:Publish ;
+    mg:targetInputWorkForm mg:weights, mg:exe, mg:saas ;
+    mg:targetOutputWorkForm mg:weights, mg:exe, mg:saas ;
+    mg:relicense mg:none-license ;
+    mg:hasPublishRestriction mg:include_license_restriction, mg:include_notice_restriction, mg:report_impact_restriction ;
+    mg:hasUseRestriction mg:use_behavior_restriction ;
+    mg:allowSharing true .
+
+mg:AI2-ImpACT-LR-republication-fuzz-rule a mg:Rule ;
+    mg:hasOutputDef mg:republication ;
+    mg:targetActionType mg:Publish ;
+    mg:targetInputWorkForm mg:code, mg:literary, mg:vision, mg:acoustics, mg:raw-form, mg:binary-form, mg:service-form, mg:mixed-form ;
+    mg:targetOutputWorkForm mg:code, mg:literary, mg:vision, mg:acoustics, mg:raw-form, mg:binary-form, mg:service-form, mg:mixed-form ;
+    mg:relicense mg:none-license ;
+    mg:hasPublishRestriction mg:include_license_restriction, mg:include_notice_restriction, mg:report_impact_restriction ;
+    mg:hasUseRestriction mg:use_behavior_restriction ;
+    mg:allowSharing true .
+
+
+###################    AI2-ImpACT-MR    ###################
+mg:AI2-ImpACT-MR-duplication-rule a mg:Rule ;
+    mg:hasOutputDef mg:duplication ;
+    mg:targetActionType mg:Copy ;
+    mg:targetInputWorkForm mg:weights, mg:exe, mg:saas ;
+    mg:targetOutputWorkForm mg:weights, mg:exe, mg:saas ;
+    mg:relicense mg:none-license ;
+    mg:hasUseRestriction mg:use_behavior_restriction ;
+    mg:allowSharing true .
+
+mg:AI2-ImpACT-MR-duplication-fuzz-rule a mg:Rule ;
+    mg:hasOutputDef mg:duplication ;
+    mg:targetActionType mg:Copy ;
+    mg:targetInputWorkForm mg:code, mg:literary, mg:vision, mg:acoustics, mg:raw-form, mg:binary-form, mg:service-form, mg:mixed-form ;
+    mg:targetOutputWorkForm mg:code, mg:literary, mg:vision, mg:acoustics, mg:raw-form, mg:binary-form, mg:service-form, mg:mixed-form ;
+    mg:relicense mg:none-license ;
+    mg:hasUseRestriction mg:use_behavior_restriction ;
+    mg:allowSharing true .
+
+# mg:AI2-ImpACT-MR-independent-rule -> mg:Llama3.1-independent-rule
+# mg:AI2-ImpACT-MR-independent-fuzz-rule -> mg:Llama3.1-independent-fuzz-rule
+
+# mg:AI2-ImpACT-MR-derivative-rule -> mg:AI2-ImpACT-LR-derivative-rule
+# mg:AI2-ImpACT-MR-derivative-fuzz-rule -> mg:AI2-ImpACT-LR-derivative-fuzz-rule
+
+# mg:AI2-ImpACT-MR-republication-rule -> mg:AI2-ImpACT-LR-republication-rule
+# mg:AI2-ImpACT-MR-republication-fuzz-rule -> mg:AI2-ImpACT-LR-republication-fuzz-rule
+
+
+###################    AI2-ImpACT-HR    ###################
+# mg:AI2-ImpACT-HR-duplication-rule -> mg:AI2-ImpACT-MR-duplication-rule
+# mg:AI2-ImpACT-HR-duplication-fuzz-rule -> mg:AI2-ImpACT-MR-duplication-fuzz-rule
+
+# mg:AI2-ImpACT-HR-independent-rule -> mg:Llama3.1-independent-rule
+# mg:AI2-ImpACT-HR-independent-fuzz-rule -> mg:Llama3.1-independent-fuzz-rule
+
+mg:AI2-ImpACT-HR-derivative-rule a mg:Rule ;
+    mg:hasOutputDef mg:derivative ;
+    mg:targetActionType mg:Amalgamate, mg:Combine, mg:Modify, mg:Train, mg:Embed, mg:Distill ;
+    mg:targetInputWorkForm mg:weights, mg:exe, mg:saas ;
+    mg:targetOutputWorkForm mg:weights, mg:exe, mg:saas ;
+    mg:relicense mg:none-license ;
+    mg:hasUseRestriction mg:use_behavior_restriction ;
+    mg:allowSharing false . # Cannot publish any derivative
+
+mg:AI2-ImpACT-HR-derivative-fuzz-rule a mg:Rule ;
+    mg:hasOutputDef mg:derivative ;
+    mg:targetActionType mg:Amalgamate, mg:Combine, mg:Modify, mg:Train, mg:Embed, mg:Distill ;
+    mg:targetInputWorkForm mg:code, mg:literary, mg:vision, mg:acoustics, mg:raw-form, mg:binary-form, mg:service-form, mg:mixed-form ;
+    mg:targetOutputWorkForm mg:code, mg:literary, mg:vision, mg:acoustics, mg:raw-form, mg:binary-form, mg:service-form, mg:mixed-form ;
+    mg:relicense mg:none-license ;
+    mg:hasUseRestriction mg:use_behavior_restriction ;
+    mg:allowSharing false . # Cannot publish any derivative
+
+mg:AI2-ImpACT-HR-republication-rule a mg:Rule ;
+    mg:hasOutputDef mg:republication ;
+    mg:targetActionType mg:Publish ;
+    mg:targetInputWorkForm mg:weights, mg:exe, mg:saas ;
+    mg:targetOutputWorkForm mg:weights, mg:exe, mg:saas ;
+    mg:relicense mg:none-license ;
+    mg:hasUseRestriction mg:use_behavior_restriction ;
+    mg:allowSharing false . # Cannot publish any derivative
+
+mg:AI2-ImpACT-HR-republication-fuzz-rule a mg:Rule ;
+    mg:hasOutputDef mg:republication ;
+    mg:targetActionType mg:Publish ;
+    mg:targetInputWorkForm mg:code, mg:literary, mg:vision, mg:acoustics, mg:raw-form, mg:binary-form, mg:service-form, mg:mixed-form ;
+    mg:targetOutputWorkForm mg:code, mg:literary, mg:vision, mg:acoustics, mg:raw-form, mg:binary-form, mg:service-form, mg:mixed-form ;
+    mg:relicense mg:none-license ;
+    mg:hasUseRestriction mg:use_behavior_restriction ;
+    mg:allowSharing false . # Cannot publish any derivative

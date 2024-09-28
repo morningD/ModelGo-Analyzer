@@ -1197,3 +1197,119 @@ mg:MG-BY-NC-ND a mg:LicenseInfo ;
     mg:hasRule mg:Llama3.1-duplication-fuzz-rule, mg:MG-BY-NC-ND-derivative-fuzz-rule-1, mg:MG-BY-NC-ND-derivative-fuzz-rule-2, mg:Llama3.1-republication-fuzz-rule ;
 
     mg:licenseUrl <https://github.com/Xtra-Computing/ModelGo/blob/main/MG_licenses/MG-BY-NC-ND.txt> .
+
+
+###################    OPT-175B    ###################
+mg:OPT-175B a mg:LicenseInfo ;
+    mg:licenseId "OPT-175B" ;
+    mg:licenseName "OPT-175B License Agreement" ;
+    mg:targetWorkType mg:model ;
+    mg:licenseVersion "NaN"^^xsd:float ;
+    mg:isFsfLibre false ;
+    mg:isOsiApproved false ;
+    mg:isPermissive false ; 
+    # mg:isOpenDomain false ;
+    mg:isCopyleft false ;
+
+    mg:grant [
+        a mg:Right ;
+        mg:isCopyright true ;
+        mg:hasRightPrefix mg:non-exclusive, mg:worldwide, mg:non-transferable, mg:non-sublicensable, mg:revocable, mg:royalty-free ;
+        mg:hasUsage mg:use, mg:modify, mg:merge, mg:redistribute
+    ] ;
+    mg:reserve [
+        a mg:Right ;
+        mg:hasUsage mg:patent, mg:copyright, mg:trademark, mg:trademark_use, mg:commercial_use
+    ] ;
+    
+    mg:hasRule mg:Llama3.1-duplication-rule, mg:Llama3.1-independent-rule, mg:Llama3.1-derivative-rule, mg:Llama3.1-republication-rule ; # Same as Llama3.1, commercial using is prohibited
+    mg:hasRule mg:Llama3.1-duplication-fuzz-rule, mg:Llama3.1-independent-fuzz-rule, mg:Llama3.1-derivative-fuzz-rule, mg:Llama3.1-republication-fuzz-rule ;
+
+    mg:licenseUrl <https://github.com/facebookresearch/metaseq/blob/main/projects/OPT/MODEL_LICENSE.md> .
+
+
+###################    AI2-ImpACT-LR    ###################
+mg:AI2-ImpACT-LR a mg:LicenseInfo ;
+    mg:licenseId "AI2-ImpACT-LR" ;
+    mg:licenseName "AI2 ImpACT License for Low Risk Artifacts" ;
+    mg:targetWorkType mg:model ;
+    mg:licenseVersion "2.0"^^xsd:float ; # Version 2.0, January 8, 2024
+    mg:isFsfLibre false ;
+    mg:isOsiApproved false ;
+    mg:isPermissive false ; 
+    # mg:isOpenDomain false ;
+    mg:isCopyleft true ; # It is a proprietary license actually
+
+    mg:grant [
+        a mg:Right ;
+        mg:hasRightPrefix mg:worldwide, mg:non-exclusive, mg:non-transferable, mg:royalty-free ;
+        mg:hasUsage mg:use, mg:modify, mg:merge, mg:redistribute
+    ] ;
+
+    mg:reserve [
+        a mg:Right ;
+        mg:hasUsage mg:patent, mg:copyright, mg:trademark, mg:trademark_use
+    ] ;
+
+    mg:hasRule mg:AI2-ImpACT-LR-duplication-rule, mg:Llama3.1-independent-rule, mg:AI2-ImpACT-LR-derivative-rule, mg:AI2-ImpACT-LR-republication-rule ;
+    mg:hasRule mg:AI2-ImpACT-LR-duplication-fuzz-rule, mg:Llama3.1-independent-fuzz-rule, mg:AI2-ImpACT-LR-derivative-fuzz-rule, mg:AI2-ImpACT-LR-republication-fuzz-rule ;
+
+    mg:licenseUrl <https://allenai.org/licenses/impact-lr> .
+
+
+###################    AI2-ImpACT-MR    ###################
+mg:AI2-ImpACT-MR a mg:LicenseInfo ;
+    mg:licenseId "AI2-ImpACT-MR" ;
+    mg:licenseName "AI2 ImpACT License for Medium Risk Artifacts" ;
+    mg:targetWorkType mg:model ;
+    mg:licenseVersion "2.0"^^xsd:float ; # Version 2.0, January 8, 2024
+    mg:isFsfLibre false ;
+    mg:isOsiApproved false ;
+    mg:isPermissive false ; 
+    # mg:isOpenDomain false ;
+    mg:isCopyleft true ; # It is a proprietary license actually
+
+    mg:grant [
+        a mg:Right ;
+        mg:hasRightPrefix mg:worldwide, mg:non-exclusive, mg:non-transferable, mg:royalty-free ;
+        mg:hasUsage mg:use, mg:modify, mg:merge, mg:redistribute
+    ] ;
+
+    mg:reserve [
+        a mg:Right ;
+        mg:hasUsage mg:patent, mg:copyright, mg:trademark, mg:trademark_use, mg:commercial_use # Internal use only
+    ] ;
+
+    mg:hasRule mg:AI2-ImpACT-MR-duplication-rule, mg:Llama3.1-independent-rule, mg:AI2-ImpACT-LR-derivative-rule, mg:AI2-ImpACT-LR-republication-rule ;
+    mg:hasRule mg:AI2-ImpACT-MR-duplication-fuzz-rule, mg:Llama3.1-independent-fuzz-rule, mg:AI2-ImpACT-LR-derivative-fuzz-rule, mg:AI2-ImpACT-LR-republication-fuzz-rule ;
+
+    mg:licenseUrl <https://allenai.org/licenses/impact-mr> .
+
+
+###################    AI2-ImpACT-HR    ###################
+mg:AI2-ImpACT-HR a mg:LicenseInfo ;
+    mg:licenseId "AI2-ImpACT-HR" ;
+    mg:licenseName "AI2 ImpACT License for High Risk Artifacts" ;
+    mg:targetWorkType mg:model ;
+    mg:licenseVersion "2.0"^^xsd:float ; # Version 2.0, January 8, 2024
+    mg:isFsfLibre false ;
+    mg:isOsiApproved false ;
+    mg:isPermissive false ; 
+    # mg:isOpenDomain false ;
+    mg:isCopyleft true ; # It is a proprietary license actually
+
+    mg:grant [
+        a mg:Right ;
+        mg:hasRightPrefix mg:worldwide, mg:non-exclusive, mg:non-transferable, mg:royalty-free ;
+        mg:hasUsage mg:use, mg:modify, mg:merge
+    ] ;
+
+    mg:reserve [
+        a mg:Right ;
+        mg:hasUsage mg:patent, mg:copyright, mg:trademark, mg:trademark_use, mg:redistribute, mg:commercial_use # Internal use only
+    ] ;
+
+    mg:hasRule mg:AI2-ImpACT-MR-duplication-rule, mg:Llama3.1-independent-rule, mg:AI2-ImpACT-HR-derivative-rule, mg:AI2-ImpACT-HR-republication-rule ;
+    mg:hasRule mg:AI2-ImpACT-MR-duplication-fuzz-rule, mg:Llama3.1-independent-fuzz-rule, mg:AI2-ImpACT-HR-derivative-fuzz-rule, mg:AI2-ImpACT-HR-republication-fuzz-rule ;
+
+    mg:licenseUrl <https://allenai.org/licenses/impact-hr> .

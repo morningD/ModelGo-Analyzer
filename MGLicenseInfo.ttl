@@ -902,7 +902,7 @@ mg:Llama3.1 a mg:LicenseInfo ;
     mg:licenseUrl <https://www.llama.com/llama3_1/license/> .
 
 
-###################    Gemma    ###################    
+###################    Gemma    ###################
 mg:Gemma a mg:LicenseInfo ;
     mg:licenseId "Gemma" ; # Very similar to <Llama3.1>, the only difference is the derivatives should state changes
     mg:licenseName "Gemma Terms of Use" ;
@@ -928,3 +928,272 @@ mg:Gemma a mg:LicenseInfo ;
     mg:hasRule mg:Llama3.1-duplication-fuzz-rule, mg:Llama3.1-independent-fuzz-rule, mg:Gemma-derivative-fuzz-rule, mg:Llama3.1-republication-fuzz-rule ;
 
     mg:licenseUrl <https://ai.google.dev/gemma/terms> .
+
+
+###################    MG0    ###################
+mg:MG0 a mg:LicenseInfo ;
+    mg:licenseId "MG0" ;
+    mg:licenseName "ModelGo Zero License 1.0" ;
+    mg:targetWorkType mg:model ;
+    mg:licenseVersion "1.0"^^xsd:float ;
+    mg:isFsfLibre false ;
+    mg:isOsiApproved false ;
+    mg:isPermissive true ;
+    # mg:isOpenDomain false ;
+    # mg:isCopyleft false ;
+
+    mg:grant [
+        a mg:Right ;
+        mg:isPatent true ;
+        mg:isCopyright true ;
+        mg:hasRightPrefix mg:worldwide, mg:non-exclusive, mg:non-transferable, mg:sublicensable, mg:irrevocable, mg:royalty-free ;
+        mg:hasUsage mg:use, mg:modify, mg:merge, mg:redistribute, mg:sublicense, mg:commercial_use
+    ] ;
+    mg:reserve [
+        a mg:Right ;
+        mg:hasUsage mg:patent, mg:copyright, mg:trademark, mg:trademark_use
+    ] ;
+    
+    mg:hasRule mg:MG0-duplication-rule, mg:MG0-independent-rule, mg:MG0-derivative-rule, mg:MG0-republication-rule ;
+    mg:hasRule mg:MG0-duplication-fuzz-rule, mg:MG0-independent-fuzz-rule, mg:MG0-derivative-fuzz-rule, mg:MG0-republication-fuzz-rule ;
+
+    mg:licenseUrl <https://github.com/Xtra-Computing/ModelGo/blob/main/MG_licenses/MG0.txt> .
+
+
+###################    MG-BY    ###################
+mg:MG-BY a mg:LicenseInfo ;
+    mg:licenseId "MG-BY" ;
+    mg:licenseName "ModelGo Attribution License 1.0" ;
+    mg:targetWorkType mg:model ;
+    mg:licenseVersion "1.0"^^xsd:float ;
+    mg:isFsfLibre false ;
+    mg:isOsiApproved false ;
+    mg:isPermissive true ;
+    # mg:isOpenDomain false ;
+    # mg:isCopyleft false ;
+
+    mg:grant [
+        a mg:Right ;
+        mg:isPatent true ;
+        mg:isCopyright true ;
+        mg:hasRightPrefix mg:worldwide, mg:non-exclusive, mg:non-transferable, mg:sublicensable, mg:irrevocable, mg:royalty-free ;
+        mg:hasUsage mg:use, mg:modify, mg:merge, mg:redistribute, mg:sublicense, mg:commercial_use
+    ] ;
+    mg:reserve [
+        a mg:Right ;
+        mg:hasUsage mg:patent, mg:copyright, mg:trademark, mg:trademark_use
+    ] ;
+    
+    mg:hasRule mg:MG-BY-duplication-rule, mg:MG0-independent-rule, mg:MG-BY-derivative-rule, mg:MG-BY-republication-rule ;
+    mg:hasRule mg:MG-BY-duplication-fuzz-rule, mg:MG0-independent-fuzz-rule, mg:MG-BY-derivative-fuzz-rule, mg:MG-BY-republication-fuzz-rule ;
+
+    mg:licenseUrl <https://github.com/Xtra-Computing/ModelGo/blob/main/MG_licenses/MG-BY.txt> .
+
+
+###################    MG-BY-RAI    ###################
+mg:MG-BY-RAI a mg:LicenseInfo ;
+    mg:licenseId "MG-BY-RAI" ;
+    mg:licenseName "ModelGo Attribution-ResponsibleAI License 1.0" ;
+    mg:targetWorkType mg:model ;
+    mg:licenseVersion "1.0"^^xsd:float ;
+    mg:isFsfLibre false ;
+    mg:isOsiApproved false ;
+    mg:isPermissive false ;
+    # mg:isOpenDomain false ;
+    mg:isCopyleft false ; # It contains copyleft-style use behavior restrictions
+
+    mg:grant [
+        a mg:Right ;
+        mg:isPatent true ;
+        mg:isCopyright true ;
+        mg:hasRightPrefix mg:worldwide, mg:non-exclusive, mg:non-transferable, mg:sublicensable, mg:revocable, mg:royalty-free ;
+        mg:hasUsage mg:use, mg:modify, mg:merge, mg:redistribute, mg:sublicense, mg:commercial_use
+    ] ;
+    mg:reserve [
+        a mg:Right ;
+        mg:hasUsage mg:patent, mg:copyright, mg:trademark, mg:trademark_use
+    ] ;
+    
+    mg:hasRule mg:Llama3.1-duplication-rule, mg:Llama3.1-independent-rule, mg:Llama3.1-derivative-rule, mg:Llama3.1-republication-rule ; # Same as Llama3.1
+    mg:hasRule mg:Llama3.1-duplication-fuzz-rule, mg:Llama3.1-independent-fuzz-rule, mg:Llama3.1-derivative-fuzz-rule, mg:Llama3.1-republication-fuzz-rule ;
+
+    mg:licenseUrl <https://github.com/Xtra-Computing/ModelGo/blob/main/MG_licenses/MG-BY-RAI.txt> .
+
+
+###################    MG-BY-OS    ###################
+mg:MG-BY-OS a mg:LicenseInfo ;
+    mg:licenseId "MG-BY-OS" ;
+    mg:licenseName "ModelGo Attribution-OpenSource License 1.0" ;
+    mg:targetWorkType mg:model ;
+    mg:licenseVersion "1.0"^^xsd:float ;
+    mg:isFsfLibre false ;
+    mg:isOsiApproved false ;
+    mg:isPermissive true ;
+    # mg:isOpenDomain false ;
+    mg:isCopyleft true ;
+
+    mg:grant [
+        a mg:Right ;
+        mg:isPatent true ;
+        mg:isCopyright true ;
+        mg:hasRightPrefix mg:worldwide, mg:non-exclusive, mg:non-transferable, mg:sublicensable, mg:irrevocable, mg:royalty-free ;
+        mg:hasUsage mg:use, mg:modify, mg:merge, mg:redistribute, mg:sublicense, mg:commercial_use
+    ] ;
+    mg:reserve [
+        a mg:Right ;
+        mg:hasUsage mg:patent, mg:copyright, mg:trademark, mg:trademark_use
+    ] ;
+    
+    mg:hasRule mg:MG-BY-OS-duplication-rule, mg:MG0-independent-rule, mg:MG-BY-OS-derivative-rule, mg:MG-BY-OS-republication-rule ;
+    mg:hasRule mg:MG-BY-OS-duplication-fuzz-rule, mg:MG0-independent-fuzz-rule, mg:MG-BY-OS-derivative-fuzz-rule, mg:MG-BY-OS-republication-fuzz-rule ;
+
+    mg:licenseUrl <https://github.com/Xtra-Computing/ModelGo/blob/main/MG_licenses/MG-BY-OS.txt> .
+
+
+###################    MG-BY-NC    ###################
+mg:MG-BY-NC a mg:LicenseInfo ;
+    mg:licenseId "MG-BY-NC" ;
+    mg:licenseName "ModelGo Attribution-NonCommercial License 1.0" ;
+    mg:targetWorkType mg:model ;
+    mg:licenseVersion "1.0"^^xsd:float ;
+    mg:isFsfLibre false ;
+    mg:isOsiApproved false ;
+    mg:isPermissive false ; 
+    # mg:isOpenDomain false ;
+    mg:isCopyleft false ;
+
+    mg:grant [
+        a mg:Right ;
+        mg:isPatent true ;
+        mg:isCopyright true ;
+        mg:hasRightPrefix mg:worldwide, mg:non-exclusive, mg:non-transferable, mg:non-sublicensable, mg:revocable, mg:royalty-free ;
+        mg:hasUsage mg:use, mg:modify, mg:merge, mg:redistribute, mg:auto-license
+    ] ;
+    mg:reserve [
+        a mg:Right ;
+        mg:hasUsage mg:patent, mg:copyright, mg:trademark, mg:trademark_use, mg:commercial_use
+    ] ;
+    
+    mg:hasRule mg:Llama3.1-duplication-rule, mg:Llama3.1-independent-rule, mg:Llama3.1-derivative-rule, mg:Llama3.1-republication-rule ; # Same as Llama3.1, no commercial use is kind of use behavior restriction
+    mg:hasRule mg:Llama3.1-duplication-fuzz-rule, mg:Llama3.1-independent-fuzz-rule, mg:Llama3.1-derivative-fuzz-rule, mg:Llama3.1-republication-fuzz-rule ;
+
+    mg:licenseUrl <https://github.com/Xtra-Computing/ModelGo/blob/main/MG_licenses/MG-BY-NC.txt> .
+
+
+###################    MG-BY-NC-RAI    ###################
+mg:MG-BY-NC-RAI a mg:LicenseInfo ;
+    mg:licenseId "MG-BY-NC-RAI" ;
+    mg:licenseName "ModelGo Attribution-NonCommercial-ResponsibleAI License 1.0" ;
+    mg:targetWorkType mg:model ;
+    mg:licenseVersion "1.0"^^xsd:float ;
+    mg:isFsfLibre false ;
+    mg:isOsiApproved false ;
+    mg:isPermissive false ; 
+    # mg:isOpenDomain false ;
+    mg:isCopyleft false ;
+
+    mg:grant [
+        a mg:Right ;
+        mg:isPatent true ;
+        mg:isCopyright true ;
+        mg:hasRightPrefix mg:worldwide, mg:non-exclusive, mg:non-transferable, mg:non-sublicensable, mg:revocable, mg:royalty-free ;
+        mg:hasUsage mg:use, mg:modify, mg:merge, mg:redistribute, mg:auto-license
+    ] ;
+    mg:reserve [
+        a mg:Right ;
+        mg:hasUsage mg:patent, mg:copyright, mg:trademark, mg:trademark_use, mg:commercial_use
+    ] ;
+    
+    mg:hasRule mg:Llama3.1-duplication-rule, mg:Llama3.1-independent-rule, mg:Llama3.1-derivative-rule, mg:Llama3.1-republication-rule ; # Same as Llama3.1, no commercial use is kind of use behavior restriction
+    mg:hasRule mg:Llama3.1-duplication-fuzz-rule, mg:Llama3.1-independent-fuzz-rule, mg:Llama3.1-derivative-fuzz-rule, mg:Llama3.1-republication-fuzz-rule ;
+
+    mg:licenseUrl <https://github.com/Xtra-Computing/ModelGo/blob/main/MG_licenses/MG-BY-NC-RAI.txt> .
+
+
+###################    MG-BY-NC-OS    ###################
+mg:MG-BY-NC-OS a mg:LicenseInfo ;
+    mg:licenseId "MG-BY-NC-OS" ;
+    mg:licenseName "ModelGo Attribution-NonCommercial-OpenSource License 1.0" ;
+    mg:targetWorkType mg:model ;
+    mg:licenseVersion "1.0"^^xsd:float ;
+    mg:isFsfLibre false ;
+    mg:isOsiApproved false ;
+    mg:isPermissive false ; 
+    # mg:isOpenDomain false ;
+    mg:isCopyleft false ;
+
+    mg:grant [
+        a mg:Right ;
+        mg:isPatent true ;
+        mg:isCopyright true ;
+        mg:hasRightPrefix mg:worldwide, mg:non-exclusive, mg:non-transferable, mg:non-sublicensable, mg:revocable, mg:royalty-free ;
+        mg:hasUsage mg:use, mg:modify, mg:merge, mg:redistribute, mg:auto-license
+    ] ;
+    mg:reserve [
+        a mg:Right ;
+        mg:hasUsage mg:patent, mg:copyright, mg:trademark, mg:trademark_use, mg:commercial_use
+    ] ;
+    
+    mg:hasRule mg:MG-BY-NC-OS-duplication-rule, mg:Llama3.1-independent-rule, mg:MG-BY-NC-OS-derivative-rule, mg:MG-BY-NC-OS-republication-rule ; # Same as Llama3.1, no commercial use is kind of use behavior restriction
+    mg:hasRule mg:MG-BY-NC-OS-duplication-fuzz-rule, mg:Llama3.1-independent-fuzz-rule, mg:MG-BY-NC-OS-derivative-fuzz-rule, mg:MG-BY-NC-OS-republication-fuzz-rule ;
+
+    mg:licenseUrl <https://github.com/Xtra-Computing/ModelGo/blob/main/MG_licenses/MG-BY-NC-OS.txt> .
+
+###################    MG-BY-ND    ###################
+mg:MG-BY-ND a mg:LicenseInfo ;
+    mg:licenseId "MG-BY-ND" ;
+    mg:licenseName "ModelGo Attribution-NoDerivatives License 1.0" ;
+    mg:targetWorkType mg:model ;
+    mg:licenseVersion "1.0"^^xsd:float ;
+    mg:isFsfLibre false ;
+    mg:isOsiApproved false ;
+    mg:isPermissive false ;
+    # mg:isOpenDomain false ;
+    # mg:isCopyleft false ;
+
+    mg:grant [
+        a mg:Right ;
+        mg:isPatent true ;
+        mg:isCopyright true ;
+        mg:hasRightPrefix mg:worldwide, mg:non-exclusive, mg:non-transferable, mg:sublicensable, mg:revocable, mg:royalty-free ;
+        mg:hasUsage mg:use, mg:modify, mg:merge, mg:redistribute, mg:auto-license, mg:commercial_use
+    ] ;
+    mg:reserve [
+        a mg:Right ;
+        mg:hasUsage mg:patent, mg:copyright, mg:trademark, mg:trademark_use
+    ] ;
+    
+    mg:hasRule mg:MG-BY-duplication-rule, mg:MG-BY-ND-derivative-rule-1, mg:MG-BY-ND-derivative-rule-2, mg:MG-BY-republication-rule ;
+    mg:hasRule mg:MG-BY-duplication-fuzz-rule, mg:MG-BY-ND-derivative-fuzz-rule-1, mg:MG-BY-ND-derivative-fuzz-rule-2, mg:MG-BY-republication-fuzz-rule ;
+
+    mg:licenseUrl <https://github.com/Xtra-Computing/ModelGo/blob/main/MG_licenses/MG-BY-ND.txt> .
+
+
+###################    MG-BY-NC-ND    ###################
+mg:MG-BY-NC-ND a mg:LicenseInfo ;
+    mg:licenseId "MG-BY-NC-ND" ;
+    mg:licenseName "ModelGo Attribution-NonCommercial-NoDerivatives License 1.0" ;
+    mg:targetWorkType mg:model ;
+    mg:licenseVersion "1.0"^^xsd:float ;
+    mg:isFsfLibre false ;
+    mg:isOsiApproved false ;
+    mg:isPermissive false ;
+    # mg:isOpenDomain false ;
+    # mg:isCopyleft false ;
+
+    mg:grant [
+        a mg:Right ;
+        mg:isPatent true ;
+        mg:isCopyright true ;
+        mg:hasRightPrefix mg:worldwide, mg:non-exclusive, mg:non-transferable, mg:sublicensable, mg:revocable, mg:royalty-free ;
+        mg:hasUsage mg:use, mg:modify, mg:merge, mg:redistribute, mg:auto-license
+    ] ;
+    mg:reserve [
+        a mg:Right ;
+        mg:hasUsage mg:patent, mg:copyright, mg:trademark, mg:trademark_use, mg:commercial_use
+    ] ;
+    
+    mg:hasRule mg:Llama3.1-duplication-rule, mg:MG-BY-NC-ND-derivative-rule-1, mg:MG-BY-NC-ND-derivative-rule-2, mg:Llama3.1-republication-rule ;
+    mg:hasRule mg:Llama3.1-duplication-fuzz-rule, mg:MG-BY-NC-ND-derivative-fuzz-rule-1, mg:MG-BY-NC-ND-derivative-fuzz-rule-2, mg:Llama3.1-republication-fuzz-rule ;
+
+    mg:licenseUrl <https://github.com/Xtra-Computing/ModelGo/blob/main/MG_licenses/MG-BY-NC-ND.txt> .

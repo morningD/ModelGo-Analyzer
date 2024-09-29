@@ -1,0 +1,51 @@
+@prefix math: <http://www.w3.org/2000/10/swap/math#> .
+@prefix list: <http://www.w3.org/2000/10/swap/list#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix string: <http://www.w3.org/2000/10/swap/string#> .
+@prefix log: <http://www.w3.org/2000/10/swap/log#> .
+@prefix mg: <http://www.modelgo.li/rdf/terms#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix : <http://example.org/ns#>.
+
+
+####    Generate license analysis report rules  ####
+# Warning [License Type Mismatch]. Report a warning if the license's target work type does not match the actual work type
+
+{   
+    ?work a mg:Work .
+    ?work mg:hasLicense ?license .
+    ?work mg:hasWorkType ?wtype.
+    ?license mg:targetWorkType ?ltype .
+    ?wtype log:notEqualTo mg:mixed-type . # Skip it if the work type is mixed-type
+    ?wtype log:notEqualTo ?ltype . # Type mismatching
+
+    ?work mg:workName ?wname . # Genreate report content
+    ?license mg:licenseId ?lid .
+    ("** Warning ** [License Type Mismatch] " ?wname " is a " ?wtype " but it have a " ?ltype " license: " ?lid) string:concatenation ?report_content .
+} => {
+    _:warning a mg:Warning ;
+        mg:reportBy ?work ;
+        mg:reportType "License Type Mismatch" ;
+        mg:content ?report_content .
+} .
+
+# Error [Wrong Work Type or Form]. The work type cannot be inconsistent with its work form; i.e., a 'software' work cannot have a 'vision' form.
+{
+    ?work a mg:Work .
+    ?work mg:hasLicense ?license . # We filter out works that do not have a license
+    ?work mg:hasWorkForm ?wform .
+    ?wform log:notEqualTo mg:mixed-form . # Skip it if the work type is mixed-form
+    ?wform mg:targetWorkType ?ttype .
+    ?work mg:hasWorkType ?wtype .
+    ?wtype log:notEqualTo mg:mixed-type . # Skip it if the work type is mixed-type
+    ?wtype log:notEqualTo ?ttype . # Check the consistency between work type and work form
+
+    ?work mg:workName ?wname . # Genreate report content
+    ("** Error ** [Wrong Work Type or Form] " ?wname " is a " ?wtype " but it is in " ?wform " form") string:concatenation ?report_content .
+} => {
+    _:error a mg:Error ;
+        mg:reportBy ?work ;
+        mg:reportType "Wrong Work Type or Form" ;
+        mg:content ?report_content .
+} .

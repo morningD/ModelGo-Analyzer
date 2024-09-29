@@ -33,13 +33,39 @@
     ?inw mg:workName ?iname .
 } .
 
+{   # Input auxworks
+    ?actionType rdfs:subClassOf mg:Action . 
+    ?a a ?actionType .
+    ?a mg:hasInput ?input .
+    ?input mg:targetAuxwork ?auxw .
+    #?auxw a mg:Work .
+    ?auxw mg:workName ?auxname .
+} log:query {
+    ?input mg:targetAuxwork ?auxw .
+    #?auxw a mg:Work .
+    ?auxw mg:workName ?auxname .
+} .
+
+{   # Input subworks
+    ?actionType rdfs:subClassOf mg:Action . 
+    ?a a ?actionType .
+    ?a mg:hasInput ?input .
+    ?input mg:targetSubwork ?subw .
+    ?subw a mg:Work .
+    ?subw mg:workName ?subname .
+} log:query {
+    ?input mg:targetSubwork ?subw .
+    ?subw a mg:Work .
+    ?subw mg:workName ?subname .
+} .
+
 {   # Output name
     ?actionType rdfs:subClassOf mg:Action . 
     ?a a ?actionType .
     ?a mg:hasOutput ?output .
     ?output mg:targetWork ?outw .
     ?outw a mg:Work .
-    ?outw mg:WorkName ?oname .
+    ?outw mg:workName ?oname .
 } log:query {
     ?a a ?actionType .
     ?a mg:hasOutput ?output .

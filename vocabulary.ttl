@@ -26,7 +26,15 @@ mg:Action a rdfs:Class ;
     rdfs:label "Action"@en ;
     rdfs:comment "The superset of all actions (e.g., registering a license, reusing, publishing) in ModelGo." .
 
-mg:yieldOutputWork a rdfs:Property ;
+mg:yieldOutputWork a rdfs:Property ; # The output work of domain action will yield to the input work of range action
+    rdfs:domain mg:Action ;
+    rdfs:range mg:Action .
+
+mg:yieldAuxWork a rdfs:Property ; # The output work of domain action will yield to the input auxwork of range action
+    rdfs:domain mg:Action ;
+    rdfs:range mg:Action .
+
+mg:yieldSubWork a rdfs:Property ; # The output work of domain action will yield to the input subwork of range action
     rdfs:domain mg:Action ;
     rdfs:range mg:Action .
 
@@ -78,6 +86,11 @@ mg:Copy a rdfs:Class ;
     rdfs:subClassOf mg:Action ;
     rdfs:lable "Copy"@en ;
     rdfs:comment "This action attempts to copy a work, there has a need to check the right of making ducplication." .
+
+mg:Train a rdfs:Class ;
+    rdfs:subClassOf mg:Action ;
+    rdfs:lable "Train"@en ;
+    rdfs:comment "This action attempts to train a model and output a new model, with or without using dataset or code." .
 
 mg:Publish a rdfs:Class ;
     rdfs:subClassOf mg:Action ;

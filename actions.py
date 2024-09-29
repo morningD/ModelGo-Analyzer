@@ -3,7 +3,7 @@ import logging
 from copy import deepcopy
 from rdflib import Graph, Namespace, Literal, BNode
 from rdflib.namespace import RDF, RDFS
-from typing import Iterable
+from typing import Iterable, Optional, Union
 
 """ <actions.py>
 This file contains the functions that can use to create a Turtule file that describe the ML workflow based on users' input,
@@ -42,7 +42,7 @@ class Workflow(object):
         self.latest_action_id = ""
 
     # Merge multiple RDF graphs w/o changing the latest action id
-    def merge(self, flows): 
+    def merge(self, flows: Union[Iterable['Workflow'], 'Workflow']): 
         if isinstance(flows, Workflow):
             self.graph += flows.graph
         if isinstance(flows, Iterable):
@@ -120,7 +120,7 @@ def combine(target_flows: Iterable[Workflow], action_label='combine') -> Workflo
 
     g.add((airi, RDF.type, MG.Combine))
     g.add((airi, MG.actionId, Literal(action_id)))
-    g.add((airi, MG.hasInput, BNode())) # Add a blank node as input, which will be populated later by N3 rules
+    g.add((airi, MG.hasInput, BNode())) # Add a blank node as input, which will be populated later by <rules_construct.n3>
     g.add((airi, MG.hasOutput, BNode())) # Add this blank node as placeholder for output
     # Create the yieldOutputWork links from latest actions in target_flows to this Combine action
     for f in target_flows: 
@@ -129,6 +129,32 @@ def combine(target_flows: Iterable[Workflow], action_label='combine') -> Workflo
 
     return flow
 
-# def train() -> Workflow:
+def train(target_flow: Workflow, aux_flows: Optional[Iterable[Workflow]]=None, sub_flows: Optional[Iterable[Workflow]]=None, action_label='train') -> Workflow:
+    flow = Workflow() # Create a new empty workflow
+    flow.merge(target_flow) # Add the target_flow to the new workflow
+    g = flow.graph
 
-#     return flow
+    # Add the Train Action in the new graph
+    action_id = action_label + str(anum())
+    airi = EX[action_id]
+
+    g.add((airi, RDF.type, MG.Train))
+    g.add((airi, MG.actionId, Literal(action_id)))
+    input_bn = BNode() # Blank node for input
+    g.add((airi, MG.hasInput, input_bn)) # Add a blank node as input, which will be populated later by <rules_construct.n3>
+    g.add((airi, MG.hasOutput, BNode())) # Add this blank node as placeholder for output
+    g.add((EX[target_flow.latest_action_id], MG.yieldOutputWork, airi)) # Add yielOutput property from latest action in target_flow to this new Train action
+    
+    if aux_flows: # If there provided aux works, such as the dataset and code used for training and will not be published with the trained model
+        for af in aux_flows: 
+            flow.merge(af)
+            g.add((EX[af.latest_action_id], MG.yieldAuxWork, airi))
+
+    if sub_flows: # If there provided sub works, such as the dataset or code used for training and will be published with the trained model
+        for sf in sub_flows: 
+            flow.merge(sf)
+            g.add((EX[sf.latest_action_id], MG.yieldSubWork, airi))
+    
+    flow.update_action_id(airi)
+
+    return flow

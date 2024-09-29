@@ -1,30 +1,30 @@
 @prefix : <http://example.org/ns#> .
 @prefix mg: <http://www.modelgo.li/rdf/terms#> .
 
-:reg1 a mg:RegisterLicense ;
-    mg:actionId "reg1" ;
-    mg:hasInput [ mg:targetLicense mg:MIT ;
-            mg:targetWork :Whisper ] ;
-    mg:yieldOutputWork :combine3 .
-
 :reg2 a mg:RegisterLicense ;
     mg:actionId "reg2" ;
+    mg:hasInput [ mg:targetLicense mg:MIT ;
+            mg:targetWork :Whisper ] ;
+    mg:yieldOutputWork :train4 .
+
+:reg3 a mg:RegisterLicense ;
+    mg:actionId "reg3" ;
     mg:hasInput [ mg:targetLicense mg:Apache-2.0 ;
             mg:targetWork :DETR ] ;
-    mg:yieldOutputWork :combine3 .
+    mg:yieldAuxWork :train4 .
 
 :DETR a mg:work ;
-    mg:hasWorkForm mg:code ;
+    mg:hasWorkForm mg:weights ;
     mg:hasWorkType mg:model ;
     mg:workName "DETR" .
 
 :Whisper a mg:work ;
-    mg:hasWorkForm mg:code ;
+    mg:hasWorkForm mg:weights ;
     mg:hasWorkType mg:model ;
     mg:workName "Whisper" .
 
-:combine3 a mg:Combine ;
-    mg:actionId "combine3" ;
+:train4 a mg:Train ;
+    mg:actionId "train4" ;
     mg:hasInput [ ] ;
     mg:hasOutput [ ] .
 

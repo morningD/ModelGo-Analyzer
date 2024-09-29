@@ -1,0 +1,57 @@
+@prefix math: <http://www.w3.org/2000/10/swap/math#> .
+@prefix list: <http://www.w3.org/2000/10/swap/list#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix string: <http://www.w3.org/2000/10/swap/string#> .
+@prefix log: <http://www.w3.org/2000/10/swap/log#> .
+@prefix mg: <http://www.modelgo.li/rdf/terms#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix : <http://example.org/ns#>.
+
+{ # Mixwork
+    ?work a mg:Work .
+    ?work mg:workName ?wname .
+    ?work mg:hasMixwork ?mixwork .
+    ?mixwork mg:workName ?mname .
+} log:query {
+    ?work a mg:Work .
+    ?work mg:workName ?wname .
+    ?work mg:hasMixwork ?mixwork .
+    ?mixwork mg:workName ?mname .
+} .
+
+{ # Auxwork
+    ?work a mg:Work .
+    ?work mg:workName ?wname .
+    ?work mg:hasAuxwork ?auxwork .
+    ?auxwork mg:workName ?aname .
+} log:query {
+    ?work a mg:Work .
+    ?work mg:workName ?wname .
+    ?work mg:hasAuxwork ?auxwork .
+    ?auxwork mg:workName ?aname .
+} .
+
+{ # Subwork
+    ?work a mg:Work .
+    ?work mg:workName ?wname .
+    ?work mg:hasSubwork ?subwork .
+    ?subwork mg:workName ?sname .
+} log:query {
+    ?work a mg:Work .
+    ?work mg:workName ?wname .
+    ?work mg:hasSubwork ?subwork .
+    ?subwork mg:workName ?sname .
+} .
+
+{ # Provenance
+    ?work a mg:Work .
+    ?work mg:workName ?wname .
+    ?work mg:hasProvenance ?prov .
+    ?prov mg:workName ?pname .
+} log:query {
+    ?work a mg:Work .
+    ?work mg:workName ?wname .
+    ?work mg:hasProvenance ?prov .
+    ?prov mg:workName ?pname .
+} .

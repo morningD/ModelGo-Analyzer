@@ -1,0 +1,89 @@
+@prefix math: <http://www.w3.org/2000/10/swap/math#> .
+@prefix list: <http://www.w3.org/2000/10/swap/list#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix string: <http://www.w3.org/2000/10/swap/string#> .
+@prefix log: <http://www.w3.org/2000/10/swap/log#> .
+@prefix mg: <http://www.modelgo.li/rdf/terms#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix : <http://example.org/ns#>.
+
+
+# Reuqest Proliferation Rule. Add the work's request to its Mixwork
+{
+    ?request a mg:Request .
+    ?request <- mg:hasRequest ?work .
+    ?work mg:hasMixwork ?mixwork .
+} => {
+    ?mixwork mg:hasRequest ?request .
+} .
+
+
+# [Combine] Request creating rule, which
+# asks 'merge' right granting from original work
+{
+    ?action a mg:Combine .
+    ?action!mg:hasInput mg:targetWork ?inw .
+    ?action!mg:hasOutput mg:targetWork ?outw .
+    (?action ?inw ?outw "request") log:skolem ?geniri . # NOTE: By this way, only one request can exsited in each (action, inw, outw) tuple.
+} => {
+    ?geniri a mg:Request ;
+        mg:targetWork ?outw ;
+        mg:targetAction ?action ;
+        mg:grant [ 
+            a mg:Right ;
+            mg:hasUsage mg:merge
+        ] .
+    ?inw mg:hasRequest ?geniri .
+} .
+
+# [Train] Request creating rule, which
+# asks 'use' and 'modify' right granting from target work (i.e, model)
+{
+    ?action a mg:Train .
+    ?action!mg:hasInput mg:targetWork ?inw .
+    ?action!mg:hasOutput mg:targetWork ?outw .
+    (?action ?inw ?outw "request") log:skolem ?geniri .
+} => {
+    ?geniri a mg:Request ;
+        mg:targetWork ?outw ;
+        mg:targetAction ?action ;
+        mg:grant [ 
+            a mg:Right ;
+            mg:hasUsage mg:use, mg:modify
+        ] .
+    ?inw mg:hasRequest ?geniri .
+} .
+# Asks 'use' right granting from auxwork (i.e, dataset) if provided
+{
+    ?action a mg:Train .
+    ?action!mg:hasInput mg:targetAuxwork ?inaw .
+    ?action!mg:hasOutput mg:targetWork ?outw .
+    (?action ?inaw ?outw "request") log:skolem ?geniri .
+} => {
+    ?geniri a mg:Request ;
+        mg:targetWork ?outw ;
+        mg:targetAction ?action ;
+        mg:grant [ 
+            a mg:Right ;
+            mg:hasUsage mg:use
+        ] .
+    ?inaw mg:hasRequest ?geniri .
+} .
+# Asks 'use' right granting from subwork (i.e, dataset) if provided, 
+# note that we will create the request of redistribution later if the final work is planned to be published
+{
+    ?action a mg:Train .
+    ?action!mg:hasInput mg:targetSubwork ?insw .
+    ?action!mg:hasOutput mg:targetWork ?outw .
+    (?action ?insw ?outw "request") log:skolem ?geniri .
+} => {
+    ?geniri a mg:Request ;
+        mg:targetWork ?outw ;
+        mg:targetAction ?action ;
+        mg:grant [ 
+            a mg:Right ;
+            mg:hasUsage mg:use
+        ] .
+    ?insw mg:hasRequest ?geniri .
+} .

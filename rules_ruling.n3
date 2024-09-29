@@ -1,0 +1,66 @@
+@prefix math: <http://www.w3.org/2000/10/swap/math#> .
+@prefix list: <http://www.w3.org/2000/10/swap/list#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix string: <http://www.w3.org/2000/10/swap/string#> .
+@prefix log: <http://www.w3.org/2000/10/swap/log#> .
+@prefix mg: <http://www.modelgo.li/rdf/terms#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix : <http://example.org/ns#>.
+
+
+# Ruling Creation. Add a new ruling to the output work for each action.
+{
+    ?actionType rdfs:subClassOf mg:Action . 
+    ?actionType log:notEqualTo mg:RegisterLicense . # Skip RegisterLicense
+    ?action a ?actionType . # For each action
+    ?action!mg:hasInput mg:targetWork ?inw .
+    ?inw mg:hasLicense ?linfo . # Ensure that the input work has a license
+    ?action!mg:hasOutput mg:targetWork ?outw .
+    (?action ?inw ?outw "ruling") log:skolem ?geniri . # Ensure that only one ruling is created for each (action, input work, output work) tuple
+} => {
+    ?geniri a mg:Ruling ;
+        mg:targetWork ?inw ;
+        mg:targetAction ?action ;
+        mg:hasLicense ?linfo .
+    ?outw mg:hasRuling ?geniri .
+} .
+
+# Ruling Proliferation. Add a new ruling with the same action to the work's all mixworks
+{
+    ?ruling a mg:Ruling .
+    ?ruling mg:targetAction ?action .
+    ?actionType rdfs:subClassOf mg:Action . 
+    # Copy will not proliferate to the mixworks due to the output def no longer being duplication,
+    # but we still check the right granting of them by proliferating their request to the mixworks.
+    ?actionType log:notEqualTo mg:Copy .
+    ?action a ?actionType .
+    ?ruling <- mg:hasRuling ?work .
+    ?work mg:hasMixwork ?mixwork .
+    ?mixwork mg:hasLicense ?linfo . # The new ruling is according to the license info of the mixwork
+    (?action ?mixwork ?work "ruling") log:skolem ?geniri . # Ensure that only one ruling is created for each (action, mixwork, work) tuple
+} => {
+    ?geniri a mg:Ruling ;
+        mg:targetWork ?mixwork ;
+        mg:targetAction ?action ;
+        mg:hasLicense ?linfo .
+    ?work mg:hasRuling ?geniri .
+} .
+
+# Ruling Completion. Find the matching LicenseRule for each ruling
+{
+    ?ruling a mg:Ruling .
+    ?ruling mg:hasLicense ?linfo .
+    ?linfo mg:hasRule ?rule . # Get the License Rules
+    ?ruling^mg:hasRuling mg:hasWorkForm ?inwf .
+    ?ruling!mg:targetWork mg:hasWorkForm ?outwf .
+    ?ruling mg:targetAction ?action .
+    ?rule mg:targetActionType ?atype .
+    ?action a ?atype . # Matching action type
+    ?rule mg:targetInputWorkForm ?inwf . # Matching input work form
+    ?rule mg:targetOutputWorkForm ?outwf . # Matching output work form
+    ?rule mg:hasOutputDef ?outputDef . # Find the matching output definition
+} => {
+    ?ruling mg:hasRule ?rule . # Bind the triggered rule to the ruling
+    ?ruling mg:hasOutputDef ?outputDef . # Bind the output definition to the ruling
+} .

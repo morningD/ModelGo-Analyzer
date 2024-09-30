@@ -151,6 +151,7 @@ mg:GPL-3.0 a mg:LicenseInfo ;
     # mg:isPermissive false ;
     # mg:isOpenDomain false ;
     mg:isCopyleft true ;
+    mg:hasCompatibleLicense (mg:GPL-3.0 mg:AGPL-3.0) ; # NOTE: self always comapatible with self, use list to reflect the priority
     
     mg:grant [
         a mg:Right ;
@@ -212,7 +213,8 @@ mg:LGPL-3.0 a mg:LicenseInfo ;
     # mg:isPermissive false ;
     # mg:isOpenDomain false ;
     mg:isCopyleft true ;
-    
+    mg:hasCompatibleLicense (mg:LGPL-3.0 mg:GPL-3.0) ; # NOTE: mg:AGPL-3.0 is compatible if we apply the chain rule, but we disable it.
+
     mg:grant [
         a mg:Right ;
         mg:isCopyright true ;
@@ -242,6 +244,7 @@ mg:LGPL-2.1 a mg:LicenseInfo ;
     # mg:isPermissive false ;
     # mg:isOpenDomain false ;
     mg:isCopyleft true ;
+    mg:hasCompatibleLicense (mg:LGPL-2.1 mg:GPL-2.0) ;
     
     mg:grant [
         a mg:Right ;
@@ -499,6 +502,7 @@ mg:CC-BY-4.0 a mg:LicenseInfo ;
     mg:isPermissive true ;
     # mg:isOpenDomain false ;
     # mg:isCopyleft false ;
+    mg:hasCompatibleLicense (mg:CC-BY-4.0 mg:CC-BY-SA-4.0 mg:CC-BY-NC-4.0 mg:CC-BY-NC-SA-4.0 ) ;
     
     mg:grant [
         a mg:Right ;
@@ -528,6 +532,7 @@ mg:CC-BY-SA-4.0 a mg:LicenseInfo ;
     # mg:isPermissive false ;
     # mg:isOpenDomain false ;
     mg:isCopyleft true ;
+    mg:hasCompatibleLicense (mg:CC-BY-SA-4.0 mg:GPL-3.0) ;
     
     mg:grant [
         a mg:Right ;
@@ -557,6 +562,7 @@ mg:CC-BY-NC-4.0 a mg:LicenseInfo ;
     mg:isPermissive false ;
     # mg:isOpenDomain false ;
     # mg:isCopyleft false ;
+    mg:hasCompatibleLicense (mg:CC-BY-NC-4.0 mg:CC-BY-NC-SA-4.0) ;
     
     mg:grant [
         a mg:Right ;

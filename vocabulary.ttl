@@ -64,6 +64,10 @@ mg:targetWork a rdfs:Property ;
     rdfs:range mg:Work ;
     rdfs:commnet "The traget work of an input/output or request/ruling." .
 
+mg:targetPublishPolicy a rdfs:Property ;
+    rdfs:range mg:PublishPolicy ;
+    rdfs:commnet "The traget publish plicy of a Publish action." .
+
 mg:targetSubwork a rdfs:Property ;
     rdfs:range mg:Work ;
     rdfs:commnet "The traget subwork of an input." .
@@ -96,6 +100,15 @@ mg:Publish a rdfs:Class ;
     rdfs:subClassOf mg:Action ;
     rdfs:lable "Publish"@en ;
     rdfs:comment "This action attempts to publish a work." .
+
+
+mg:PublishPolicy a rdfs:Class ;
+    rdfs:label "PublishPolicy"@en ;
+    rdfs:comment "The publish policy supported by ModelGo." .
+
+mg:internal a mg:PublishPolicy . # Just personal use
+mg:share a mg:PublishPolicy . # Non-commercial sharing of work
+mg:sell a mg:PublishPolicy . # Commericial use and share work
 
 # Vocabulary of Work
 
@@ -282,6 +295,11 @@ mg:licenseVersion a rdfs:Property ;
 mg:licenseUrl a rdfs:Property ;
     rdfs:domain mg:LicenseInfo ;
     rdfs:range xsd:anyURI .
+
+mg:hasCompatibleLicense a rdfs:Property ;
+    rdfs:domain mg:LicenseInfo ;
+    # rdfs:range mg:LicenseInfo ; # Should be a list to reflect the priority
+    rdfs:comment "This license has declared a list of its compatible licenses ." . # NOTE: Slef is always compatible
 
 mg:Right a rdfs:Class ;
     rdfs:lable "Right"@en ;

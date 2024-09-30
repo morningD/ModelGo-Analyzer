@@ -26,8 +26,6 @@
     # Note: The properties list here does not reflect the real properties path, we simplify it for visualization purposes
     ?ru a mg:Ruling .
     ?ru mg:targetAction ?act .
-    ?act a ?actType .
-    ?actType rdfs:subClassOf mg:Action .
     ?ru mg:targetWork ?inw .
     ?inw mg:hasWorkForm ?inwf .
     ?inw mg:workName ?inwn .

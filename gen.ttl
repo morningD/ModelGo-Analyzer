@@ -15,25 +15,25 @@
 
 :reg4 a mg:RegisterLicense ;
     mg:actionId "reg4" ;
-    mg:hasInput [ mg:targetLicense mg:Apache-2.0 ;
-            mg:targetWork :BERT ] ;
+    mg:hasInput [ mg:targetLicense mg:GPL-3.0 ;
+            mg:targetWork :BigTranslate ] ;
     mg:yieldOutputWork :combine7 .
 
 :reg5 a mg:RegisterLicense ;
     mg:actionId "reg5" ;
-    mg:hasInput [ mg:targetLicense mg:OpenRAIL-M ;
+    mg:hasInput [ mg:targetLicense mg:GPL-3.0 ;
             mg:targetWork :BLOOM ] ;
     mg:yieldOutputWork :combine7 .
-
-:BERT a mg:work ;
-    mg:hasWorkForm mg:weights ;
-    mg:hasWorkType mg:model ;
-    mg:workName "BERT" .
 
 :BLOOM a mg:work ;
     mg:hasWorkForm mg:weights ;
     mg:hasWorkType mg:model ;
     mg:workName "BLOOM" .
+
+:BigTranslate a mg:work ;
+    mg:hasWorkForm mg:weights ;
+    mg:hasWorkType mg:model ;
+    mg:workName "BigTranslate" .
 
 :Whisper a mg:work ;
     mg:hasWorkForm mg:weights ;

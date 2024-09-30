@@ -31,14 +31,14 @@ whisper_model = register_license(Work('Whisper', 'model', 'weights'), target_lic
 # detr_model = register_license(Work('DETR', 'model', 'weights'), target_license='Apache-2.0') # Image Segmentation https://github.com/facebookresearch/detr
 # xclip_model = register_license(Work('X-Clip', 'model', 'weights'), target_license='MIT') # Video2Text, https://huggingface.co/microsoft/xclip-base-patch32
 # i2vgen_model = register_license(Work('I2VGen-XL', 'model', 'weights'), target_license='CC-BY-NC-ND-4.0') # Image2Video, https://huggingface.co/damo-vilab/MS-Image2Video
-# bigtranslate_model = register_license(Work('BigTranslate', 'model', 'weights'), target_license='GPL-3.0') # Text Translation, https://huggingface.co/James-WYang/BigTranslate
-bert_model = register_license(Work('BERT', 'model', 'weights'), target_license='Apache-2.0') # Text, https://huggingface.co/bert-base-uncased
-bloom_model = register_license(Work('BLOOM', 'model', 'weights'), target_license='OpenRAIL-M') # Text Generation, https://huggingface.co/bigscience/bloom
+bigtranslate_model = register_license(Work('BigTranslate', 'model', 'weights'), target_license='GPL-3.0') # Text Translation, https://huggingface.co/James-WYang/BigTranslate
+# bert_model = register_license(Work('BERT', 'model', 'weights'), target_license='Apache-2.0') # Text, https://huggingface.co/bert-base-uncased
+# bloom_model = register_license(Work('BLOOM', 'model', 'weights'), target_license='OpenRAIL-M') # Text Generation, https://huggingface.co/bigscience/bloom
 # llama2_model = register_license(Work('Llama2', 'model', 'weights'), target_license='Llama2') # Text Generation, https://huggingface.co/meta-llama/Llama-2-7b
 
-
+bloom_model = register_license(Work('BLOOM', 'model', 'weights'), target_license='GPL-3.0') # Text Generation, https://huggingface.co/bigscience/bloom
 #flow = combine([whisper_model, detr_model])
-flow = combine([train(whisper_model, [wiki_text]), combine([bert_model, bloom_model])])
+flow = combine([train(whisper_model, [wiki_text]), combine([bigtranslate_model, bloom_model])])
 
 # Save the gen graph to a new Turtle file
 flow.graph.serialize(destination="gen.ttl", format="ttl")
@@ -74,19 +74,20 @@ Graph().parse(data=filter_result.stdout, format="n3").serialize(destination="out
 
 
 # Reasoning of Ruling
-result = subprocess.run(["eye", "--quiet", "--nope", "--pass", 
+result = subprocess.run(["eye", "--quiet", "--nope", "--pass-only-new", 
                          "vocabulary.ttl", "MGLicenseInfo.ttl", "MGLicenseRule.ttl", "out_WF.ttl",
                          "rules_ruling.n3"], 
                          stdout=subprocess.PIPE, check=True)
 # Output rulings
-Graph().parse(data=result.stdout, format="n3").serialize(destination="out_WF_ruling.ttl", format="turtle")
+#Graph().parse(data=result.stdout, format="n3").serialize(destination="out_WF_ruling.ttl", format="turtle")
+Graph().parse(data=result.stdout, format="n3").serialize(destination="out_ruling.ttl", format="turtle")
 
-filter_result = subprocess.run(["eye", "--quiet", "--nope",
-                         "out_WF_ruling.ttl", "--query", "filter_rulings.n3"], 
-                         stdout=subprocess.PIPE, check=True)
+# filter_result = subprocess.run(["eye", "--quiet", "--nope",
+#                          "out_WF_ruling.ttl", "--query", "filter_rulings.n3"], 
+#                          stdout=subprocess.PIPE, check=True)
 
-# Output rulings
-Graph().parse(data=filter_result.stdout, format="n3").serialize(destination="out_ruling.ttl", format="turtle")
+# # Output rulings
+# Graph().parse(data=filter_result.stdout, format="n3").serialize(destination="out_ruling.ttl", format="turtle")
 
 
 '''

@@ -109,6 +109,25 @@ def copy(target_flow: Workflow, action_label='copy') -> Workflow:
 
     return target_flow
 
+"""
+    Improvement It: reuse code between these action.
+"""
+def modify(target_flow: Workflow, action_label='modify') -> Workflow: # Simlar as copy
+    g = target_flow.graph
+
+    # Add the Moidfy Action in this graph
+    action_id = action_label + str(anum())
+    airi = EX[action_id]
+
+    g.add((airi, RDF.type, MG.Moidfy))
+    g.add((airi, MG.actionId, Literal(action_id)))
+    g.add((airi, MG.hasInput, BNode())) # Add a blank node as input, which will be populated later by N3 rules
+    g.add((airi, MG.hasOutput, BNode())) # Add this blank node as placeholder for output
+    g.add((EX[target_flow.latest_action_id], MG.yieldOutputWork, airi))
+    target_flow.update_action_id(action_id)
+
+    return target_flow
+
 def combine(target_flows: Iterable[Workflow], action_label='combine') -> Workflow:
     flow = Workflow() # Create a new empty workflow
     flow.merge(target_flows) # Add the graphs from targetflows to new workflow
@@ -119,6 +138,26 @@ def combine(target_flows: Iterable[Workflow], action_label='combine') -> Workflo
     airi = EX[action_id]
 
     g.add((airi, RDF.type, MG.Combine))
+    g.add((airi, MG.actionId, Literal(action_id)))
+    g.add((airi, MG.hasInput, BNode())) # Add a blank node as input, which will be populated later by <rules_construct.n3>
+    g.add((airi, MG.hasOutput, BNode())) # Add this blank node as placeholder for output
+    # Create the yieldOutputWork links from latest actions in target_flows to this Combine action
+    for f in target_flows: 
+        g.add((EX[f.latest_action_id], MG.yieldOutputWork, airi))
+    flow.update_action_id(action_id)
+
+    return flow
+
+def Amalgamate(target_flows: Iterable[Workflow], action_label='amalg') -> Workflow: # Similar as Combine
+    flow = Workflow() # Create a new empty workflow
+    flow.merge(target_flows) # Add the graphs from targetflows to new workflow
+    g = flow.graph
+
+    # Add the Amalgamate Action in the new graph
+    action_id = action_label + str(anum())
+    airi = EX[action_id]
+
+    g.add((airi, RDF.type, MG.Amalgamate))
     g.add((airi, MG.actionId, Literal(action_id)))
     g.add((airi, MG.hasInput, BNode())) # Add a blank node as input, which will be populated later by <rules_construct.n3>
     g.add((airi, MG.hasOutput, BNode())) # Add this blank node as placeholder for output
@@ -158,3 +197,115 @@ def train(target_flow: Workflow, aux_flows: Optional[Iterable[Workflow]]=None, s
     flow.update_action_id(action_id)
 
     return flow
+
+def embed(target_flow: Workflow, aux_flows: Optional[Iterable[Workflow]]=None, sub_flows: Optional[Iterable[Workflow]]=None, action_label='embed') -> Workflow:
+    flow = Workflow() # Create a new empty workflow
+    flow.merge(target_flow) # Add the target_flow to the new workflow
+    g = flow.graph
+
+    # Add the Embed Action in the new graph
+    action_id = action_label + str(anum())
+    airi = EX[action_id]
+
+    g.add((airi, RDF.type, MG.Embed))
+    g.add((airi, MG.actionId, Literal(action_id)))
+    input_bn = BNode() # Blank node for input
+    g.add((airi, MG.hasInput, input_bn)) # Add a blank node as input, which will be populated later by <rules_construct.n3>
+    g.add((airi, MG.hasOutput, BNode())) # Add this blank node as placeholder for output
+    g.add((EX[target_flow.latest_action_id], MG.yieldOutputWork, airi)) # Add yielOutput property from latest action in target_flow to this new Embed action
+    
+    if aux_flows: # If there provided aux works, such as the dataset and code used for training and will not be published with the trained model
+        for af in aux_flows: 
+            flow.merge(af)
+            g.add((EX[af.latest_action_id], MG.yieldAuxWork, airi))
+
+    if sub_flows: # If there provided sub works, such as the dataset or code used for training and will be published with the trained model
+        for sf in sub_flows: 
+            flow.merge(sf)
+            g.add((EX[sf.latest_action_id], MG.yieldSubWork, airi))
+    
+    flow.update_action_id(action_id)
+
+    return flow
+
+def distill(target_flow: Workflow, aux_flows: Optional[Iterable[Workflow]]=None, sub_flows: Optional[Iterable[Workflow]]=None, action_label='distill') -> Workflow:
+    flow = Workflow() # Create a new empty workflow
+    flow.merge(target_flow) # Add the target_flow to the new workflow
+    g = flow.graph
+
+    # Add the Embed Action in the new graph
+    action_id = action_label + str(anum())
+    airi = EX[action_id]
+
+    g.add((airi, RDF.type, MG.Distill))
+    g.add((airi, MG.actionId, Literal(action_id)))
+    input_bn = BNode() # Blank node for input
+    g.add((airi, MG.hasInput, input_bn)) # Add a blank node as input, which will be populated later by <rules_construct.n3>
+    g.add((airi, MG.hasOutput, BNode())) # Add this blank node as placeholder for output
+    g.add((EX[target_flow.latest_action_id], MG.yieldOutputWork, airi)) # Add yielOutput property from latest action in target_flow to this new Embed action
+    
+    if aux_flows: # If there provided aux works, such as the dataset and code used for training and will not be published with the trained model
+        for af in aux_flows: 
+            flow.merge(af)
+            g.add((EX[af.latest_action_id], MG.yieldAuxWork, airi))
+
+    if sub_flows: # If there provided sub works, such as the dataset or code used for training and will be published with the trained model
+        for sf in sub_flows: 
+            flow.merge(sf)
+            g.add((EX[sf.latest_action_id], MG.yieldSubWork, airi))
+    
+    flow.update_action_id(action_id)
+
+    return flow
+
+# Accept appoint the output form and type.
+def generate(target_flow: Workflow, aux_flows: Optional[Iterable[Workflow]]=None, sub_flows: Optional[Iterable[Workflow]]=None, form='raw-form', type='dataset', action_label='gen') -> Workflow:
+    flow = Workflow() # Create a new empty workflow
+    flow.merge(target_flow) # Add the target_flow to the new workflow
+    g = flow.graph
+
+    # Add the Generate Action in the new graph
+    action_id = action_label + str(anum())
+    airi = EX[action_id]
+
+    g.add((airi, RDF.type, MG.Generate))
+    g.add((airi, MG.actionId, Literal(action_id)))
+    input_bn = BNode() # Blank node for input
+    g.add((airi, MG.hasInput, input_bn)) # Add a blank node as input, which will be populated later by <rules_construct.n3>
+    g.add((input_bn, MG.targetWorkForm, MG[form]))
+    g.add((input_bn, MG.targetWorkType, MG[type]))
+    g.add((airi, MG.hasOutput, BNode())) # Add this blank node as placeholder for output
+    g.add((EX[target_flow.latest_action_id], MG.yieldOutputWork, airi)) # Add yielOutput property from latest action in target_flow to this new Embed action
+    
+    if aux_flows: # If there provided aux works, such as the dataset and code used for training and will not be published with the trained model
+        for af in aux_flows: 
+            flow.merge(af)
+            g.add((EX[af.latest_action_id], MG.yieldAuxWork, airi))
+
+    if sub_flows: # If there provided sub works, such as the dataset or code used for training and will be published with the trained model
+        for sf in sub_flows: 
+            flow.merge(sf)
+            g.add((EX[sf.latest_action_id], MG.yieldSubWork, airi))
+    
+    flow.update_action_id(action_id)
+
+    return flow
+
+
+def publish(target_flow: Workflow, policy='share', action_label='publish') -> Workflow:  # support policy: internal, share, sell
+    g = target_flow.graph
+
+    # Add the Copy Action in this graph
+    action_id = action_label + str(anum())
+    airi = EX[action_id]
+
+    g.add((airi, RDF.type, MG.Copy))
+    g.add((airi, MG.actionId, Literal(action_id)))
+    input_bn = BNode() # Blank node for input
+    g.add((airi, MG.hasInput, input_bn)) # Add a blank node as input, which will be populated later by N3 rules
+    g.add((input_bn, MG.targetPublishPolicy, MG[policy]))
+    g.add((airi, MG.hasOutput, BNode())) # Add this blank node as placeholder for output
+    g.add((EX[target_flow.latest_action_id], MG.yieldOutputWork, airi))
+    target_flow.update_action_id(action_id)
+
+    return target_flow

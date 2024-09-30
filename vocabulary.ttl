@@ -91,6 +91,31 @@ mg:Copy a rdfs:Class ;
     rdfs:lable "Copy"@en ;
     rdfs:comment "This action attempts to copy a work, there has a need to check the right of making ducplication." .
 
+mg:Embed a rdfs:Class ;
+    rdfs:subClassOf mg:Action ;
+    rdfs:lable "Embed"@en ;
+    rdfs:comment "TODO." .
+
+mg:Amalgamate a rdfs:Class ;
+    rdfs:subClassOf mg:Action ;
+    rdfs:lable "Embed"@en ;
+    rdfs:comment "TODO." .
+
+mg:Distill a rdfs:Class ;
+    rdfs:subClassOf mg:Action ;
+    rdfs:lable "Embed"@en ;
+    rdfs:comment "TODO." .
+
+mg:Genreate a rdfs:Class ;
+    rdfs:subClassOf mg:Action ;
+    rdfs:lable "Embed"@en ;
+    rdfs:comment "TODO." .
+
+mg:Modify a rdfs:Class ;
+    rdfs:subClassOf mg:Action ;
+    rdfs:lable "Embed"@en ;
+    rdfs:comment "TODO." .
+
 mg:Train a rdfs:Class ;
     rdfs:subClassOf mg:Action ;
     rdfs:lable "Train"@en ;
@@ -185,6 +210,9 @@ mg:formName a rdfs:Property ;
     rdfs:range xsd:string .
 
 mg:hasWorkForm a rdfs:Property ;
+    rdfs:range mg:WorkForm .
+
+mg:targetWorkForm a rdfs:Property ; # Aim to has this work form
     rdfs:range mg:WorkForm .
 
 ## Known work forms (instances)

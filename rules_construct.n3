@@ -352,25 +352,29 @@
         mg:hasAuxwork ?inw . # Key difference
 } .
 
-
 ##   Publish
 # [Publish] Reasoning rules for pulish a work, which
 # adds the 'hasMixwork' property to the output.
 {
-    ?action a mg:Copy .
+    ?action a mg:Publish .
     ?action!mg:hasInput mg:targetWork ?inw .
     ?action!mg:hasInput mg:targetPublishPolicy ?policy .
     ?action mg:hasOutput ?out .
-    ?inw mg:hasWorkForm ?wf .
     ?inw mg:hasWorkType ?wt .
-    ?inw mg:hasLicenseInfo ?linfo .
     (?action "outputWork") log:skolem ?geniri . 
 } => {
     ?geniri a mg:Work ; # Hold same work form, type, and license info as the input work
         mg:hasMixwork ?inw ;
-        mg:hasWorkForm ?wf ;
-        mg:hasWorkType ?wt ;
-        mg:targetPublishPolicy ?policy ; # Add the publish policy to output (republication) work
-        mg:hasLicenseInfo ?linfo .
+        mg:hasWorkType ?wt ; # Output has same work type as input
+        mg:targetPublishPolicy ?policy . # Add the publish policy to output (republication) work
     ?out mg:targetWork ?geniri .
+} .
+# [Publish] Assign work form of output
+{
+    ?action a mg:Publish .
+    ?action!mg:hasInput mg:targetWorkForm ?wf .
+    ?action!mg:hasOutput mg:targetWork ?outw .
+    (?action "outputWork") log:skolem ?geniri . 
+} => {
+    ?geniri mg:hasWorkForm ?wf . 
 } .

@@ -5,8 +5,8 @@ import subprocess
 
 # 6 Corpus, 5 Image DS, 2 Music DS, 1 3D DS, 1 Video DS, 10 Models
 
-wiki_text = register_license(Work('Wikipedia', 'dataset', 'literary'), target_license='CC-BY-SA-4.0') # Corpus, https://en.wikipedia.org/wiki/Wikipedia:Copyrights
-# stack_exchange_text = register_license(Work('StackExchange', 'dataset', 'literary'), target_license='CC-BY-SA-4.0') # Corpus, https://stackexchange.com/
+# wiki_text = register_license(Work('Wikipedia', 'dataset', 'literary'), target_license='CC-BY-SA-4.0') # Corpus, https://en.wikipedia.org/wiki/Wikipedia:Copyrights
+stack_exchange_text = register_license(Work('StackExchange', 'dataset', 'literary'), target_license='CC-BY-SA-4.0') # Corpus, https://stackexchange.com/
 # free_law_text = register_license(Work('FreeLaw', 'dataset', 'literary'), target_license='CC-BY-ND-4.0') # Corpus, https://free.law/
 arxiv_text = register_license(Work('arXiv', 'dataset', 'literary'), target_license='CC-BY-NC-SA-4.0') # Corpus, https://info.arxiv.org/help/license/index.html
 # pubmed_text = register_license(Work('PubMed', 'dataset', 'literary'), target_license='CC-BY-NC-ND-4.0') # Corpus, https://www.ncbi.nlm.nih.gov/pmc/tools/textmining/
@@ -26,7 +26,7 @@ arxiv_text = register_license(Work('arXiv', 'dataset', 'literary'), target_licen
 
 # baize_model = register_license(Work('Baize', 'model', 'weights'), target_license='GPL-3.0') # Chatbot, https://github.com/project-baize/baize-chatbot
 # stable_diffusion_mode = register_license(Work('StableDiffusion', 'model', 'weights'), target_license='OpenRAIL-M') # Text2Image, https://huggingface.co/runwayml/stable-diffusion-v1-5
-whisper_model = register_license(Work('Whisper', 'model', 'weights'), target_license='MIT') # Voice2Text, https://github.com/openai/whisper
+# whisper_model = register_license(Work('Whisper', 'model', 'weights'), target_license='MIT') # Voice2Text, https://github.com/openai/whisper
 # maskformer_model = register_license(Work('MaskFormer', 'model', 'weights'), target_license='CC-BY-NC-4.0') # Image Segmentation, https://github.com/facebookresearch/MaskFormer/tree/da3e60d85fdeedcb31476b5edd7d328826ce56cc
 # detr_model = register_license(Work('DETR', 'model', 'weights'), target_license='Apache-2.0') # Image Segmentation https://github.com/facebookresearch/detr
 # xclip_model = register_license(Work('X-Clip', 'model', 'weights'), target_license='MIT') # Video2Text, https://huggingface.co/microsoft/xclip-base-patch32
@@ -36,20 +36,13 @@ bigtranslate_model = register_license(Work('BigTranslate', 'model', 'weights'), 
 # bloom_model = register_license(Work('BLOOM', 'model', 'weights'), target_license='OpenRAIL-M') # Text Generation, https://huggingface.co/bigscience/bloom
 # llama2_model = register_license(Work('Llama2', 'model', 'weights'), target_license='Llama2') # Text Generation, https://huggingface.co/meta-llama/Llama-2-7b
 
-bloom_model = register_license(Work('BLOOM', 'model', 'weights'), target_license='GPL-3.0') # Text Generation, https://huggingface.co/bigscience/bloom
 #flow = combine([whisper_model, detr_model])
-flow = combine([train(whisper_model, [wiki_text]), combine([bigtranslate_model, bloom_model])])
-
+flow = combine([embed(arxiv_text, aux_flows=[bigtranslate_model]), embed(stack_exchange_text, aux_flows=[bigtranslate_model])])
+flow = publish(flow, policy = 'sell')
 # Save the gen graph to a new Turtle file
 flow.graph.serialize(destination="gen.ttl", format="ttl")
 
 # Reasoning by N3 Rules
-#result = subprocess.run(["eye", "--quiet", "--nope", "--pass", "vocabulary.ttl", "MGLicenseInfo.ttl", "MGLicenseRule.ttl", "gen.ttl", "rules_init.n3"], stdout=subprocess.PIPE, check=True)
-
-#g.parse(data=result.stdout, format="n3")
-#g.serialize(destination="out_init.ttl", format="ttl")
-
-#result = subprocess.run(["eye", "--quiet", "--nope", "--pass-only-new", "vocabulary.ttl", "MGLicenseInfo.ttl", "MGLicenseRule.ttl", "out_init.ttl", "rules_construct.n3"], stdout=subprocess.PIPE, check=True)
 result = subprocess.run(["eye", "--quiet", "--nope", "--pass", 
                          "vocabulary.ttl", "MGLicenseInfo.ttl", "MGLicenseRule.ttl", "gen.ttl",
                          "rules_init.n3", "rules_construct.n3"], 
@@ -74,13 +67,19 @@ Graph().parse(data=filter_result.stdout, format="n3").serialize(destination="out
 
 
 # Reasoning of Ruling
-result = subprocess.run(["eye", "--quiet", "--nope", "--pass-only-new", 
+result = subprocess.run(["eye", "--quiet", "--nope", "--pass", 
                          "vocabulary.ttl", "MGLicenseInfo.ttl", "MGLicenseRule.ttl", "out_WF.ttl",
                          "rules_ruling.n3"], 
                          stdout=subprocess.PIPE, check=True)
 # Output rulings
-#Graph().parse(data=result.stdout, format="n3").serialize(destination="out_WF_ruling.ttl", format="turtle")
-Graph().parse(data=result.stdout, format="n3").serialize(destination="out_ruling.ttl", format="turtle")
+Graph().parse(data=result.stdout, format="n3").serialize(destination="out_WF_ruling.ttl", format="turtle")
+#Graph().parse(data=result.stdout, format="n3").serialize(destination="out_ruling.ttl", format="turtle")
+
+# Output base work after ruling
+filter_result = subprocess.run(["eye", "--quiet", "--nope",
+                         "out_WF_ruling.ttl", "--query", "filter_base_WF.n3"], 
+                         stdout=subprocess.PIPE, check=True)
+Graph().parse(data=filter_result.stdout, format="n3").serialize(destination="out_base_WF_after_ruling.ttl", format="turtle")
 
 # filter_result = subprocess.run(["eye", "--quiet", "--nope",
 #                          "out_WF_ruling.ttl", "--query", "filter_rulings.n3"], 
@@ -89,32 +88,30 @@ Graph().parse(data=result.stdout, format="n3").serialize(destination="out_ruling
 # # Output rulings
 # Graph().parse(data=filter_result.stdout, format="n3").serialize(destination="out_ruling.ttl", format="turtle")
 
-
-'''
-dete_result = subprocess.run(["eye", "--quiet", "--nope", "--pass-only-new", 
-                         "vocabulary.ttl", "MGLicenseInfo.ttl", "MGLicenseRule.ttl", "out_WF_ruling.ttl",
-                         "rules_determination.n3"], 
-                         stdout=subprocess.PIPE, check=True)
-print(dete_result.stdout)
-'''
-
-'''
 # Reasoning of Request
 result = subprocess.run(["eye", "--quiet", "--nope", "--pass", 
-                         "vocabulary.ttl", "MGLicenseInfo.ttl", "MGLicenseRule.ttl", "out_WF.ttl",
+                         "vocabulary.ttl", "MGLicenseInfo.ttl", "MGLicenseRule.ttl", "out_WF_ruling.ttl",
                          "rules_request.n3"], 
                          stdout=subprocess.PIPE, check=True)
 # Output WF with requests
-Graph().parse(data=result.stdout, format="n3").serialize(destination="out_WF_request.ttl", format="turtle")
+Graph().parse(data=result.stdout, format="n3").serialize(destination="out_WF_ruling_request.ttl", format="turtle")
 
 # Analysis of request
 analysis_result = subprocess.run(["eye", "--quiet", "--nope", "--pass-only-new", 
-                         "vocabulary.ttl", "MGLicenseInfo.ttl", "MGLicenseRule.ttl", "out_WF_request.ttl",
+                         "vocabulary.ttl", "MGLicenseInfo.ttl", "MGLicenseRule.ttl", "out_WF_ruling_request.ttl",
                          "rules_analysis_granting.n3"], 
                          stdout=subprocess.PIPE, check=True)
 
 print(analysis_result.stdout)
-'''
+
+# Analysis of base
+analysis_result = subprocess.run(["eye", "--quiet", "--nope", "--pass-only-new", 
+                         "vocabulary.ttl", "MGLicenseInfo.ttl", "MGLicenseRule.ttl", "out_WF_ruling_request.ttl",
+                         "rules_analysis_base.n3"], 
+                         stdout=subprocess.PIPE, check=True)
+
+print(analysis_result.stdout)
+
 
 # filter_result = subprocess.run(["eye", "--quiet", "--nope",
 #                          "out_WF_request.ttl", "--query", "filter_base_WF.n3"], 

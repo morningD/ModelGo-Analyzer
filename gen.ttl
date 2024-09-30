@@ -4,61 +4,57 @@
 :reg1 a mg:RegisterLicense ;
     mg:actionId "reg1" ;
     mg:hasInput [ mg:targetLicense mg:CC-BY-SA-4.0 ;
-            mg:targetWork :Wikipedia ] ;
-    mg:yieldAuxWork :train6 .
+            mg:targetWork :StackExchange ] ;
+    mg:yieldOutputWork :embed5 .
+
+:reg2 a mg:RegisterLicense ;
+    mg:actionId "reg2" ;
+    mg:hasInput [ mg:targetLicense mg:CC-BY-NC-SA-4.0 ;
+            mg:targetWork :arXiv ] ;
+    mg:yieldOutputWork :embed4 .
 
 :reg3 a mg:RegisterLicense ;
     mg:actionId "reg3" ;
-    mg:hasInput [ mg:targetLicense mg:MIT ;
-            mg:targetWork :Whisper ] ;
-    mg:yieldOutputWork :train6 .
-
-:reg4 a mg:RegisterLicense ;
-    mg:actionId "reg4" ;
     mg:hasInput [ mg:targetLicense mg:GPL-3.0 ;
             mg:targetWork :BigTranslate ] ;
-    mg:yieldOutputWork :combine7 .
-
-:reg5 a mg:RegisterLicense ;
-    mg:actionId "reg5" ;
-    mg:hasInput [ mg:targetLicense mg:GPL-3.0 ;
-            mg:targetWork :BLOOM ] ;
-    mg:yieldOutputWork :combine7 .
-
-:BLOOM a mg:work ;
-    mg:hasWorkForm mg:weights ;
-    mg:hasWorkType mg:model ;
-    mg:workName "BLOOM" .
+    mg:yieldAuxWork :embed4,
+        :embed5 .
 
 :BigTranslate a mg:work ;
     mg:hasWorkForm mg:weights ;
     mg:hasWorkType mg:model ;
     mg:workName "BigTranslate" .
 
-:Whisper a mg:work ;
-    mg:hasWorkForm mg:weights ;
-    mg:hasWorkType mg:model ;
-    mg:workName "Whisper" .
-
-:Wikipedia a mg:work ;
+:StackExchange a mg:work ;
     mg:hasWorkForm mg:literary ;
     mg:hasWorkType mg:dataset ;
-    mg:workName "Wikipedia" .
+    mg:workName "StackExchange" .
 
-:combine7 a mg:Combine ;
-    mg:actionId "combine7" ;
-    mg:hasInput [ ] ;
-    mg:hasOutput [ ] ;
-    mg:yieldOutputWork :combine8 .
+:arXiv a mg:work ;
+    mg:hasWorkForm mg:literary ;
+    mg:hasWorkType mg:dataset ;
+    mg:workName "arXiv" .
 
-:combine8 a mg:Combine ;
-    mg:actionId "combine8" ;
-    mg:hasInput [ ] ;
+:publish7 a mg:Publish ;
+    mg:actionId "publish7" ;
+    mg:hasInput [ mg:targetPublishPolicy mg:sell ] ;
     mg:hasOutput [ ] .
 
-:train6 a mg:Train ;
-    mg:actionId "train6" ;
+:combine6 a mg:Combine ;
+    mg:actionId "combine6" ;
     mg:hasInput [ ] ;
     mg:hasOutput [ ] ;
-    mg:yieldOutputWork :combine8 .
+    mg:yieldOutputWork :publish7 .
+
+:embed4 a mg:Embed ;
+    mg:actionId "embed4" ;
+    mg:hasInput [ ] ;
+    mg:hasOutput [ ] ;
+    mg:yieldOutputWork :combine6 .
+
+:embed5 a mg:Embed ;
+    mg:actionId "embed5" ;
+    mg:hasInput [ ] ;
+    mg:hasOutput [ ] ;
+    mg:yieldOutputWork :combine6 .
 

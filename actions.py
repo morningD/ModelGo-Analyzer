@@ -292,18 +292,20 @@ def generate(target_flow: Workflow, aux_flows: Optional[Iterable[Workflow]]=None
     return flow
 
 
-def publish(target_flow: Workflow, policy='share', action_label='publish') -> Workflow:  # support policy: internal, share, sell
+def publish(target_flow: Workflow, policy='share', form=None, action_label='publish') -> Workflow:  # support policy: internal, share, sell
     g = target_flow.graph
 
     # Add the Copy Action in this graph
     action_id = action_label + str(anum())
     airi = EX[action_id]
 
-    g.add((airi, RDF.type, MG.Copy))
+    g.add((airi, RDF.type, MG.Publish))
     g.add((airi, MG.actionId, Literal(action_id)))
     input_bn = BNode() # Blank node for input
     g.add((airi, MG.hasInput, input_bn)) # Add a blank node as input, which will be populated later by N3 rules
     g.add((input_bn, MG.targetPublishPolicy, MG[policy]))
+    if form: # If target form is provided
+        g.add((input_bn, MG.targetWorkForm, MG[form]))
     g.add((airi, MG.hasOutput, BNode())) # Add this blank node as placeholder for output
     g.add((EX[target_flow.latest_action_id], MG.yieldOutputWork, airi))
     target_flow.update_action_id(action_id)

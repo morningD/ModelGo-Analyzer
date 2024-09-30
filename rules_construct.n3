@@ -161,37 +161,27 @@
 } .
 
 # [Combine] Reasoning rules for determination the type and form of output work.
-{ # Collect all input works' types
-    ?action a mg:Combine .
-    ?action!mg:hasInput mg:targetWork ?inw .
-    ?inw mg:hasWorkType ?t .
-    (?action "types") log:skolem ?geniri .
-} => {
-    ?geniri mg:is ?t .
-} .
-{ # Mixed-type case;
+{ # Type, all same
     ?action a mg:Combine .
     ?action!mg:hasOutput mg:targetWork ?outw .
-    (?action "types") log:skolem ?geniri .
-    ( ?t { ?geniri mg:is ?t . } ?types ) log:collectAllIn _:x .
-    ?types list:length ?len .
-    ?len math:greaterThan "1"^^<xsd:int> . # More than one input work type
+    ( ?t { ?action!mg:hasInput!mg:targetWork mg:hasWorkType ?t } ?t_list ) log:collectAllIn _:x .
+    ({?t1 list:in ?t_list} {?t2 list:in ?t_list} {?t1 log:equalTo ?t2}) log:forAllIn _:x . # All type are same
+    ?t_list list:first ?t .
+} => {
+    ?outw mg:hasWorkType ?t .
+} .
+{   # Type, not same
+    ?action a mg:Combine .
+    ?action!mg:hasOutput mg:targetWork ?outw .
+    ( ?t { ?action!mg:hasInput!mg:targetWork mg:hasWorkType ?t } ?t_list ) log:collectAllIn _:x .
+    ?t_list list:first ?t1 .
+    ?t_list list:member ?t2 .
+    ?t1 log:notEqualTo mg:mixed-type .
 } => {
     ?outw mg:hasWorkType mg:mixed-type .
 } .
-{ # Else, single work type case.
-    ?action a mg:Combine .
-    ?action!mg:hasOutput mg:targetWork ?outw .
-    (?action "types") log:skolem ?geniri .
-    ( ?t { ?geniri mg:is ?t . } ?types ) log:collectAllIn _:x .
-    ?types list:length ?len .
-    ?len math:equalTo "1"^^<xsd:int> . # Only one input work type
-    ?types list:first ?type .
-} => {
-    ?outw mg:hasWorkType ?type .
-} .
 
-{ # Collect all input works' forms and broader forms
+{ # Collect all input works' forms and broader forms ######## Need simplify
     ?action a mg:Combine .
     ?action!mg:hasInput mg:targetWork ?inw .
     ?inw mg:hasWorkForm ?f .
@@ -247,7 +237,7 @@
 # [Amalgamate] Reasoning rules for amalgamate multiple works, which
 # creates a new output work and adds the 'hasMixwork' to this output.
 {
-    ?action a mg:Combine .
+    ?action a mg:Amalgamate .
     ?action!mg:hasInput mg:targetWork ?inw .
     ?action mg:hasOutput ?out .
     (?w {?inw a mg:Work} ?w_list) log:collectAllIn _:t .
@@ -374,6 +364,17 @@
     ?action a mg:Publish .
     ?action!mg:hasInput mg:targetWorkForm ?wf .
     ?action!mg:hasOutput mg:targetWork ?outw .
+    (?action "outputWork") log:skolem ?geniri . 
+} => {
+    ?geniri mg:hasWorkForm ?wf . 
+} .
+
+# [Publish] IF no work form provided, use the work form of input
+{
+    ?action a mg:Publish .
+    _:x log:notIncludes {?action!mg:hasInput mg:targetWorkForm ?wf }. 
+    ?action!mg:hasOutput mg:targetWork ?outw .
+    ?action!mg:hasInput!mg:targetWork mg:hasWorkForm ?wf .
     (?action "outputWork") log:skolem ?geniri . 
 } => {
     ?geniri mg:hasWorkForm ?wf . 

@@ -7,3 +7,13 @@
 @prefix mg: <http://www.modelgo.li/rdf/terms#> .
 @prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
 @prefix : <http://example.org/ns#>.
+
+
+####    Generate license analysis report rules  ####
+{
+    ?action a mg:Publish .
+    ?action!mg:hasOutput mg:targetWork ?outw .
+    ?outw mg:hasRuling ?ruling .
+} => {
+    :rule :is ?ruling .
+} .

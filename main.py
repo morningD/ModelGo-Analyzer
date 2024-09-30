@@ -102,7 +102,7 @@ analysis_result = subprocess.run(["eye", "--quiet", "--nope", "--pass-only-new",
                          "rules_analysis_granting.n3"], 
                          stdout=subprocess.PIPE, check=True)
 
-print(analysis_result.stdout)
+#print(analysis_result.stdout)
 
 # Analysis of base
 analysis_result = subprocess.run(["eye", "--quiet", "--nope", "--pass-only-new", 
@@ -110,7 +110,15 @@ analysis_result = subprocess.run(["eye", "--quiet", "--nope", "--pass-only-new",
                          "rules_analysis_base.n3"], 
                          stdout=subprocess.PIPE, check=True)
 
-print(analysis_result.stdout)
+#print(analysis_result.stdout)
+
+# Analysis of conflicts and reprot restrictions thought rulings.
+analysis_result = subprocess.run(["eye", "--quiet", "--nope", "--pass-only-new", 
+                         "vocabulary.ttl", "MGLicenseInfo.ttl", "MGLicenseRule.ttl", "out_WF_ruling_request.ttl",
+                         "rules_analysis_conflict.n3"], 
+                         stdout=subprocess.PIPE, check=True)
+
+Graph().parse(data=analysis_result.stdout, format="n3").serialize(destination="out_analysis.ttl", format="turtle")
 
 
 # filter_result = subprocess.run(["eye", "--quiet", "--nope",

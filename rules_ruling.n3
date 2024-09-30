@@ -28,14 +28,14 @@
 
 # Ruling Proliferation. Add a new ruling with the same action to the work's all MIXWORKS
 {
-    ?ruling a mg:Ruling .
-    ?ruling mg:targetAction ?action .
     ?actionType rdfs:subClassOf mg:Action . 
+    ?ruling a mg:Ruling .
+    ?ruling mg:targetAction ?action .   
     # Copy will not proliferate to the mixworks due to the output def no longer being duplication,
     # but we still check the right granting of them by proliferating their request to the mixworks.
     ?actionType log:notEqualTo mg:Copy .
     ?action a ?actionType .
-    ?ruling <- mg:hasRuling ?work .
+    ?work mg:hasRuling ?ruling .
     ?work mg:hasMixwork ?mixwork .
     ?mixwork mg:hasLicense ?linfo . # The new ruling is according to the license info of the mixwork
     (?action ?mixwork ?work "ruling") log:skolem ?geniri . # Ensure that only one ruling is created for each (action, mixwork, work) tuple
@@ -52,8 +52,8 @@
     ?ruling a mg:Ruling .
     ?ruling mg:hasLicense ?linfo .
     ?linfo mg:hasRule ?rule . # Get the License Rules
-    ?ruling^mg:hasRuling mg:hasWorkForm ?inwf .
-    ?ruling!mg:targetWork mg:hasWorkForm ?outwf .
+    ?ruling!mg:targetWork mg:hasWorkForm ?inwf .
+    ?ruling^mg:hasRuling mg:hasWorkForm ?outwf .
     ?ruling mg:targetAction ?action .
     ?rule mg:targetActionType ?atype .
     ?action a ?atype . # Matching action type

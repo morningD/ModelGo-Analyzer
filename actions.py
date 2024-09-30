@@ -50,9 +50,9 @@ class Workflow(object):
                 self.graph += f.graph
         return
 
-    def update_action_id(self, action_id :str):
+    def update_action_id(self, action_id: str):
         if action_id:
-            self.latest_action_id = action_id
+            self.latest_action_id = action_id # w/o namespace
             return True
         return False
     
@@ -105,7 +105,7 @@ def copy(target_flow: Workflow, action_label='copy') -> Workflow:
     g.add((airi, MG.hasInput, BNode())) # Add a blank node as input, which will be populated later by N3 rules
     g.add((airi, MG.hasOutput, BNode())) # Add this blank node as placeholder for output
     g.add((EX[target_flow.latest_action_id], MG.yieldOutputWork, airi))
-    target_flow.update_action_id(airi)
+    target_flow.update_action_id(action_id)
 
     return target_flow
 
@@ -125,7 +125,7 @@ def combine(target_flows: Iterable[Workflow], action_label='combine') -> Workflo
     # Create the yieldOutputWork links from latest actions in target_flows to this Combine action
     for f in target_flows: 
         g.add((EX[f.latest_action_id], MG.yieldOutputWork, airi))
-    flow.update_action_id(airi)
+    flow.update_action_id(action_id)
 
     return flow
 
@@ -155,6 +155,6 @@ def train(target_flow: Workflow, aux_flows: Optional[Iterable[Workflow]]=None, s
             flow.merge(sf)
             g.add((EX[sf.latest_action_id], MG.yieldSubWork, airi))
     
-    flow.update_action_id(airi)
+    flow.update_action_id(action_id)
 
     return flow

@@ -9,13 +9,13 @@
 @prefix : <http://example.org/ns#>.
 
 
-# Ruling Creation. Add a new ruling to the output work for each action.
+# Ruling Creation. Add a new ruling to the output work for each action.  
 {
     ?actionType rdfs:subClassOf mg:Action . 
     ?actionType log:notEqualTo mg:RegisterLicense . # Skip RegisterLicense
     ?action a ?actionType . # For each action
     ?action!mg:hasInput mg:targetWork ?inw .
-    ?inw mg:hasLicense ?linfo . # Ensure that the input work has a license
+    ?inw mg:hasLicense ?linfo . # Ensure that the input work has a license, if not, need to wait for the license determination rules
     ?action!mg:hasOutput mg:targetWork ?outw .
     (?action ?inw ?outw "ruling") log:skolem ?geniri . # Ensure that only one ruling is created for each (action, input work, output work) tuple
 } => {
@@ -26,7 +26,7 @@
     ?outw mg:hasRuling ?geniri .
 } .
 
-# Ruling Proliferation. Add a new ruling with the same action to the work's all mixworks
+# Ruling Proliferation. Add a new ruling with the same action to the work's all MIXWORKS
 {
     ?ruling a mg:Ruling .
     ?ruling mg:targetAction ?action .
@@ -64,3 +64,22 @@
     ?ruling mg:hasRule ?rule . # Bind the triggered rule to the ruling
     ?ruling mg:hasOutputDef ?outputDef . # Bind the output definition to the ruling
 } .
+
+# License Determination. Find the license of the output work according to its rulings
+# The default license in Unlicense, if there are multiple copyleft licenses are triggered, then try to find a compatible license as solution.
+
+{ # One of ruling cannot allow relicense
+    ?outw a mg:Work .
+    _:x log:notIncludes { ?outw mg:hasLicense ?li } . # This work does not have a license yet
+    ( { ?outw mg:hasReliedwork ?relw } { ?relw mg:hasLicense ?li } ) log:forAllIn _:t .
+    #( ?relw { ?outw mg:hasReliedwork ?relw . } ?relw_list ) log:collectAllIn _:x .
+    #?relw_list 
+    # ?outw mg:hasRuling ?ruling .
+    # ?ruling mg:hasLicense ?li .
+    # ?ruling mg:hasRule ?rule .
+    # ?rule mg:relicense ?reli .
+    # ?reli log:equalTo mg:none-license . # If there have a rule that cannot allow relicense, then keep the original license
+} => {
+    #?outw mg:hasLicense ?li .
+    ?outw :isready "license"
+}.

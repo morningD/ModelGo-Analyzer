@@ -22,6 +22,14 @@
     ?work mg:hasWorkForm ?wform .
 } .
 
+# Mixworks relationship proliferation. (Chain rule)
+{
+    ?work a mg:Work .
+    ?work!mg:hasMixwork mg:hasMixwork ?mmixw .
+} => {
+    ?work mg:hasMixwork ?mmixw .
+} .
+
 # Add the 'hasSubwork' property to the output if 'targetSubwork' is provided through the input.
 {
     ?action a mg:Action .
@@ -232,7 +240,8 @@
         mg:hasWorkForm ?wf ;
         mg:hasMixwork ?inw .
 } .
-# # Meanwhile add 'hasAuxwork' and 'hasSubwork' to targetAuxwork and targetSubwork accordingly if they exist.
+
+# # Meanwhile add 'hasAuxwork' and 'hasSubwork' to targetAuxwork and targetSubwork accordingly if they exist.  ======>> We already globally write this rule, deprecated it.
 # {
 #     ?action a mg:Train .
 #     ?action!mg:hasInput mg:targetAuxwork ?inaw .

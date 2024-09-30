@@ -1,30 +1,64 @@
 @prefix : <http://example.org/ns#> .
 @prefix mg: <http://www.modelgo.li/rdf/terms#> .
 
-:reg2 a mg:RegisterLicense ;
-    mg:actionId "reg2" ;
-    mg:hasInput [ mg:targetLicense mg:MIT ;
-            mg:targetWork :Whisper ] ;
-    mg:yieldOutputWork :train4 .
+:reg1 a mg:RegisterLicense ;
+    mg:actionId "reg1" ;
+    mg:hasInput [ mg:targetLicense mg:CC-BY-SA-4.0 ;
+            mg:targetWork :Wikipedia ] ;
+    mg:yieldAuxWork :train6 .
 
 :reg3 a mg:RegisterLicense ;
     mg:actionId "reg3" ;
-    mg:hasInput [ mg:targetLicense mg:Apache-2.0 ;
-            mg:targetWork :DETR ] ;
-    mg:yieldAuxWork :train4 .
+    mg:hasInput [ mg:targetLicense mg:MIT ;
+            mg:targetWork :Whisper ] ;
+    mg:yieldOutputWork :train6 .
 
-:DETR a mg:work ;
+:reg4 a mg:RegisterLicense ;
+    mg:actionId "reg4" ;
+    mg:hasInput [ mg:targetLicense mg:Apache-2.0 ;
+            mg:targetWork :BERT ] ;
+    mg:yieldOutputWork :combine7 .
+
+:reg5 a mg:RegisterLicense ;
+    mg:actionId "reg5" ;
+    mg:hasInput [ mg:targetLicense mg:OpenRAIL-M ;
+            mg:targetWork :BLOOM ] ;
+    mg:yieldOutputWork :combine7 .
+
+:BERT a mg:work ;
     mg:hasWorkForm mg:weights ;
     mg:hasWorkType mg:model ;
-    mg:workName "DETR" .
+    mg:workName "BERT" .
+
+:BLOOM a mg:work ;
+    mg:hasWorkForm mg:weights ;
+    mg:hasWorkType mg:model ;
+    mg:workName "BLOOM" .
 
 :Whisper a mg:work ;
     mg:hasWorkForm mg:weights ;
     mg:hasWorkType mg:model ;
     mg:workName "Whisper" .
 
-:train4 a mg:Train ;
-    mg:actionId "train4" ;
+:Wikipedia a mg:work ;
+    mg:hasWorkForm mg:literary ;
+    mg:hasWorkType mg:dataset ;
+    mg:workName "Wikipedia" .
+
+:combine7 a mg:Combine ;
+    mg:actionId "combine7" ;
+    mg:hasInput [ ] ;
+    mg:hasOutput [ ] ;
+    mg:yieldOutputWork :combine8 .
+
+:combine8 a mg:Combine ;
+    mg:actionId "combine8" ;
     mg:hasInput [ ] ;
     mg:hasOutput [ ] .
+
+:train6 a mg:Train ;
+    mg:actionId "train6" ;
+    mg:hasInput [ ] ;
+    mg:hasOutput [ ] ;
+    mg:yieldOutputWork :combine8 .
 

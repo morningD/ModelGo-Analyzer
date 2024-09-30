@@ -7,3 +7,48 @@
 @prefix mg: <http://www.modelgo.li/rdf/terms#> .
 @prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
 @prefix : <http://example.org/ns#>.
+
+####    Generate license analysis report rules  ####
+# Warning [Right Not Explicitly Granted]. Report a warning if the license cannot grant you the right to do your action
+{
+    ?req a mg:Request .
+    ?req!mg:grant mg:hasUsage ?req_usage . # There may be multiple mg:Usage inside a mg:Right
+    ?req mg:targetAction ?a .
+    ?req mg:targetWork ?outw .
+    ?req <- mg:hasRequest ?inw .
+    ?inw mg:hasLicense ?li . # The checking target work must have a license, otherwise this checking will be skipped
+    ( ?r { ?li!mg:grant mg:hasUsage ?r . } ?granted_list ) log:collectAllIn _:x . # Collect all granted rights according to the license
+    ( ?r { ?li!mg:reserve mg:hasUsage ?r . } ?reserved_list ) log:collectAllIn _:x . # Collect all reserved rights according to the license
+    _:t log:notIncludes {?req_usage list:in ?granted_list} . # Check if the required usage is not in the granted list
+    _:t log:notIncludes {?req_usage list:in ?reserved_list} . # Check if the required usage is not in the reserved list
+
+    (?a ?inw ?outw ?req_usage) log:skolem ?geniri . # Keep unique
+    # Generate report content
+    ("** Warning ** [Right Not Explicitly Granted] " ?req_usage " is not explicitly granted by " ?li " license for " ?a " action on " ?inw " to produce " ?outw) string:concatenation ?report_content .
+} => {
+    ?geniri a mg:Warning ;
+        mg:reportBy ?a ;
+        mg:reportType "Right Not Explicitly Granted" ;
+        mg:content ?report_content .
+} .
+
+# Error [Right Reserved]. Report a error if the license reserves you the right to do your action
+{
+    ?req a mg:Request .
+    ?req!mg:grant mg:hasUsage ?req_usage . # There may be multiple mg:Usage inside a mg:Right
+    ?req mg:targetAction ?a .
+    ?req mg:targetWork ?outw .
+    ?req <- mg:hasRequest ?inw .
+    ?inw mg:hasLicense ?li . # The checking target work must have a license, otherwise this checking will be skipped
+    ( ?r { ?li!mg:reserve mg:hasUsage ?r . } ?reserved_list ) log:collectAllIn _:x . # Collect all reserved rights according to the license
+    ?req_usage list:in ?reserved_list . # Check if the required usage is in the reserved list
+
+    (?a ?inw ?outw ?req_usage) log:skolem ?geniri . # Keep unique
+    # Generate report content
+    ("** Error ** [Right Reserved] " ?req_usage " is reserved by " ?li " license for " ?a " action on " ?inw " to produce " ?outw) string:concatenation ?report_content .
+} => {
+    ?geniri a mg:Error ;
+        mg:reportBy ?a ;
+        mg:reportType "Right Reserved" ;
+        mg:content ?report_content .
+} .

@@ -30,6 +30,41 @@
         mg:content ?report_content .
 } .
 
+# Warning [Revocable License]. Report a warning if the license of a work is revocable
+
+{   
+    ?work a mg:Work .
+    ?work mg:hasLicense ?license .
+    _:x log:includes {?license!mg:grant mg:hasRightPrefix mg:revocable} .
+
+    ?work mg:workName ?wname . # Genreate report content
+    ?license mg:licenseId ?lid .
+    ("** Warning ** [Revocable License] The " ?lid " license of"  ?wname " is revocable") string:concatenation ?report_content .
+} => {
+    _:warning a mg:Warning ;
+        mg:reportBy ?work ;
+        mg:reportType "Revocable License" ;
+        mg:content ?report_content .
+} .
+
+# Warning [Possibly Revocable License]. Report a warning if the license of a work is not explictly claim irrevocable
+
+{   
+    ?work a mg:Work .
+    ?work mg:hasLicense ?license .
+    _:x log:notIncludes {?license!mg:grant mg:hasRightPrefix mg:revocable} . # Not claim revocable
+    _:x log:notIncludes {?license!mg:grant mg:hasRightPrefix mg:irrevocable} . # Not claim irrevocable
+
+    ?work mg:workName ?wname . # Genreate report content
+    ?license mg:licenseId ?lid .
+    ("** Warning ** [Revocable License] The " ?lid " license of"  ?wname " is revocable") string:concatenation ?report_content .
+} => {
+    _:warning a mg:Warning ;
+        mg:reportBy ?work ;
+        mg:reportType "Revocable License" ;
+        mg:content ?report_content .
+} .
+
 # Error [Wrong Work Type or Form]. The work type cannot be inconsistent with its work form; i.e., a 'software' work cannot have a 'vision' form.
 {
     ?work a mg:Work .

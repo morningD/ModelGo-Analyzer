@@ -40,7 +40,8 @@
 # [Train], [Amalgamate], [Modify] Request creating rule, which
 # asks 'use' and 'modify' right granting from target work (i.e, model)
 {
-    ?action a mg:Train, mg:Amalgamate, mg:Modify .
+    ?action a ?atype .
+    ?atype list:in (mg:Train mg:Amalgamate mg:Modify) .
     ?action!mg:hasInput mg:targetWork ?inw .
     ?action!mg:hasOutput mg:targetWork ?outw .
     (?action ?inw ?outw "request") log:skolem ?geniri .
@@ -58,7 +59,8 @@
 # [Distill], [Generate], [Embed] Request creating rule, which
 # asks 'use' right granting from target work (i.e, model)
 {
-    ?action a mg:Distill, mg:Generate, mg:Embed .
+    ?action a ?atype .
+    ?atype list:in (mg:Distill mg:Generate mg:Embed) .
     ?action!mg:hasInput mg:targetWork ?inw .
     ?action!mg:hasOutput mg:targetWork ?outw .
     (?action ?inw ?outw "request") log:skolem ?geniri .
@@ -104,7 +106,7 @@
         mg:targetAction ?action ;
         mg:grant [ 
             a mg:Right ;
-            mg:hasUsage mg:sublicense, mg:commercial_use
+            mg:hasUsage mg:redistribute, mg:sublicense, mg:commercial_use
         ] .
     ?inw mg:hasRequest ?geniri .
 } .
@@ -121,7 +123,7 @@
         mg:targetAction ?action ;
         mg:grant [ 
             a mg:Right ;
-            mg:hasUsage mg:sublicense
+            mg:hasUsage mg:redistribute, mg:sublicense
         ] .
     ?inw mg:hasRequest ?geniri .
 } .
@@ -140,7 +142,7 @@
         mg:targetAction ?action ;
         mg:grant [ 
             a mg:Right ;
-            mg:hasUsage mg:sublicense, mg:commercial_use
+            mg:hasUsage mg:redistribute, mg:sublicense, mg:commercial_use
         ] .
     ?insw mg:hasRequest ?geniri .
 } .
@@ -157,7 +159,7 @@
         mg:targetAction ?action ;
         mg:grant [ 
             a mg:Right ;
-            mg:hasUsage mg:sublicense
+            mg:hasUsage mg:redistribute, mg:sublicense
         ] .
     ?insw mg:hasRequest ?geniri .
 } .
@@ -176,7 +178,7 @@
         mg:targetAction ?action ;
         mg:grant [ 
             a mg:Right ;
-            mg:hasUsage mg:sublicense, mg:commercial_use
+            mg:hasUsage mg:redistribute, mg:sublicense, mg:commercial_use
         ] .
     ?inmw mg:hasRequest ?geniri .
 } .
@@ -193,7 +195,7 @@
         mg:targetAction ?action ;
         mg:grant [ 
             a mg:Right ;
-            mg:hasUsage mg:sublicense
+            mg:hasUsage mg:redistribute, mg:sublicense
         ] .
     ?inmw mg:hasRequest ?geniri .
 } .

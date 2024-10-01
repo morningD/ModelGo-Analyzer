@@ -7,10 +7,10 @@ import subprocess
 
 # wiki_text = register_license(Work('Wikipedia', 'dataset', 'literary'), target_license='CC-BY-SA-4.0') # Corpus, https://en.wikipedia.org/wiki/Wikipedia:Copyrights
 stack_exchange_text = register_license(Work('StackExchange', 'dataset', 'literary'), target_license='CC-BY-SA-4.0') # Corpus, https://stackexchange.com/
-# free_law_text = register_license(Work('FreeLaw', 'dataset', 'literary'), target_license='CC-BY-ND-4.0') # Corpus, https://free.law/
+free_law_text = register_license(Work('FreeLaw', 'dataset', 'literary'), target_license='CC-BY-ND-4.0') # Corpus, https://free.law/
 arxiv_text = register_license(Work('arXiv', 'dataset', 'literary'), target_license='CC-BY-NC-SA-4.0') # Corpus, https://info.arxiv.org/help/license/index.html
 # pubmed_text = register_license(Work('PubMed', 'dataset', 'literary'), target_license='CC-BY-NC-ND-4.0') # Corpus, https://www.ncbi.nlm.nih.gov/pmc/tools/textmining/
-# deep_sequoia_text = register_license(Work('Deep-sequoia', 'dataset', 'literary'), target_license='LGPLLR') # Corpus, http://deep-sequoia.inria.fr/
+deep_sequoia_text = register_license(Work('Deep-sequoia', 'dataset', 'literary'), target_license='LGPLLR') # Corpus, http://deep-sequoia.inria.fr/
 
 # midjourney_img = register_license(Work('Midjourney_gen', 'dataset', 'vision'), target_license='CC-BY-NC-4.0') # Image, https://docs.midjourney.com/docs/terms-of-service
 # flickr_img = register_license(Work('Flickr', 'dataset', 'vision'), target_license='CC-BY-NC-SA-4.0') # Image, https://www.flickr.com/creativecommons/
@@ -37,7 +37,7 @@ bigtranslate_model = register_license(Work('BigTranslate', 'model', 'weights'), 
 # llama2_model = register_license(Work('Llama2', 'model', 'weights'), target_license='Llama2') # Text Generation, https://huggingface.co/meta-llama/Llama-2-7b
 
 #flow = combine([whisper_model, detr_model])
-flow = combine([embed(arxiv_text, aux_flows=[bigtranslate_model]), embed(stack_exchange_text, aux_flows=[bigtranslate_model])])
+flow = combine([embed(arxiv_text, aux_flows=[bigtranslate_model]), embed(stack_exchange_text, aux_flows=[bigtranslate_model]), deep_sequoia_text, free_law_text])
 flow = publish(flow, policy = 'sell')
 # Save the gen graph to a new Turtle file
 flow.graph.serialize(destination="gen.ttl", format="ttl")
@@ -102,7 +102,7 @@ analysis_result = subprocess.run(["eye", "--quiet", "--nope", "--pass-only-new",
                          "rules_analysis_granting.n3"], 
                          stdout=subprocess.PIPE, check=True)
 
-#print(analysis_result.stdout)
+Graph().parse(data=analysis_result.stdout, format="n3").serialize(destination="out_analysis_granting.ttl", format="turtle")
 
 # Analysis of base
 analysis_result = subprocess.run(["eye", "--quiet", "--nope", "--pass-only-new", 
@@ -110,7 +110,7 @@ analysis_result = subprocess.run(["eye", "--quiet", "--nope", "--pass-only-new",
                          "rules_analysis_base.n3"], 
                          stdout=subprocess.PIPE, check=True)
 
-#print(analysis_result.stdout)
+Graph().parse(data=analysis_result.stdout, format="n3").serialize(destination="out_analysis_base.ttl", format="turtle")
 
 # Analysis of conflicts and reprot restrictions thought rulings.
 analysis_result = subprocess.run(["eye", "--quiet", "--nope", "--pass-only-new", 
@@ -118,7 +118,7 @@ analysis_result = subprocess.run(["eye", "--quiet", "--nope", "--pass-only-new",
                          "rules_analysis_conflict.n3"], 
                          stdout=subprocess.PIPE, check=True)
 
-Graph().parse(data=analysis_result.stdout, format="n3").serialize(destination="out_analysis.ttl", format="turtle")
+Graph().parse(data=analysis_result.stdout, format="n3").serialize(destination="out_analysis_conflict.ttl", format="turtle")
 
 
 # filter_result = subprocess.run(["eye", "--quiet", "--nope",

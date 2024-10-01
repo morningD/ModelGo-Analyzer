@@ -165,10 +165,10 @@
     ?action a mg:Combine .
     ?action!mg:hasOutput mg:targetWork ?outw .
     ( ?t { ?action!mg:hasInput!mg:targetWork mg:hasWorkType ?t } ?t_list ) log:collectAllIn _:x .
-    ({?t1 list:in ?t_list} {?t2 list:in ?t_list} {?t1 log:equalTo ?t2}) log:forAllIn _:x . # All type are same
-    ?t_list list:first ?t .
+    ({?t_list list:first ?t1 . ?t2 list:in ?t_list} {?t1 log:equalTo ?t2}) log:forAllIn _:x . # All type are same
+    ?t_list list:first ?t1 .
 } => {
-    ?outw mg:hasWorkType ?t .
+    ?outw mg:hasWorkType ?t1 .
 } .
 {   # Type, not same
     ?action a mg:Combine .
@@ -176,7 +176,7 @@
     ( ?t { ?action!mg:hasInput!mg:targetWork mg:hasWorkType ?t } ?t_list ) log:collectAllIn _:x .
     ?t_list list:first ?t1 .
     ?t_list list:member ?t2 .
-    ?t1 log:notEqualTo mg:mixed-type .
+    _:t log:includes {?t1 log:notEqualTo ?t2 } .
 } => {
     ?outw mg:hasWorkType mg:mixed-type .
 } .
@@ -328,7 +328,7 @@
 # [Generate] Reasoning rules for generate data based on model or algorithm, which adds the 'hasAubwork' property to targetWork,
 # and the output work has same type and form as the input target work.
 {
-    ?action a mg:Distill . # Key difference
+    ?action a mg:Generate . # Key difference
     ?action!mg:hasInput mg:targetWork ?inw .
     ?action!mg:hasInput mg:targetWorkForm ?wf . # Use appoint work form and type
     ?action!mg:hasInput mg:targetWorkType ?wt .

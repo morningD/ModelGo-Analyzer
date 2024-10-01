@@ -9,11 +9,124 @@
 @prefix : <http://example.org/ns#>.
 
 
+# {
+#     ?rule a mg:Rule .
+#     ?rule mg:hasPublishRestriction ?pub_rest .
+# } => {
+#     ?pub_rest mg:isPublishRestriction true .
+# } .
+
+
 ####    Generate license analysis report rules  ####
-{
-    ?action a mg:Publish .
-    ?action!mg:hasOutput mg:targetWork ?outw .
-    ?outw mg:hasRuling ?ruling .
+# # Restrictions 
+# {   # Use Restriction
+#     ?outw a mg:Work .
+#     ?outw mg:hasRuling ?ruling . # Gather all rulings related to this work
+#     ?ruling mg:hasRule ?rule .
+#     ?ruling mg:targetWork ?inw . # Ruling source work
+#     ?ruling mg:hasLicense ?li .
+#     ?ruling mg:targetAction ?a .
+#     ?rule mg:hasUseRestriction ?rest .
+#     ?rest mg:equalTo mg:include_notice_restriction .
+#     (?a ?inw ?outw mg:include_notice_restriction) log:skolem ?geniri . # Keep unique
+#     ("** Restriction ** [Include License Restriction] " ?outw " must retain the original " ?li " license file from " ?inw ) string:concatenation ?report_content .
+# } => {
+#     _:rest a mg:Restriction ;
+#         mg:reportBy ?work ;
+#         mg:reportType "Include License Restriction" ;
+#         mg:content ?report_content .
+# } .
+{   # Use Restriction
+    ?outw a mg:Work .
+    ?outw mg:workName ?wn .
+    ?outw mg:hasRuling ?ruling . # Gather all rulings related to this work
+    ?ruling mg:hasRule ?rule .
+    ?ruling mg:targetWork ?inw . # Ruling source work
+    ?ruling mg:hasLicense ?li .
+    ?ruling mg:targetAction ?a .
+    ?rule mg:hasUseRestriction ?rest .
+    #(?a ?inw ?outw mg:include_notice_restriction) log:skolem ?geniri . # Keep unique
+    #("** Restriction ** [XXX] " ?outw " has restriction " ?li " license file from " ?inw ) string:concatenation ?report_content .
 } => {
-    :rule :is ?ruling .
+    # _:rest a mg:Restrction ;
+    #     mg:reportBy ?work ;
+    #     mg:reportType "Include License Restriction" ;
+    #     mg:content ?report_content .
+    ?outw :thisWorkHasUseRestriction (?rest ?wn ?rule ?li) .
+} .
+
+
+{   # Publish Restrction
+    ?outw a mg:Work .
+    ?outw mg:workName ?wn .
+    ?outw!mg:targetPublishPolicy list:in (mg:sell mg:share) . # This work will be redistributed.
+    #(?w {?outw mg:hasMixwork ?w} ?mixw) log:collectAllIn _:x .
+    #( (?outw) ?mixw ) list:append ?w_list .
+    #?w_list list:member ?outw .
+    ?outw mg:hasRuling ?ruling . # Gather all rulings related to this work
+    ?ruling mg:hasRule ?rule .
+    ?ruling mg:targetWork ?inw . # Ruling source work
+    ?inw mg:workName ?inwn .
+    ?ruling mg:hasLicense ?li .
+    ?ruling mg:targetAction ?a .
+    ?rule mg:hasPublishRestriction ?rest .
+    #?rest log:equalTo mg:include_notice_restriction .
+    #(?a ?inw ?outw mg:include_notice_restriction) log:skolem ?geniri . # Keep unique
+    #("** Restriction ** [Include License Restriction] " ?outw " must retain the original " ?li " license file from " ?inw ) string:concatenation ?report_content .
+} => {
+    ?outw :thisWorkHasPublishRestriction (?rest ?iwn ?rule ?li) .
+    ?outw :nameis ?wn
+} .
+
+{   # Publish Restrction of mixworks
+    ?outw a mg:Work .
+    ?outw mg:workName ?wn .
+    ?outw!mg:targetPublishPolicy list:in (mg:sell mg:share) . # This work will be redistributed.
+    ?outw mg:hasMixwork ?mixw .
+    ?mixw mg:workName ?mixwn .
+    ?mixw mg:hasRuling ?ruling . # Gather all rulings related to this work and its mixworks
+    ?ruling mg:hasRule ?rule .
+    ?ruling mg:targetWork ?inw . # Ruling source work
+    ?ruling mg:hasLicense ?li .
+    ?ruling mg:targetAction ?a .
+    ?rule mg:hasPublishRestriction ?rest .
+    #?rest log:equalTo mg:include_notice_restriction .
+    #(?a ?inw ?outw mg:include_notice_restriction) log:skolem ?geniri . # Keep unique
+    #("** Restriction ** [Include License Restriction] " ?outw " must retain the original " ?li " license file from " ?inw ) string:concatenation ?report_content .
+} => {
+    ?outw :thisWorkHasPublishRestriction (?rest ?mixwn ?rule ?li) .
+    ?outw :nameis ?wn
+} .
+
+{   # Check allowSharing 
+    ?w a mg:Work .
+    ?w :hasRule ?rule .
+    ?rule!mg:allowSharing log:equalTo false .
+    # ?ruling mg:hasRule ?rule .
+    # ?ruling mg:targetWork ?inw . # Ruling source work
+    # ?ruling mg:hasLicense ?li .
+    # ?ruling mg:targetAction ?a .
+    # _:t log:notIncludes {?rule mg:allowSharing true} .
+    #?rest log:equalTo mg:include_notice_restriction .
+    #(?a ?inw ?outw mg:include_notice_restriction) log:skolem ?geniri . # Keep unique
+    #("** Restriction ** [Include License Restriction] " ?outw " must retain the original " ?li " license file from " ?inw ) string:concatenation ?report_content .
+} => {
+    ?w :hasShareIssue ?rule .
+} .
+
+{   # DEBUG: Gather all rules related to this work
+    ?outw a mg:Work .
+    ?outw mg:workName ?wn .
+    ?outw mg:hasRuling ?ruling . # Gather all rulings related to this work
+    #?outw!mg:targetPublishPolicy list:in (mg:sell mg:share) . # This work will be redistributed.
+    ?ruling mg:hasRule ?rule .
+} => {
+    ?outw :hasRule ?rule .
+} .
+
+{   # DEBUG: Gather all rules related to this work's mixworks
+    ?outw a mg:Work .
+    ?outw!mg:hasMixwork :hasRule ?rule .
+} => {
+    ?outw :hasRule ?rule .
 } .

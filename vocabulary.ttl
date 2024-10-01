@@ -431,13 +431,17 @@ mg:compatible-license a mg:LicenseCategory . # It is a concept which depends on 
 #mg:tbd-license a mg:LicenseCategory . # The final license is not determined yet, need to be decided by the logic rules (N3).
 
 mg:hasRestriction a rdfs:Property ;
-    rdfs:range mg:Restriction .
+    rdfs:range mg:Restriction .     ################ Rename Require: Restriction ->> Condition
 
 mg:hasPublishRestriction rdfs:subPropertyOf mg:hasRestriction ;
     rdfs:domain mg:Restriction .
 
 mg:hasUseRestriction rdfs:subPropertyOf mg:hasRestriction ;
     rdfs:domain mg:Restriction .
+
+mg:isPublishRestriction a rdfs:Property ;
+    rdfs:domain mg:Restriction ;
+    rdfs:range xsd:boolean .
 
 # mg:banUseRestriction rdfs:subPropertyOf mg:hasRestriction ;
 #     rdfs:domain mg:Restriction .

@@ -5,25 +5,47 @@
     mg:actionId "reg1" ;
     mg:hasInput [ mg:targetLicense mg:CC-BY-SA-4.0 ;
             mg:targetWork :StackExchange ] ;
-    mg:yieldOutputWork :embed5 .
+    mg:yieldOutputWork :embed7 .
 
 :reg2 a mg:RegisterLicense ;
     mg:actionId "reg2" ;
-    mg:hasInput [ mg:targetLicense mg:CC-BY-NC-SA-4.0 ;
-            mg:targetWork :arXiv ] ;
-    mg:yieldOutputWork :embed4 .
+    mg:hasInput [ mg:targetLicense mg:CC-BY-ND-4.0 ;
+            mg:targetWork :FreeLaw ] ;
+    mg:yieldOutputWork :combine8 .
 
 :reg3 a mg:RegisterLicense ;
     mg:actionId "reg3" ;
+    mg:hasInput [ mg:targetLicense mg:CC-BY-NC-SA-4.0 ;
+            mg:targetWork :arXiv ] ;
+    mg:yieldOutputWork :embed6 .
+
+:reg4 a mg:RegisterLicense ;
+    mg:actionId "reg4" ;
+    mg:hasInput [ mg:targetLicense mg:LGPLLR ;
+            mg:targetWork :Deep-sequoia ] ;
+    mg:yieldOutputWork :combine8 .
+
+:reg5 a mg:RegisterLicense ;
+    mg:actionId "reg5" ;
     mg:hasInput [ mg:targetLicense mg:GPL-3.0 ;
             mg:targetWork :BigTranslate ] ;
-    mg:yieldAuxWork :embed4,
-        :embed5 .
+    mg:yieldAuxWork :embed6,
+        :embed7 .
 
 :BigTranslate a mg:work ;
     mg:hasWorkForm mg:weights ;
     mg:hasWorkType mg:model ;
     mg:workName "BigTranslate" .
+
+:Deep-sequoia a mg:work ;
+    mg:hasWorkForm mg:literary ;
+    mg:hasWorkType mg:dataset ;
+    mg:workName "Deep-sequoia" .
+
+:FreeLaw a mg:work ;
+    mg:hasWorkForm mg:literary ;
+    mg:hasWorkType mg:dataset ;
+    mg:workName "FreeLaw" .
 
 :StackExchange a mg:work ;
     mg:hasWorkForm mg:literary ;
@@ -35,26 +57,26 @@
     mg:hasWorkType mg:dataset ;
     mg:workName "arXiv" .
 
-:publish7 a mg:Publish ;
-    mg:actionId "publish7" ;
+:publish9 a mg:Publish ;
+    mg:actionId "publish9" ;
     mg:hasInput [ mg:targetPublishPolicy mg:sell ] ;
     mg:hasOutput [ ] .
 
-:combine6 a mg:Combine ;
-    mg:actionId "combine6" ;
+:embed6 a mg:Embed ;
+    mg:actionId "embed6" ;
     mg:hasInput [ ] ;
     mg:hasOutput [ ] ;
-    mg:yieldOutputWork :publish7 .
+    mg:yieldOutputWork :combine8 .
 
-:embed4 a mg:Embed ;
-    mg:actionId "embed4" ;
+:embed7 a mg:Embed ;
+    mg:actionId "embed7" ;
     mg:hasInput [ ] ;
     mg:hasOutput [ ] ;
-    mg:yieldOutputWork :combine6 .
+    mg:yieldOutputWork :combine8 .
 
-:embed5 a mg:Embed ;
-    mg:actionId "embed5" ;
+:combine8 a mg:Combine ;
+    mg:actionId "combine8" ;
     mg:hasInput [ ] ;
     mg:hasOutput [ ] ;
-    mg:yieldOutputWork :combine6 .
+    mg:yieldOutputWork :publish9 .
 

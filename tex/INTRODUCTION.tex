@@ -1,0 +1,22 @@
+\section{Introduction}
+In recent years, the compelling generalization capabilities provided by billion-parameter models~\cite{wei2023inverse}, along with the high computational and data costs associated with their training~\cite{maslej2024aiindex}, have motivated ML project developers to collaborate incrementally rather than train models from scratch.
+For example, a common approach is to download a pre-trained model (PTM)~\cite{jiang2023empirical} and fine-tune it for downstream task~\cite{hu2022lora}.
+However, these paradigms may face potential legal risks if the use and redistribution practices violate the governing licenses of the reused components, akin to the GPL violation issues in the field of Open Source Software (OSS)~\cite{mathur2012empirical}.
+Another risk arises from the choice of license used to republish the work. Some developers adhere to traditional software publishing practices and select OSS licenses for their models~\cite{devlin2019bert, ni2022expanding}, which often lack clear definitions and conditions regarding ML activities and do not effectively prevent undesirable use.
+For example, a licensee can close-source your published models, even if they are licensed under GPL, without violating any terms.
+
+There are three possible ways to address above challenges.
+First, developers could avoid using any third-party materials. However, this is extremely difficult for individual developers, as training PTMs is expensive and requires vast amounts of data. For instance, the training dataset for GPT-2~\cite{radford2019language} was collected from 45 million web pages, governed by various licenses and terms of use.
+Second, a new licensing framework for ML projects could be developed, which might include drafting specific licenses for models and datasets~\cite{benjamin2019towards, contractor2022behavioral}, along with a compatibility table to guide their reuse policies. 
+However, this approach also has limitations, as it does little to address existing conflicts in ML projects that rely on components released under traditional licenses. Furthermore, it is impractical to expect all publishers to relicense their previous works.
+Third, we can scan the reused components in ML projects and analyze existing license compliance risks to eliminate them. 
+This is a common solution applied to OSS projects~\cite{jaeger2017fossology} but it cannot be directly extended to ML projects.
+The reason is that ML components can involve complex coupling mechanisms and different licensing frameworks that are interwoven within a project.
+
+Take MixLoRA~\cite{li2024mixlora} as an example: it is licensed under Apache-2.0 (an OSS license) and is fine-tuned on Llama2~\cite{touvron2023llama} (governed by Llama2 Community License~\cite{meta2023llama2}, a model license) using the Cleaned Alpaca Dataset~\cite{taori2023alpaca}, which licensed under CC BY-NC-4.0 (a free content license from Creative Commons~\cite{creative2023list}).
+Previous OSS license analysis tools~\cite{mathur2012empirical, ombredanne2020free} that only consider package reference dependencies and focus on software licenses will fall short in such ML scenarios, which involve implicit nested dependencies and various licensing frameworks.
+Therefore, to provide license analysis for ML projects, the key is to develop a feasible solution that can cover all licensing frameworks and their mapping rules related to ML activities.
+Moreover, the lack of consensus in standard model publishing practices and the inflexibility of available model licenses have led many developers to publish their models under OSS licenses or even free-content licenses~\cite{groeneveld2024olmo, cohereforai2024c4ai}, thereby increasing the complexity of designing license analysis methods.
+%the key is bulid a new vocabulary that can cover all licensing framework in common ML projects
+
+In this paper,

@@ -74,7 +74,7 @@
     #(?a ?inw ?outw mg:include_notice_restriction) log:skolem ?geniri . # Keep unique
     #("** Restriction ** [Include License Restriction] " ?outw " must retain the original " ?li " license file from " ?inw ) string:concatenation ?report_content .
 } => {
-    ?outw :thisWorkHasPublishRestriction (?rest ?iwn ?rule ?li) .
+    ?outw :thisWorkHasPublishRestriction (?rest "This" ?inwn ?rule ?li) .
     ?outw :nameis ?wn
 } .
 
@@ -94,8 +94,19 @@
     #(?a ?inw ?outw mg:include_notice_restriction) log:skolem ?geniri . # Keep unique
     #("** Restriction ** [Include License Restriction] " ?outw " must retain the original " ?li " license file from " ?inw ) string:concatenation ?report_content .
 } => {
-    ?outw :thisWorkHasPublishRestriction (?rest ?mixwn ?rule ?li) .
+    ?outw :thisWorkHasPublishRestriction (?rest "Mix" ?mixwn ?rule ?li) .
     ?outw :nameis ?wn
+} .
+
+{   # Publish Restrction of subworks
+    ?outw a mg:Work .
+    ?outw mg:workName ?wn .
+    ?outw!mg:targetPublishPolicy list:in (mg:sell mg:share) . # This work will be redistributed.
+    ?outw mg:hasSubwork ?subw .
+    ?subw mg:workName ?subwn .
+} => {
+    ?outw :thisWorkHasPublishSubwork (?rest ?subwn ?subw) .
+    ?outw :nameis ?wn .
 } .
 
 {   # Check allowSharing 

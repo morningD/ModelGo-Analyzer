@@ -113,23 +113,32 @@
 \usepackage{booktabs}
 \usepackage{rotating}
 \usepackage{array}
-\usepackage[para]{footmisc}
-\usepackage{tablefootnote}
+%\usepackage[para]{footmisc}
+%\usepackage{tablefootnote}
 \usepackage{xcolor}
 \usepackage{colortbl}
 \usepackage{longtable}
 \usepackage{circledsteps}
 \usepackage{romannum}
-\usepackage{longtable}
 \usepackage{tcolorbox}
 \usepackage{enumitem} % no indent [leftmargin=*]
 \usepackage{balance}
+\usepackage{bm}
 
 \definecolor{Permissive}{HTML}{18AFCC}
 \definecolor{Public}{HTML}{5F9099}
 \definecolor{Copyleft}{HTML}{CC1865}
 
-\hyphenation{OpenAI Model-Go} 
+\definecolor{Yes}{HTML}{64FFA0}
+\definecolor{Part}{HTML}{FF9963}
+\definecolor{No}{HTML}{FF6B63}
+
+\newcommand{\cmark}{\cellcolor{Yes}\textcolor{black}{\ding{51}}}
+\newcommand{\pmark}{\cellcolor{Part}\textcolor{gray}{$\bm{\approx}$}}
+\newcommand{\xmark}{\cellcolor{No}\textcolor{white}{\ding{55}}}
+%\newcommand{\namark}{\cellcolor{white}\textcolor{black}{n.a.}}
+
+\hyphenation{OpenAI Model-Go HuggingFace} 
 
 %%
 %% end of the preamble, start of the body of the document source.

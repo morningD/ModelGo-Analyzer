@@ -171,6 +171,36 @@ mg:GPL-3.0 a mg:LicenseInfo ;
     mg:licenseUrl <https://www.gnu.org/licenses/gpl-3.0.en.html> .
 
 
+###################    GPL-2.0    ###################
+mg:GPL-2.0 a mg:LicenseInfo ;
+    mg:licenseId "GPL-2.0" ;
+    mg:licenseName "GNU General Public License v2.0" ;
+    mg:targetWorkType mg:software ;
+    mg:licenseVersion "2.0"^^xsd:float ;
+    mg:isFsfLibre true ;
+    mg:isOsiApproved true ;
+    # mg:isPermissive false ;
+    # mg:isOpenDomain false ;
+    mg:isCopyleft true ;
+    
+    mg:grant [
+        a mg:Right ;
+        mg:isCopyright true ;
+        mg:isPatent true ;
+        # mg:hasRightPrefix ; 
+        mg:hasUsage mg:use, mg:modify, mg:merge, mg:redistribute, mg:auto-license, mg:commercial_use
+    ] ;
+    mg:reserve [
+        a mg:Right ;
+        mg:hasUsage mg:patent, mg:copyright, mg:trademark, mg:trademark_use, mg:sublicense # The auto-license can waive the requirement of sublicense.
+    ] ;
+
+    mg:hasRule mg:GPL-2.0-duplication-rule, mg:GPL-3.0-independent-rule-1, mg:GPL-3.0-independent-rule-2, mg:GPL-2.0-derivate-rule, mg:LGPL-2.1-nodefinition-rule, mg:Artistic-2.0-republication-rule-1, mg:Apache-2.0-republication-rule-2 ;
+    mg:hasRule mg:GPL-2.0-duplication-fuzz-rule, mg:GPL-3.0-independent-fuzz-rule-1, mg:GPL-3.0-independent-fuzz-rule-2, mg:GPL-2.0-derivate-fuzz-rule, mg:LGPL-2.1-nodefinition-fuzz-rule, mg:Artistic-2.0-republication-fuzz-rule-1 ; # Fuzz rules
+    
+    mg:licenseUrl <https://www.gnu.org/licenses/old-licenses/gpl-2.0.en.html> .
+
+
 ###################    AGPL-3.0    ###################
 mg:AGPL-3.0 a mg:LicenseInfo ;
     mg:licenseId "AGPL-3.0" ;
@@ -262,36 +292,6 @@ mg:LGPL-2.1 a mg:LicenseInfo ;
     mg:hasRule mg:GPL-3.0-duplication-fuzz-rule, mg:LGPL-2.1-derivate-fuzz-rule, mg:LGPL-3.0-independent-fuzz-rule-1, mg:LGPL-3.0-independent-fuzz-rule-2, mg:GPL-3.0-independent-fuzz-rule-2, mg:LGPL-2.1-nodefinition-fuzz-rule, mg:LGPL-3.0-republication-fuzz-rule-1 ;
 
     mg:licenseUrl <https://www.gnu.org/licenses/old-licenses/lgpl-2.1.en.html> .
-
-
-###################    GPL-2.0    ###################
-mg:GPL-2.0 a mg:LicenseInfo ;
-    mg:licenseId "GPL-2.0" ;
-    mg:licenseName "GNU General Public License v2.0" ;
-    mg:targetWorkType mg:software ;
-    mg:licenseVersion "2.0"^^xsd:float ;
-    mg:isFsfLibre true ;
-    mg:isOsiApproved true ;
-    # mg:isPermissive false ;
-    # mg:isOpenDomain false ;
-    mg:isCopyleft true ;
-    
-    mg:grant [
-        a mg:Right ;
-        mg:isCopyright true ;
-        mg:isPatent true ;
-        # mg:hasRightPrefix ; 
-        mg:hasUsage mg:use, mg:modify, mg:merge, mg:redistribute, mg:auto-license, mg:commercial_use
-    ] ;
-    mg:reserve [
-        a mg:Right ;
-        mg:hasUsage mg:patent, mg:copyright, mg:trademark, mg:trademark_use, mg:sublicense # The auto-license can waive the requirement of sublicense.
-    ] ;
-
-    mg:hasRule mg:GPL-3.0-duplication-rule, mg:GPL-3.0-independent-rule-1, mg:GPL-3.0-independent-rule-2, mg:GPL-2.0-derivate-rule, mg:LGPL-2.1-nodefinition-rule, mg:Artistic-2.0-republication-rule-1, mg:Apache-2.0-republication-rule-2 ;
-    mg:hasRule mg:GPL-3.0-duplication-fuzz-rule, mg:GPL-3.0-independent-fuzz-rule-1, mg:GPL-3.0-independent-fuzz-rule-2, mg:GPL-2.0-derivate-fuzz-rule, mg:LGPL-2.1-nodefinition-fuzz-rule, mg:Artistic-2.0-republication-fuzz-rule-1 ; # Fuzz rules
-    
-    mg:licenseUrl <https://www.gnu.org/licenses/old-licenses/gpl-2.0.en.html> .
 
 
 ###################    BSD-3-Clause    ###################
@@ -427,8 +427,8 @@ mg:OSL-3.0 a mg:LicenseInfo ;
         mg:hasUsage mg:patent, mg:copyright, mg:trademark, mg:trademark_use
     ] ;
     
-    mg:hasRule mg:AFL-3.0-duplication-rule, mg:OSL-3.0-derivative-rule-1, mg:OSL-3.0-derivative-rule-2, mg:AFL-3.0-nodefinition-rule, mg:AFL-3.0-republication-rule ;
-    mg:hasRule mg:AFL-3.0-duplication-fuzz-rule, mg:OSL-3.0-derivative-fuzz-rule-1, mg:OSL-3.0-derivative-fuzz-rule-2, mg:AFL-3.0-nodefinition-fuzz-rule, mg:AFL-3.0-republication-fuzz-rule ; # Fuzz rules
+    mg:hasRule mg:OSL-3.0-duplication-rule, mg:OSL-3.0-derivative-rule-1, mg:OSL-3.0-derivative-rule-2, mg:AFL-3.0-nodefinition-rule, mg:AFL-3.0-republication-rule ;
+    mg:hasRule mg:OSL-3.0-duplication-fuzz-rule, mg:OSL-3.0-derivative-fuzz-rule-1, mg:OSL-3.0-derivative-fuzz-rule-2, mg:AFL-3.0-nodefinition-fuzz-rule, mg:AFL-3.0-republication-fuzz-rule ; # Fuzz rules
     
     mg:licenseUrl <https://opensource.org/license/osl-3-0-php/> .
 

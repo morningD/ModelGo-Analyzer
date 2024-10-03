@@ -761,8 +761,23 @@ mg:LGPL-2.1-nodefinition-fuzz-rule a mg:Rule ;
 
 
 ###################    GPL-2.0 Rules    ###################
-# mg:GPL-2.0-duplication-rule -> mg:GPL-3.0-duplication-rule
-# mg:GPL-2.0-duplication-fuzz-rule -> mg:GPL-3.0-duplication-fuzz-rule
+mg:GPL-2.0-duplication-rule a mg:Rule ;
+    mg:hasOutputDef mg:duplication ;
+    mg:targetActionType mg:Copy ;
+    mg:targetInputWorkForm mg:code, mg:exe ;
+    mg:targetOutputWorkForm mg:code, mg:exe ;
+    mg:relicense mg:none-license ;
+    mg:hasPublishRestriction mg:include_license_restriction, mg:include_notice_restriction, mg:disclose_self_restriction;
+    mg:allowSharing true .
+
+mg:GPL-2.0-duplication-fuzz-rule a mg:Rule ;
+    mg:hasOutputDef mg:duplication ;
+    mg:targetActionType mg:Copy ;
+    mg:targetInputWorkForm mg:literary, mg:vision, mg:acoustics, mg:weights, mg:raw-form, mg:binary-form, mg:mixed-form ;
+    mg:targetOutputWorkForm mg:literary, mg:vision, mg:acoustics, mg:weights, mg:raw-form, mg:binary-form, mg:mixed-form ;
+    mg:relicense mg:none-license ;
+    mg:hasPublishRestriction mg:include_license_restriction, mg:include_notice_restriction, mg:disclose_self_restriction ;
+    mg:allowSharing true .
 
 # mg:GPL-2.0-independent-rule-1 -> mg:GPL-3.0-independent-rule-1
 # mg:GPL-2.0-independent-fuzz-rule-1 -> mg:GPL-3.0-independent-fuzz-rule-1
@@ -883,8 +898,23 @@ mg:BSD-3-Clause-derivative-fuzz-rule a mg:Rule ;
 
 
 ###################    OSL-3.0 Rules    ###################
-# mg:OSL-3.0-duplication-rule -> mg:AFL-3.0-duplication-rule
-# mg:OSL-3.0-duplication-fuzz-rule -> mg:AFL-3.0-duplication-fuzz-rule
+mg:OSL-3.0-duplication-rule a mg:Rule ;
+    mg:hasOutputDef mg:duplication ;
+    mg:targetActionType mg:Copy ;
+    mg:targetInputWorkForm mg:code, mg:exe, mg:saas ;
+    mg:targetOutputWorkForm mg:code, mg:exe, mg:saas ;
+    mg:relicense mg:none-license ;
+    mg:hasPublishRestriction mg:include_license_restriction, mg:disclose_self_restriction, mg:no_other_conditions_restriction ;
+    mg:allowSharing true .
+
+mg:OSL-3.0-duplication-fuzz-rule a mg:Rule ;
+    mg:hasOutputDef mg:duplication ;
+    mg:targetActionType mg:Copy ;
+    mg:targetInputWorkForm mg:literary, mg:vision, mg:acoustics, mg:weights, mg:raw-form, mg:binary-form, mg:service-form, mg:mixed-form ;
+    mg:targetOutputWorkForm mg:literary, mg:vision, mg:acoustics, mg:weights, mg:raw-form, mg:binary-form, mg:service-form, mg:mixed-form ;
+    mg:relicense mg:none-license ;
+    mg:hasPublishRestriction mg:include_license_restriction, mg:disclose_self_restriction, mg:no_other_conditions_restriction ;
+    mg:allowSharing true .
 
 mg:OSL-3.0-derivative-rule-1 a mg:Rule ;
     mg:hasOutputDef mg:derivative ;
@@ -892,6 +922,7 @@ mg:OSL-3.0-derivative-rule-1 a mg:Rule ;
     mg:targetInputWorkForm mg:code, mg:exe, mg:saas ;
     mg:targetOutputWorkForm mg:code ;
     mg:relicense mg:none-license ;
+    mg:hasPublishRestriction mg:disclose_self_restriction, mg:no_other_conditions_restriction ;
     mg:hasUseRestriction mg:include_notice_restriction, mg:include_license_restriction ;
     mg:allowSharing true .
 
@@ -901,6 +932,7 @@ mg:OSL-3.0-derivative-fuzz-rule-1 a mg:Rule ;
     mg:targetInputWorkForm mg:literary, mg:vision, mg:acoustics, mg:weights, mg:raw-form, mg:binary-form, mg:service-form, mg:mixed-form ;
     mg:targetOutputWorkForm mg:literary, mg:vision, mg:acoustics, mg:weights, mg:raw-form ;
     mg:relicense mg:none-license ;
+    mg:hasPublishRestriction mg:disclose_self_restriction, mg:no_other_conditions_restriction ;
     mg:hasUseRestriction mg:include_notice_restriction, mg:include_license_restriction ;
     mg:allowSharing true .
 
@@ -910,6 +942,7 @@ mg:OSL-3.0-derivative-rule-2 a mg:Rule ;
     mg:targetInputWorkForm mg:code, mg:exe, mg:saas ;
     mg:targetOutputWorkForm mg:exe, mg:saas ;
     mg:relicense mg:none-license ;
+    mg:hasPublishRestriction mg:disclose_self_restriction, mg:no_other_conditions_restriction ;
     mg:allowSharing true .
 
 mg:OSL-3.0-derivative-fuzz-rule-2 a mg:Rule ;
@@ -918,6 +951,7 @@ mg:OSL-3.0-derivative-fuzz-rule-2 a mg:Rule ;
     mg:targetInputWorkForm mg:literary, mg:vision, mg:acoustics, mg:weights, mg:raw-form, mg:binary-form, mg:service-form, mg:mixed-form ;
     mg:targetOutputWorkForm mg:binary-form, mg:service-form, mg:mixed-form ;
     mg:relicense mg:none-license ;
+    mg:hasPublishRestriction mg:disclose_self_restriction, mg:no_other_conditions_restriction ;
     mg:allowSharing true .
 
 # mg:OSL-3.0-nodefinition-rule -> mg:AFL-3.0-nodefinition-rule

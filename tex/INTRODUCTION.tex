@@ -1,6 +1,6 @@
 \section{Introduction}
 In recent years, the compelling generalization capabilities provided by billion-parameter models~\cite{wei2023inverse}, along with the high computational and data costs associated with their training~\cite{maslej2024aiindex}, have motivated ML project developers to collaborate incrementally rather than train models from scratch.
-For example, a common approach is to download a pre-trained model (PTM)~\cite{jiang2023empirical} and fine-tune it for downstream task~\cite{hu2022lora}.
+For example, a common approach is to download a Pre-Trained Model (PTM)~\cite{jiang2023empirical} and fine-tune it for downstream task~\cite{hu2022lora}.
 However, these paradigms may face potential legal risks if the use and redistribution practices violate the governing licenses of the reused components, akin to the GPL violation issues in the field of Open Source Software (OSS)~\cite{mathur2012empirical}.
 Another risk arises from the choice of license used to republish the work. Some developers adhere to traditional software publishing practices and select OSS licenses for their models~\cite{devlin2019bert, ni2022expanding}, which often lack clear definitions and conditions regarding ML activities and do not effectively prevent undesirable use.
 For example, a licensee can close-source your published models, even if they are licensed under GPL, without violating any terms.
@@ -15,8 +15,198 @@ The reason is that ML components can involve complex coupling mechanisms and dif
 
 Take MixLoRA~\cite{li2024mixlora} as an example: it is licensed under Apache-2.0 (an OSS license) and is fine-tuned on Llama2~\cite{touvron2023llama} (governed by Llama2 Community License~\cite{meta2023llama2}, a model license) using the Cleaned Alpaca Dataset~\cite{taori2023alpaca}, which licensed under CC BY-NC-4.0 (a free content license from Creative Commons~\cite{creative2023list}).
 Previous OSS license analysis tools~\cite{mathur2012empirical, ombredanne2020free} that only consider package reference dependencies and focus on software licenses will fall short in such ML scenarios, which involve implicit nested dependencies and various licensing frameworks.
-Therefore, to provide license analysis for ML projects, the key is to develop a feasible solution that can cover all licensing frameworks and their mapping rules related to ML activities.
-Moreover, the lack of consensus in standard model publishing practices and the inflexibility of available model licenses have led many developers to publish their models under OSS licenses or even free-content licenses~\cite{groeneveld2024olmo, cohereforai2024c4ai}, thereby increasing the complexity of designing license analysis methods.
-%the key is bulid a new vocabulary that can cover all licensing framework in common ML projects
+Therefore, to provide license analysis for ML projects, the key is to develop an interpretative solution that can cover all licensing frameworks and disambiguate their mapping rules related to ML activities.
+Moreover, the lack of consensus in standard model publishing practices and the inflexibility of available model licenses have led many developers to publish their models under OSS licenses or even free-content licenses~\cite{groeneveld2024olmo, cohereforai2024c4ai}, further increasing the complexity of designing license analysis methods.
 
-In this paper,
+In this paper, we propose a two-pronged approach to address these challenges. 
+First, to resolve existing license conflicts in ML projects, we introduce \textit{MG Analyzer}, a tool that constructs ML workflows as Resource Description Framework (RDF) graphs and assesses potential license compliance issues, improper license selection, rights grants, restrictions, and obligations within the projects. 
+Second, to promote standardized model publishing in the future, we propose a new set of model-specific licenses, \textit{MG Licenses}, offering Creative Commons-style licensing options for developers to choose from.
+To present potential risks of using traditional OSS, model, and free-content licenses in model publishing scenarios, we present XXXXXXXX use case.
+We also demonstrate the flexibility of \textit{MG Licenses} in encompassing nearly all licensing conditions provided by other model licenses (by our analyzer?).
+The main contributions of our paper are:
+
+\begin{itemize}
+    \item Our code and license text are available at (link temporarily hidden due to double-blind policy).
+\end{itemize}
+
+The rest of the paper is organized as follows. 
+
+
+\begin{table*}[h]
+    \caption{Licenses.}
+    \tiny
+    \begin{tabular}{|llcccccccccccccccc|}
+        \hline
+        \multicolumn{1}{|l|}{\multirow{2}{*}{License Name}} & \multicolumn{1}{l|}{\multirow{2}{*}{Type}} & \multicolumn{4}{c|}{Clarity of Definitions} & \multicolumn{3}{c|}{Freedom of Verbatim Copy} & \multicolumn{5}{c|}{Freedom of Derivative} & \multicolumn{2}{c|}{Freedom of Use} & \multicolumn{1}{c|}{\multirow{2}{*}{Clarity}} & \multirow{2}{*}{Freedom} \\ \cline{3-16}
+        \multicolumn{1}{|l|}{} & \multicolumn{1}{l|}{} & \multicolumn{1}{l|}{Prefixes} & \multicolumn{1}{l|}{Rights} & \multicolumn{1}{l|}{Rules} & \multicolumn{1}{l|}{Remote} & \multicolumn{1}{l|}{Share} & \multicolumn{1}{l|}{Close} & \multicolumn{1}{l|}{Non-excl} & \multicolumn{1}{l|}{Share} & \multicolumn{1}{l|}{Close} & \multicolumn{1}{l|}{Non-excl} & \multicolumn{1}{l|}{Sublicense} & \multicolumn{1}{l|}{Attribute} & \multicolumn{1}{l|}{Comm} & \multicolumn{1}{l|}{Behav} & \multicolumn{1}{l|}{} & \\ 
+        \hline
+        
+        \multicolumn{1}{|l|}{Apache-2.0} & \multicolumn{1}{c|}{\multirow{16}{*}{OSS}}  & \cmark & \cmark & \pmark & \multicolumn{1}{c|}{\xmark} & \pmark & \cmark & \multicolumn{1}{c|}{\cmark} & \pmark & \pmark &\cmark & \cmark & \multicolumn{1}{c|}{\xmark} & \cmark & \multicolumn{1}{c|}{\cmark} & \multicolumn{1}{c|}{2.5} & 7.5 \\
+
+        \multicolumn{1}{|l|}{MIT} & \multicolumn{1}{l|}{} & \pmark & \pmark & \pmark & \multicolumn{1}{c|}{\xmark} & \pmark & \cmark & \multicolumn{1}{c|}{\cmark} & \cmark & \cmark & \cmark & \cmark & \multicolumn{1}{c|}{\xmark} & \cmark & \multicolumn{1}{c|}{\cmark} & \multicolumn{1}{c|}{1.5} & 8.5 \\
+
+        \multicolumn{1}{|l|}{Unlicensed} & \multicolumn{1}{l|}{} & \pmark & \pmark & \pmark & \multicolumn{1}{c|}{\xmark} & \cmark & \cmark & \multicolumn{1}{c|}{\cmark} & \cmark & \cmark & \cmark & \cmark & \multicolumn{1}{c|}{\cmark} & \cmark & \multicolumn{1}{c|}{\cmark} & \multicolumn{1}{c|}{1.5} & 10 \\
+
+        \multicolumn{1}{|l|}{AFL-3.0} & \multicolumn{1}{l|}{} & \pmark & \cmark & \pmark & \multicolumn{1}{c|}{\cmark} & \pmark & \cmark & \multicolumn{1}{c|}{\cmark} & \pmark & \pmark & \cmark & \cmark & \multicolumn{1}{c|}{\xmark} & \cmark & \multicolumn{1}{c|}{\cmark} & \multicolumn{1}{c|}{3.0} & 7.5 \\
+
+        \multicolumn{1}{|l|}{Artistic-2.0} & \multicolumn{1}{l|}{} & \pmark & \pmark & \pmark & \multicolumn{1}{c|}{\cmark} & \pmark & \xmark & \multicolumn{1}{c|}{\cmark} & \pmark & \xmark & \cmark & \cmark & \multicolumn{1}{c|}{\xmark} & \cmark & \multicolumn{1}{c|}{\cmark} & \multicolumn{1}{c|}{2.5} & 6.0 \\
+
+        \multicolumn{1}{|l|}{GPL-3.0} & \multicolumn{1}{l|}{} & \cmark & \cmark & \pmark & \multicolumn{1}{c|}{\xmark} & \pmark & \xmark & \multicolumn{1}{c|}{\pmark} & \pmark & \xmark & \pmark & \pmark & \multicolumn{1}{c|}{\xmark} & \cmark & \multicolumn{1}{c|}{\cmark} & \multicolumn{1}{c|}{2.5} & 4.5 \\
+
+        \multicolumn{1}{|l|}{GPL-2.0} & \multicolumn{1}{l|}{} & \xmark & \cmark & \pmark & \multicolumn{1}{c|}{\xmark} & \pmark & \xmark & \multicolumn{1}{c|}{\cmark} & \pmark & \xmark & \cmark & \pmark & \multicolumn{1}{c|}{\xmark} & \cmark & \multicolumn{1}{c|}{\cmark} & \multicolumn{1}{c|}{1.5} & 5.5 \\
+
+        \multicolumn{1}{|l|}{AGPL-3.0} & \multicolumn{1}{l|}{} & \cmark & \cmark & \pmark & \multicolumn{1}{c|}{\cmark} & \pmark & \xmark & \multicolumn{1}{c|}{\pmark} & \pmark & \xmark & \pmark & \pmark & \multicolumn{1}{c|}{\xmark} & \cmark & \multicolumn{1}{c|}{\cmark} & \multicolumn{1}{c|}{3.5} & 4.5 \\
+
+        \multicolumn{1}{|l|}{LGPL-3.0} & \multicolumn{1}{l|}{} & \cmark & \cmark & \pmark & \multicolumn{1}{c|}{\xmark} & \pmark & \xmark & \multicolumn{1}{c|}{\cmark} & \pmark & \cmark & \cmark & \pmark & \multicolumn{1}{c|}{\cmark} & \cmark & \multicolumn{1}{c|}{\cmark} & \multicolumn{1}{c|}{2.5} & 7.5 \\
+
+        \multicolumn{1}{|l|}{LGPL-2.1} & \multicolumn{1}{l|}{} & \xmark & \cmark & \pmark & \multicolumn{1}{c|}{\xmark} & \pmark & \xmark & \multicolumn{1}{c|}{\cmark} & \pmark & \xmark & \cmark & \pmark & \multicolumn{1}{c|}{\xmark} & \cmark & \multicolumn{1}{c|}{\cmark} & \multicolumn{1}{c|}{1.5} & 5.5 \\
+        
+        \multicolumn{1}{|l|}{BSD-3-Clause} & \multicolumn{1}{l|}{} & \xmark & \pmark & \pmark & \multicolumn{1}{c|}{\xmark} & \pmark & \cmark & \multicolumn{1}{c|}{\cmark} & \pmark & \cmark & \cmark & \cmark & \multicolumn{1}{c|}{\xmark} & \pmark & \multicolumn{1}{c|}{\cmark} & \multicolumn{1}{c|}{1.0} & 7.5 \\
+
+        \multicolumn{1}{|l|}{BSD-3-Clause-Clear} & \multicolumn{1}{l|}{} & \xmark & \pmark & \pmark & \multicolumn{1}{c|}{\xmark} & \pmark & \cmark & \multicolumn{1}{c|}{\cmark} & \pmark & \cmark & \cmark & \cmark & \multicolumn{1}{c|}{\xmark} & \pmark & \multicolumn{1}{c|}{\cmark} & \multicolumn{1}{c|}{1.0} & 7.5 \\
+
+        \multicolumn{1}{|l|}{BSD-2-Clause} & \multicolumn{1}{l|}{} & \xmark & \pmark & \pmark & \multicolumn{1}{c|}{\xmark} & \pmark & \cmark & \multicolumn{1}{c|}{\cmark} & \pmark & \cmark & \cmark & \cmark & \multicolumn{1}{c|}{\xmark} & \pmark & \multicolumn{1}{c|}{\cmark} & \multicolumn{1}{c|}{1.0} & 7.5 \\
+
+        \multicolumn{1}{|l|}{WTFPL-2.0} & \multicolumn{1}{l|}{} & \xmark & \xmark & \xmark & \multicolumn{1}{c|}{\xmark} & \cmark & \cmark & \multicolumn{1}{c|}{\cmark} & \cmark & \cmark & \cmark & \cmark & \multicolumn{1}{c|}{\cmark} & \cmark & \multicolumn{1}{c|}{\cmark} & \multicolumn{1}{c|}{0} & 10 \\
+
+        \multicolumn{1}{|l|}{OSL-3.0} & \multicolumn{1}{l|}{} & \pmark & \cmark & \pmark & \multicolumn{1}{c|}{\cmark} & \pmark & \cmark & \multicolumn{1}{c|}{\cmark} & \pmark & \xmark & \xmark & \cmark & \multicolumn{1}{c|}{\xmark} & \cmark & \multicolumn{1}{c|}{\cmark} & \multicolumn{1}{c|}{3.0} & 6 \\
+
+        \multicolumn{1}{|l|}{ECL-2.0} & \multicolumn{1}{l|}{} & \pmark & \cmark & \pmark & \multicolumn{1}{c|}{\xmark} & \pmark & \cmark & \multicolumn{1}{c|}{\cmark} & \pmark & \pmark & \cmark & \cmark & \multicolumn{1}{c|}{\xmark} & \cmark & \multicolumn{1}{c|}{\cmark} & \multicolumn{1}{c|}{2.0} & 7.5 \\ 
+        \hline
+
+        \multicolumn{1}{|l|}{CC0-1.0} & \multicolumn{1}{c|}{\multirow{12}{*}{Data}} & \ & \ & \ & \multicolumn{1}{c|}{} & \ & \ & \multicolumn{1}{c|}{} & \ & \ & \ & \ & \multicolumn{1}{c|}{} & \ & \multicolumn{1}{c|}{} & \multicolumn{1}{c|}{} &  \\
+
+        \multicolumn{1}{|l|}{CC-BY-4.0} & \multicolumn{1}{l|}{} & \ & \ & \ & \multicolumn{1}{c|}{} & \ & \ & \multicolumn{1}{c|}{} & \ & \ & \ & \ & \multicolumn{1}{c|}{} & \ & \multicolumn{1}{c|}{} & \multicolumn{1}{c|}{} &  \\
+
+        \multicolumn{1}{|l|}{CC-BY-SA-4.0} & \multicolumn{1}{l|}{} & \ & \ & \ & \multicolumn{1}{c|}{} & \ & \ & \multicolumn{1}{c|}{} & \ & \ & \ & \ & \multicolumn{1}{c|}{} & \ & \multicolumn{1}{c|}{} & \multicolumn{1}{c|}{} &  \\
+
+        \multicolumn{1}{|l|}{CC-BY-NC-4.0} & \multicolumn{1}{l|}{} & \ & \ & \ & \multicolumn{1}{c|}{} & \ & \ & \multicolumn{1}{c|}{} & \ & \ & \ & \ & \multicolumn{1}{c|}{} & \ & \multicolumn{1}{c|}{} & \multicolumn{1}{c|}{} &  \\
+
+        \multicolumn{1}{|l|}{CC-BY-ND-4.0} & \multicolumn{1}{l|}{} & \ & \ & \ & \multicolumn{1}{c|}{} & \ & \ & \multicolumn{1}{c|}{} & \ & \ & \ & \ & \multicolumn{1}{c|}{} & \ & \multicolumn{1}{c|}{} & \multicolumn{1}{c|}{} &  \\
+
+        \multicolumn{1}{|l|}{CC-BY-NC-ND-4.0} & \multicolumn{1}{l|}{} & \ & \ & \ & \multicolumn{1}{c|}{} & \ & \ & \multicolumn{1}{c|}{} & \ & \ & \ & \ & \multicolumn{1}{c|}{} & \ & \multicolumn{1}{c|}{} & \multicolumn{1}{c|}{} &  \\
+
+        \multicolumn{1}{|l|}{CC-BY-NC-SA-4.0} & \multicolumn{1}{l|}{} & \ & \ & \ & \multicolumn{1}{c|}{} & \ & \ & \multicolumn{1}{c|}{} & \ & \ & \ & \ & \multicolumn{1}{c|}{} & \ & \multicolumn{1}{c|}{} & \multicolumn{1}{c|}{} &  \\
+
+        \multicolumn{1}{|l|}{PDDL-1.0} & \multicolumn{1}{l|}{} & \ & \ & \ & \multicolumn{1}{c|}{} & \ & \ & \multicolumn{1}{c|}{} & \ & \ & \ & \ & \multicolumn{1}{c|}{} & \ & \multicolumn{1}{c|}{} & \multicolumn{1}{c|}{} &  \\
+
+        \multicolumn{1}{|l|}{C-UDA} & \multicolumn{1}{l|}{} & \ & \ & \ & \multicolumn{1}{c|}{} & \ & \ & \multicolumn{1}{c|}{} & \ & \ & \ & \ & \multicolumn{1}{c|}{} & \ & \multicolumn{1}{c|}{} & \multicolumn{1}{c|}{} &  \\
+
+        \multicolumn{1}{|l|}{LGPLLR} & \multicolumn{1}{l|}{} & \ & \ & \ & \multicolumn{1}{c|}{} & \ & \ & \multicolumn{1}{c|}{} & \ & \ & \ & \ & \multicolumn{1}{c|}{} & \ & \multicolumn{1}{c|}{} & \multicolumn{1}{c|}{} &  \\
+
+        \multicolumn{1}{|l|}{GFDL} & \multicolumn{1}{l|}{} & \ & \ & \ & \multicolumn{1}{c|}{} & \ & \ & \multicolumn{1}{c|}{} & \ & \ & \ & \ & \multicolumn{1}{c|}{} & \ & \multicolumn{1}{c|}{} & \multicolumn{1}{c|}{} &  \\
+
+        \multicolumn{1}{|l|}{ODC-By-1.0} & \multicolumn{1}{l|}{} & \ & \ & \ & \multicolumn{1}{c|}{} & \ & \ & \multicolumn{1}{c|}{} & \ & \ & \ & \ & \multicolumn{1}{c|}{} & \ & \multicolumn{1}{c|}{} & \multicolumn{1}{c|}{} &  \\
+        \hline
+
+        \multicolumn{1}{|l|}{OpenRAIL-M} & \multicolumn{1}{l|}{\multirow{18}{*}{Model}} & \ & \ & \ & \multicolumn{1}{c|}{} & \ & \ & \multicolumn{1}{c|}{} & \ & \ & \ & \ & \multicolumn{1}{c|}{} & \ & \multicolumn{1}{c|}{} & \multicolumn{1}{c|}{} &  \\
+
+        \multicolumn{1}{|l|}{Llama2} & \multicolumn{1}{l|}{} & \ & \ & \ & \multicolumn{1}{c|}{} & \ & \ & \multicolumn{1}{c|}{} & \ & \ & \ & \ & \multicolumn{1}{c|}{} & \ & \multicolumn{1}{c|}{} & \multicolumn{1}{c|}{} &  \\
+
+        \multicolumn{1}{|l|}{Llama3} & \multicolumn{1}{l|}{} & \ & \ & \ & \multicolumn{1}{c|}{} & \ & \ & \multicolumn{1}{c|}{} & \ & \ & \ & \ & \multicolumn{1}{c|}{} & \ & \multicolumn{1}{c|}{} & \multicolumn{1}{c|}{} &  \\
+
+        \multicolumn{1}{|l|}{Llama3.1} & \multicolumn{1}{l|}{} & \ & \ & \ & \multicolumn{1}{c|}{} & \ & \ & \multicolumn{1}{c|}{} & \ & \ & \ & \ & \multicolumn{1}{c|}{} & \ & \multicolumn{1}{c|}{} & \multicolumn{1}{c|}{} &  \\
+
+        \multicolumn{1}{|l|}{Gemma} & \multicolumn{1}{l|}{} & \ & \ & \ & \multicolumn{1}{c|}{} & \ & \ & \multicolumn{1}{c|}{} & \ & \ & \ & \ & \multicolumn{1}{c|}{} & \ & \multicolumn{1}{c|}{} & \multicolumn{1}{c|}{} &  \\
+
+        \multicolumn{1}{|l|}{MG0} & \multicolumn{1}{l|}{} & \ & \ & \ & \multicolumn{1}{c|}{} & \ & \ & \multicolumn{1}{c|}{} & \ & \ & \ & \ & \multicolumn{1}{c|}{} & \ & \multicolumn{1}{c|}{} & \multicolumn{1}{c|}{} &  \\
+
+        \multicolumn{1}{|l|}{MG-BY} & \multicolumn{1}{l|}{} & \ & \ & \ & \multicolumn{1}{c|}{} & \ & \ & \multicolumn{1}{c|}{} & \ & \ & \ & \ & \multicolumn{1}{c|}{} & \ & \multicolumn{1}{c|}{} & \multicolumn{1}{c|}{} &  \\
+
+        \multicolumn{1}{|l|}{MG-BY-RAI} & \multicolumn{1}{l|}{} & \ & \ & \ & \multicolumn{1}{c|}{} & \ & \ & \multicolumn{1}{c|}{} & \ & \ & \ & \ & \multicolumn{1}{c|}{} & \ & \multicolumn{1}{c|}{} & \multicolumn{1}{c|}{} &  \\
+
+        \multicolumn{1}{|l|}{MG-BY-OS} & \multicolumn{1}{l|}{} & \ & \ & \ & \multicolumn{1}{c|}{} & \ & \ & \multicolumn{1}{c|}{} & \ & \ & \ & \ & \multicolumn{1}{c|}{} & \ & \multicolumn{1}{c|}{} & \multicolumn{1}{c|}{} &  \\
+
+        \multicolumn{1}{|l|}{MG-BY-NC} & \multicolumn{1}{l|}{} & \ & \ & \ & \multicolumn{1}{c|}{} & \ & \ & \multicolumn{1}{c|}{} & \ & \ & \ & \ & \multicolumn{1}{c|}{} & \ & \multicolumn{1}{c|}{} & \multicolumn{1}{c|}{} &  \\
+
+        \multicolumn{1}{|l|}{MG-BY-NC-RAI} & \multicolumn{1}{l|}{} & \ & \ & \ & \multicolumn{1}{c|}{} & \ & \ & \multicolumn{1}{c|}{} & \ & \ & \ & \ & \multicolumn{1}{c|}{} & \ & \multicolumn{1}{c|}{} & \multicolumn{1}{c|}{} &  \\
+
+        \multicolumn{1}{|l|}{MG-BY-NC-OS} & \multicolumn{1}{l|}{} & \ & \ & \ & \multicolumn{1}{c|}{} & \ & \ & \multicolumn{1}{c|}{} & \ & \ & \ & \ & \multicolumn{1}{c|}{} & \ & \multicolumn{1}{c|}{} & \multicolumn{1}{c|}{} &  \\
+
+        \multicolumn{1}{|l|}{MG-BY-ND} & \multicolumn{1}{l|}{} & \ & \ & \ & \multicolumn{1}{c|}{} & \ & \ & \multicolumn{1}{c|}{} & \ & \ & \ & \ & \multicolumn{1}{c|}{} & \ & \multicolumn{1}{c|}{} & \multicolumn{1}{c|}{} &  \\
+
+        \multicolumn{1}{|l|}{MG-BY-NC-ND} & \multicolumn{1}{l|}{} & \ & \ & \ & \multicolumn{1}{c|}{} & \ & \ & \multicolumn{1}{c|}{} & \ & \ & \ & \ & \multicolumn{1}{c|}{} & \ & \multicolumn{1}{c|}{} & \multicolumn{1}{c|}{} &  \\
+
+        \multicolumn{1}{|l|}{OPT-175B} & \multicolumn{1}{l|}{} & \ & \ & \ & \multicolumn{1}{c|}{} & \ & \ & \multicolumn{1}{c|}{} & \ & \ & \ & \ & \multicolumn{1}{c|}{} & \ & \multicolumn{1}{c|}{} & \multicolumn{1}{c|}{} &  \\
+
+        \multicolumn{1}{|l|}{AI2-ImpACT-LR} & \multicolumn{1}{l|}{} & \ & \ & \ & \multicolumn{1}{c|}{} & \ & \ & \multicolumn{1}{c|}{} & \ & \ & \ & \ & \multicolumn{1}{c|}{} & \ & \multicolumn{1}{c|}{} & \multicolumn{1}{c|}{} &  \\
+
+        \multicolumn{1}{|l|}{AI2-ImpACT-MR} & \multicolumn{1}{l|}{} & \ & \ & \ & \multicolumn{1}{c|}{} & \ & \ & \multicolumn{1}{c|}{} & \ & \ & \ & \ & \multicolumn{1}{c|}{} & \ & \multicolumn{1}{c|}{} & \multicolumn{1}{c|}{} &  \\
+
+        \multicolumn{1}{|l|}{AI2-ImpACT-HR} & \multicolumn{1}{l|}{} & \ & \ & \ & \multicolumn{1}{c|}{} & \ & \ & \multicolumn{1}{c|}{} & \ & \ & \ & \ & \multicolumn{1}{c|}{} & \ & \multicolumn{1}{c|}{} & \multicolumn{1}{c|}{} &  \\
+
+        \hline\hline
+        \multicolumn{18}{|p{16cm}|}{
+            \textbf{Header Definitions:} \newline
+            \textbf{Prefixes}: \ding{51} The license explicitly includes sufficient prefixes that clearly describe scope and conditions of granting rights (e.g., revocable, sublicensable); $\bm{\approx}$ Some important prefixes are indeterminate; \ding{55} No prefixes are declared. \newline
+            \textbf{Rights}: \ding{51} The license explicitly declares whether a patent license or a copyright license is granted; $\bm{\approx}$ Only the granting of a patent license or copyright license is stated; \ding{55} No explicit grant of either is provided. \newline
+            \textbf{Rules}: \ding{51} The license terms cover all ML activities listed in (TBD); $\bm{\approx}$ Some ML activities fall outside the definition of this license; \ding{55} Almost no rules are set forth. \newline
+            \textbf{Remote}: \ding{51} The license considers remote access situations (e.g., via API, Web, SaaS); \ding{55} No definitions or rules regarding remote access behaviors are set forth.\newline
+            \textbf{Share}: \ding{51} The license permits the sharing of verbatim copies/derivatives created by you without any restrictions; $\bm{\approx}$ Some restrictions apply to sharing; \ding{55} Sharing verbatim copies/derivatives is prohibited. \newline
+            \textbf{Close}: \ding{51} The license does not require you to disclose the source files of verbatim copies/derivatives created by you; $\bm{\approx}$ Modification statements are required; \ding{55} You must disclose the source files of your created copies/derivatives. \newline
+            \textbf{Non-excl}usive: \ding{51} The license does not restrict you from adding new terms when republishing; $\bm{\approx}$ Certain types of terms are prohibited in republishing; \ding{55} All republishing must adhere to the original terms and conditions. \newline
+            \textbf{Sublicense}: \ding{51} The license explicitly grants sublicensing rights; $\bm{\approx}$ The license prohibits sublicensing but offers automatic licensing instead; \ding{55} Sublicensing is either prohibited or not explicitly permitted. \newline
+            \textbf{Attribute}: \ding{51} The license does not require retaining the original attribution or licenses in redistributed derivatives; $\bm{\approx}$ Attribution or license must be retained; \ding{55} Redistributed derivatives must retain the  attributions and licenses. \newline
+            \textbf{Comm}ercial: \ding{51} The license explicitly grants commercial rights; $\bm{\approx}$ Commercial rights are not explicitly granted but not reserved either; \ding{55} Commercial rights are reserved. \newline
+            \textbf{Behav}ioral: \ding{51} The license does not restrict user behaviors; $\bm{\approx}$ Includes runtime controls (e.g., forced updates); \ding{55} Certain behaviors involving the licensed materials or derivatives are prohibited (e.g., harming, medical advice). \newline          
+            \textbf{Clarity}/\textbf{Freedom} Score: \ding{51} $+1.0$, $\bm{\approx}$ $+0.5$, \ding{55} $+0$, n.a.: $+0$ . Maximum Clarity Score: 4.0, Maximum Freedom Score: 10.
+        } \\ \hline
+    \end{tabular}
+\end{table*}
+
+\begin{comment}
+  \begin{table}[h]
+    \caption{Specifications of AI components used in case studies, which include \textcolor{Copyleft}{Copyleft License}, \textcolor{Permissive}{Permissive License}, \textcolor{Public}{Public Domain License} and Non-Public License.}
+    \vspace{-1mm}
+    \footnotesize
+    \label{tab:works}
+    \begin{tabular}{|p{1.6cm}|p{3cm}|p{0.6cm}|p{1.7cm}|}
+        \hline
+        \rowcolor[gray]{.8}
+        \textbf{Work Name} & \textbf{License Name} & \textbf{Type} & \textbf{Modality/Usage}  \\ \hline
+        Wikipedia & \textcolor{Copyleft}{CC-BY-SA-4.0} & \multirow{15}{*}{Data} & \multirow{6}{*}{Text}   \\ \cline{1-2}
+        StackExchange & \textcolor{Copyleft}{CC-BY-SA-4.0}  &  &    \\ \cline{1-2}
+        FreeLaw & CC-BY-ND-4.0 &  &   \\ \cline{1-2}
+        arXiv & \textcolor{Copyleft}{CC-BY-NC-SA-4.0} &  &   \\ \cline{1-2}
+        PubMed & \textcolor{Copyleft}{CC-BY-NC-SA-4.0} &  &    \\ \cline{1-2}
+        Deep-sequoia & CC-BY-NC-ND-4.0 &  &   \\ \cline{1-2} \cline{4-4}
+  
+        Midjourney Gen & CC-BY-NC-ND-4.0 &  & \multirow{6}{*}{Image}  \\ \cline{1-2}
+        Flickr & \textcolor{Copyleft}{CC-BY-NC-SA-4.0} &  &   \\ \cline{1-2}
+        StockSnap & \textcolor{Public}{CC0-1.0} &  &   \\ \cline{1-2}
+        Wikimedia & \textcolor{Copyleft}{CC-BY-SA-4.0} &  &   \\ \cline{1-2}
+        OpenClipart & \textcolor{Public}{CC0-1.0} &  &   \\ \cline{1-2} \cline{4-4}
+        
+        ccMixter & \textcolor{Permissive}{CC-BY-NC-4.0} & & \multirow{2}{*}{Voice}  \\ \cline{1-2}
+        Jamendo & CC-BY-NC-ND-4.0 &  &   \\ \cline{1-2} \cline{4-4}
+        
+        Thingverse & \textcolor{Copyleft}{CC-BY-NC-SA-4.0} &  & 3D model  \\ \cline{1-2} \cline{4-4}
+  
+        Vimeo & CC-BY-NC-ND-4.0 &  & Video  \\ \hline
+  
+        Baize & \textcolor{Copyleft}{GPL-3.0} & \multirow{11}{*}{Model} & \multirow{4}{*}{Text Generation}   \\ \cline{1-2}
+        BLOOM & \textcolor{Permissive}{BigScience-BLOOM-RAIL-1.0} & &   \\ \cline{1-2}
+        Llama2 & \textcolor{Permissive}{Llama2 Community License} & &   \\ \cline{1-2}
+        BigTranslate & \textcolor{Copyleft}{GPL-3.0} & &   \\ \cline{1-2} \cline{4-4}
+  
+        BERT & \textcolor{Permissive}{Apache-2.0} &  & Fill-Mask   \\ \cline{1-2} \cline{4-4}
+  
+        Stable Diffusion & \textcolor{Permissive}{CreativeML-OpenRAIL-M} & & Text to Image  \\ \cline{1-2} \cline{4-4}
+  
+        MaskFormer & \textcolor{Permissive}{CC-BY-NC-4.0} & & Image  \\ \cline{1-2}
+        DETR & \textcolor{Permissive}{Apache-2.0} & & Segmentation \\ \cline{1-2} \cline{4-4}
+  
+        Whisper & \textcolor{Permissive}{MIT} & & Voice to Text  \\ \cline{1-2} \cline{4-4}
+  
+        X-Clip & \textcolor{Permissive}{MIT} & & Video to Text  \\ \cline{1-2} \cline{4-4}
+  
+        I2VGen-XL & CC-BY-NC-ND-4.0 & & Image to Video  \\ \hline
+  
+        \end{tabular}
+        \footnotetext{}
+  \end{table}
+\end{comment}
+
+%from HuggingFace\footnote{\url{https://huggingface.co/models}}
+%We have encoded commonly used OSS, model, and free-content licenses and \textit{MG Licenses} into \textit{MG Analyzer} to illustrate their potential risks in model publishing scenarios. 
+%\textit{MG Licenses} offer flexibility in encompassing nearly all licensing conditions provided by other model licenses.

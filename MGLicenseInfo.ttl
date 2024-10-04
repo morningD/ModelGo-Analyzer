@@ -508,8 +508,8 @@ mg:CC-BY-4.0 a mg:LicenseInfo ;
         a mg:Right ;
         mg:isCopyright true ;
         mg:isPatent true ;
-        mg:hasRightPrefix mg:worldwide, mg:royalty-free, mg:non-exclusive, mg:no-charge, mg:irrevocable ;
-        mg:hasUsage mg:use, mg:modify, mg:merge, mg:redistribute, mg:auto-license, mg:commercial_use
+        mg:hasRightPrefix mg:worldwide, mg:royalty-free, mg:non-sublicensable, mg:non-exclusive, mg:irrevocable ;
+        mg:hasUsage mg:use, mg:modify, mg:merge, mg:redistribute, mg:auto-license, mg:commercial_use # Allow commercial use according CC website https://creativecommons.org/share-your-work/cclicenses/
     ] ;
     mg:reserve [
         a mg:Right ;
@@ -538,7 +538,7 @@ mg:CC-BY-SA-4.0 a mg:LicenseInfo ;
         a mg:Right ;
         mg:isCopyright true ;
         mg:isPatent true ;
-        mg:hasRightPrefix mg:worldwide, mg:royalty-free, mg:non-exclusive, mg:no-charge, mg:irrevocable ;
+        mg:hasRightPrefix mg:worldwide, mg:royalty-free, mg:non-sublicensable, mg:non-exclusive, mg:irrevocable ;
         mg:hasUsage mg:use, mg:modify, mg:merge, mg:redistribute, mg:auto-license, mg:commercial_use
     ] ;
     mg:reserve [
@@ -568,7 +568,7 @@ mg:CC-BY-NC-4.0 a mg:LicenseInfo ;
         a mg:Right ;
         mg:isCopyright true ;
         mg:isPatent true ;
-        mg:hasRightPrefix mg:worldwide, mg:royalty-free, mg:non-exclusive, mg:no-charge, mg:irrevocable ;
+        mg:hasRightPrefix mg:worldwide, mg:royalty-free, mg:non-sublicensable, mg:non-exclusive, mg:irrevocable ;
         mg:hasUsage mg:use, mg:modify, mg:merge, mg:redistribute, mg:auto-license
     ] ;
     mg:reserve [
@@ -598,12 +598,12 @@ mg:CC-BY-ND-4.0 a mg:LicenseInfo ;
         a mg:Right ;
         mg:isCopyright true ;
         mg:isPatent true ;
-        mg:hasRightPrefix mg:worldwide, mg:royalty-free, mg:non-exclusive, mg:no-charge, mg:irrevocable ;
-        mg:hasUsage mg:use, mg:modify, mg:merge, mg:redistribute, mg:auto-license
+        mg:hasRightPrefix mg:worldwide, mg:royalty-free, mg:non-sublicensable, mg:non-exclusive, mg:irrevocable ;
+        mg:hasUsage mg:use, mg:modify, mg:merge, mg:redistribute, mg:auto-license, mg:commercial_use
     ] ;
     mg:reserve [
         a mg:Right ;
-        mg:hasUsage mg:patent, mg:copyright, mg:trademark, mg:trademark_use, mg:commercial_use # Prohibit commercial use
+        mg:hasUsage mg:patent, mg:copyright, mg:trademark, mg:trademark_use
     ] ;
     
     mg:hasRule mg:CC-BY-4.0-duplication-rule, mg:CC-BY-4.0-independent-rule, mg:CC-BY-ND-4.0-derivative-rule, mg:CC-BY-4.0-nodefinition-rule, mg:CC-BY-ND-4.0-republication-rule ; # No sharing of derivative
@@ -628,7 +628,7 @@ mg:CC-BY-NC-ND-4.0 a mg:LicenseInfo ;
         a mg:Right ;
         mg:isCopyright true ;
         mg:isPatent true ;
-        mg:hasRightPrefix mg:worldwide, mg:royalty-free, mg:non-exclusive, mg:no-charge, mg:irrevocable ;
+        mg:hasRightPrefix mg:worldwide, mg:royalty-free, mg:non-sublicensable, mg:non-exclusive, mg:irrevocable ;
         mg:hasUsage mg:use, mg:modify, mg:merge, mg:redistribute, mg:auto-license
     ] ;
     mg:reserve [
@@ -658,7 +658,7 @@ mg:CC-BY-NC-SA-4.0 a mg:LicenseInfo ;
         a mg:Right ;
         mg:isCopyright true ;
         mg:isPatent true ;
-        mg:hasRightPrefix mg:worldwide, mg:royalty-free, mg:non-exclusive, mg:no-charge, mg:irrevocable ;
+        mg:hasRightPrefix mg:worldwide, mg:royalty-free, mg:non-sublicensable, mg:non-exclusive, mg:irrevocable ;
         mg:hasUsage mg:use, mg:modify, mg:merge, mg:redistribute, mg:auto-license
     ] ;
     mg:reserve [
@@ -846,7 +846,7 @@ mg:OpenRAIL-M a mg:LicenseInfo ;
 
 # There is no fundamental difference between this license and <OpenRAIL++>, <BigScience RAIL License v1.0> and <BigScience Open RAIL-M License>, so we cover them by this license. Please ref: 
 # OpenRAIL++ <https://huggingface.co/stabilityai/stable-diffusion-2/blob/main/LICENSE-MODEL>,
-# BigScience RAIL License v1.0 <https://bigscience.huggingface.co/blog/the-bigscience-rail-license>,
+# BigScience RAIL License v1.0 <https://huggingface.co/spaces/bigscience/license>,
 # BigScience Open RAIL-M License <https://bigscience.huggingface.co/blog/bigscience-openrail-m>
 
 
@@ -950,7 +950,7 @@ mg:Gemma a mg:LicenseInfo ;
 
     mg:grant [
         a mg:Right ;
-        mg:hasRightPrefix mg:non-exclusive, mg:worldwide, mg:non-transferable, mg:royalty-free ; # Same as Llama2
+        #mg:hasRightPrefix ;
         mg:hasUsage mg:use, mg:modify, mg:merge, mg:redistribute # Commercial_use is not explicitly granted
     ] ;
     mg:reserve [

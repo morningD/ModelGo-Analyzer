@@ -37,7 +37,8 @@ bigtranslate_model = register_license(Work('BigTranslate', 'model', 'weights'), 
 # llama2_model = register_license(Work('Llama2', 'model', 'weights'), target_license='Llama2') # Text Generation, https://huggingface.co/meta-llama/Llama-2-7b
 
 #flow = combine([whisper_model, detr_model])
-flow = combine([embed(arxiv_text, aux_flows=[bigtranslate_model]), embed(stack_exchange_text, aux_flows=[bigtranslate_model]), deep_sequoia_text, free_law_text])
+#flow = combine([embed(arxiv_text, aux_flows=[bigtranslate_model]), embed(stack_exchange_text, aux_flows=[bigtranslate_model]), deep_sequoia_text, free_law_text])
+flow = combine([embed(arxiv_text, aux_flows=[bigtranslate_model]), free_law_text])
 flow = publish(flow, policy = 'sell')
 # Save the gen graph to a new Turtle file
 flow.graph.serialize(destination="gen.ttl", format="ttl")

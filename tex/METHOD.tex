@@ -70,7 +70,7 @@ We use mixed-form to represent the cases involving collections of works.
 \textbf{LicenseInfo}: This contains the essential license information derived from conditions, including the license name, ID, intended types of works, whether it is copyleft or permissive, as well as granted and reserved rights, etc.
 While the license name is sufficient to describe the base workflow, to enable reasoning, LicenseInfo should bind rules, which we will discuss in the next section.
 
-At this stage, we can describe a base ML workflow, as illustrated schematically in Figure~\ref{fig:wf}\footnote{The "mg" prefix is omitted, and some properties are merged or filtered for presentation.} (The RDF graph can be referred to in \emph{gen.ttl} in Figure~\ref{fig:framework}).
+At this stage, we can describe a base ML workflow, as illustrated\footnote{The "mg" prefix is omitted, and some properties are merged or filtered for presentation.} schematically in Figure~\ref{fig:wf} (The RDF graph can be referred to in \emph{gen.ttl} in Figure~\ref{fig:framework}).
 In this base workflow, the derived input and output of each Action can be represented as blank nodes, serving as placeholders. 
 These placeholders will be populated by reasoning the output yielded by the previous action and the input for the current action, respectively.
 
@@ -95,9 +95,20 @@ Additionally, a work may have multiple definition dependencies in a complex work
 The corresponding implementation in the MG Analyzer is illustrated in the Reasoning Stage of Figure~\ref{fig:framework}. 
 New instance nodes called \emph{Ruling} are created to track the definition dependencies and triggered rules for each work, determining their applicable licenses in an alternating manner.
 
-The last dependencies existed in ML workflow is righs-using.
+The \emph{rights-using dependencies} describe the rights that must be granted for actions performed on works. 
+For example, when executing a training action on a model, it requires the rights to \emph{use} and \emph{modify} (termed as Usage in MG vocabulary) from the model's license\footnote{An example of such rights granting can be found in the Llama2 Community License~\cite{meta2024llama2}, which states, "You are granted a ... to use, reproduce, distribute, copy, create derivative works of, and make modifications to the Llama Materials.}.
+Similarly, the rights-using dependencies should proliferate according to compositional dependencies.
+For instance, the requirement to \emph{modify} a model extends to all its submodels.
+In the MG Analyzer, we create new nodes called \emph{Request} to represent this dependency.
+Additionally, it is insufficient to only check the granting rights; the reserved rights must also be verified. 
+Depending on the clarity of the license text, some rights may either be explicitly granted or reserved.
+Furthermore, certain license clauses can waive the requirement for specific rights. 
+For instance, both GPL-3.0 and CC licenses include automatic relicensing clauses for downstream recipients, which eliminate the need for a \emph{sublicense} right.
 
-% This proliferation underscores the importance of tracking compositional dependencies to ensure that the entire process remains license-compliant.
+By MG Vocabulary, we are able to describe complete ML workflows and represent the necessary dependencies for license analysis.
+The \emph{compositional dependencies} are license-independent and can be reasoned from the base workflow. 
+However, \emph{definition dependencies} and \emph{rights-using dependencies} are associated with specific rules expressed in natural language within each license.
+To facilitate automated reasoning for these dependencies, the next step is to develop a viable method for encoding license terms into formal logic rules.
 
 \begin{figure}[t]
     \centering
@@ -109,6 +120,55 @@ The last dependencies existed in ML workflow is righs-using.
 
 \subsection{License Rule Encoding and Reasoning}
 \label{sec:rule}
+Typically, licenses are designed to govern the use and distribution of specific types of works. 
+For example, the GPL-3.0 is tailored for software and object code, while CC licenses focus on literary, musical, and visual works. 
+As a result, it is challenging to map their rules within a unified framework for logical reasoning.
+Meanwhile, many ML projects actually incorporate non-standard licensing components, as mentioned in Section~\ref{sec:intro}.
+If we consider these claimed licenses to be invalid, then they would not pose any license compliance issues.
+However, the validity of these licenses depends on specific cases and the dispute resolution process by the jurisdictional courts in accordance with the applicable laws in different regions.
+As a license analyzer, we aim to maximize the detection of all potential legal risks under various interpretations,rather than merely granting a green light with low confidence.
+To this end, we perform three generalizations to encode license rules.
+
+The first generalization is called \emph{fuzz form matching}. 
+We broaden the definitions related to a work's form to encompass its general form.
+For instance, we expand the license terms of GPL-3.0 concerning source code to include all forms of work in the Raw categories, such as model weights and corpus. 
+In this way, we can extend the scope of interpretation of GPL-3.0 to cover models and datasets.
+
+The second generalization is called \emph{composition-based rule alignment}, which aims to resolve the pervasive ambiguities across different licensing frameworks. 
+This ambiguity often arises in non-standard scenarios, for example, when licensing a model under GPL-3.0, it may be unclear whether \emph{model aggregation} (a technology used in federated learning~\cite{li2021model}) triggers the \emph{aggregate} clause in GPL-3.0.
+Therefore, we propose a composition-based method to align these rules. 
+Specifically, we generalize the concept of action to represent the compositional relationships between input and output. 
+For instance, the action \emph{Combine} signifies that the input work has been entirely included in the output work without modification. 
+This action corresponds to terms such as \emph{Link} and \emph{Aggregate} in software licenses, \emph{Collection} in CC licenses, and \emph{MoE} in model licenses.
+In the case of \emph{model aggregation}, which produces an output that contains parts of the input works and is difficult to separate, it is not considered a \emph{Combine}. Consequently, according to our rule alignment, it will not activate the \emph{Aggregate} clause in GPL-3.0.
+The complete rule alignment method utilized in the MG Analyzer can be found in Table~\ref{???}.
+
+
+\begin{table}[]
+    \caption{List of Supported Actions in MG Analyzer Following Rule Alignment. \textcolor{Construct}{OSS}, \textcolor{Ruling}{Free-content}, \textcolor{Request}{Model}}
+    \tiny
+    \begin{tabular}{|l|c|c|p{3.5cm}|p{1.5cm}|}
+    \hline
+    \rowcolor[gray]{.8}
+    Action & Type & Form & Composition & Terms \\ \hline
+
+    Copy & $=$ & $=$ & Input and output are exactly equal. & Copy Duplicate \\ \hline
+    Combine & $\approx$ & $\approx$ & Entire input included in output. & \textcolor{Construct}{Link} \textcolor{Construct}{Aggregate} \textcolor{Request}{MoE} \textcolor{Ruling}{Arrange} \textcolor{Ruling}{Collection} \\ \hline
+
+    Modify & $=$ & $=$ & Output includes a significant portion of the input and can be reverted. &  \\ \hline
+    Amalgamate & $=$ & $=$ & Output includes portions of the input but cannot be reverted. &               \\ \hline
+    Train & $=$ & $=$ & Output shares a similar structure with the input and may contain a negligible portion of it. &               \\ \hline
+    Generate & $\approx$ & $\approx$ & &               \\ \hline
+    Distill &      &      &             &               \\ \hline
+    Publish &      &      &             &               \\ \hline
+    \end{tabular}
+\end{table}
+
+
+
+% In addition, some ML concepts have no definition in other licensing framework but The latter has clause toward 
+
+%more abstraction are need to perform in encoding license rules.
 
 \subsection{Compliance Analysis}
 \label{sec:analysis}

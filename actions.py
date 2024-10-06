@@ -148,7 +148,7 @@ def combine(target_flows: Iterable[Workflow], action_label='combine') -> Workflo
 
     return flow
 
-def Amalgamate(target_flows: Iterable[Workflow], action_label='amalg') -> Workflow: # Similar as Combine
+def amalgamate(target_flows: Iterable[Workflow], action_label='amalg') -> Workflow: # Similar as Combine
     flow = Workflow() # Create a new empty workflow
     flow.merge(target_flows) # Add the graphs from targetflows to new workflow
     g = flow.graph

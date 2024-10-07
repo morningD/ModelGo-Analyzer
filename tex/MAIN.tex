@@ -141,7 +141,7 @@
 
 
 \lstdefinelanguage{Turtle}{
-  keywords={a, rdf, rdfs, owl, foaf, xsd, base, prefix, mg},
+  keywords={a, rdf, rdfs, owl, foaf, xsd, base, prefix, mg, log, list},
   sensitive=true,
   morecomment=[l]{\#}, % Line comments
   morestring=[b]",
@@ -202,15 +202,15 @@
 %% The abstract is a short summary of the work to be presented in the
 %% article.
 \begin{abstract}
-  As model parameter sizes reach the billion-level range and their training consumes zettaFLOPs of computation, components reuse and collaborative development are become increasingly prevalent in the Machine Learning (ML) community.
-  These components, including models, software, and datasets, may originate from various sources and be published under different licenses, which govern the use and distribution of licensed materials and their derivatives.
-  However, commonly chosen licenses, such as GPL and Apache, are software-specific and may not be clearly defined and bounded in the context of model publishing.
-  Meanwhile, the reused components may also have free-content licenses and model licenses, which pose a potential risk of license conflicts and rights infringement within the model production workflow.
-  In this paper, we propose addressing the above challenges along two lines:
-    1) For license analysis, we have developed a new vocabulary for ML workflow management and encoded license rules to enable ontological reasoning for analyzing rights granting and license conflicts.
-    2) For standardized model publishing, we have drafted a set of model licenses that provide flexible options to meet the diverse needs of model publishing.
-    Our analysis tool is built on Turtle language and the Notation3 reasoning engine, serving as a first step toward Linked Open Model Production Data.
-    We have also encoded our proposed model license set into rules and demonstrated the effects of GPL and other commonly used licenses in model publishing, along with the flexibility advantages of our proposed model licenses, through experiments.
+As model parameter sizes reach the billion-level range and their training consumes zettaFLOPs of computation, components reuse and collaborative development are become increasingly prevalent in the Machine Learning (ML) community.
+These components, including models, software, and datasets, may originate from various sources and be published under different licenses, which govern the use and distribution of licensed materials and their derivatives.
+However, commonly chosen licenses, such as GPL and Apache, are software-specific and may not be clearly defined and bounded in the context of model publishing.
+Meanwhile, the reused components may also have free-content licenses and model licenses, which pose a potential risk of license conflicts and rights infringement within the model production workflow.
+In this paper, we propose addressing the above challenges along two lines:
+1) For license analysis, we have developed a new vocabulary for ML workflow management and encoded license rules to enable ontological reasoning for analyzing rights granting and license conflicts.
+2) For standardized model publishing, we have drafted a set of model licenses that provide flexible options to meet the diverse needs of model publishing.
+Our analysis tool is built on Turtle language and the Notation3 reasoning engine, serving as a first step toward Linked Open Model Production Data.
+We have also encoded our proposed model license set into rules and demonstrated the effects of GPL and other commonly used licenses in model publishing, along with the flexibility advantages of our proposed model licenses, through experiments.
 
 \end{abstract}
 

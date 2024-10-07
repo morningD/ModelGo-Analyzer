@@ -107,7 +107,7 @@
     # If all relied wroks have a license, we can determind the license of this work
     ( { ?outw mg:hasReliedwork ?relw } { ?relw mg:hasLicense ?li } ) log:forAllIn _:t . 
 
-    # There is no request that NOT allow relicesnse (For exclude CASE-2)
+    # There is no ruling that NOT allow relicesnse (For exclude CASE-2)
     ({?outw!mg:hasRuling!mg:hasRule mg:relicense ?reli } {?reli log:notEqualTo mg:none-license}) log:forAllIn _:t .
 
     # Collect all compatible-relicensable license to a list
@@ -133,6 +133,8 @@
 } => {
     ?outw mg:hasLicense ?li_1st .
 } .
+
+# TODO: CASE-4?
 
 ############################   Debug: find work that need assign license
 # { # All ruling allow relicense output work

@@ -57,11 +57,11 @@
 
     ?work mg:workName ?wname . # Genreate report content
     ?license mg:licenseId ?lid .
-    ("** Warning ** [Revocable License] The " ?lid " license of"  ?wname " is revocable") string:concatenation ?report_content .
+    ("** Warning ** [Possibly Revocable License] The " ?lid " license of"  ?wname " is revocable") string:concatenation ?report_content .
 } => {
     _:warning a mg:Warning ;
         mg:reportBy ?work ;
-        mg:reportType "Revocable License" ;
+        mg:reportType "Possibly Revocable License" ;
         mg:content ?report_content .
 } .
 

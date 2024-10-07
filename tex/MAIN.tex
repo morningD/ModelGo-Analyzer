@@ -124,6 +124,7 @@
 \usepackage{enumitem} % no indent [leftmargin=*]
 \usepackage{balance}
 \usepackage{bm}
+\usepackage{listings}
 
 \definecolor{Ruling}{HTML}{18AFCC}
 \definecolor{Request}{HTML}{5F9099}
@@ -137,6 +138,19 @@
 \newcommand{\pmark}{\cellcolor{Part}\textcolor{gray}{$\bm{\approx}$}}
 \newcommand{\xmark}{\cellcolor{No}\textcolor{white}{\ding{55}}}
 \newcommand{\namark}{\cellcolor{white}\textcolor{black}{n/a}}
+
+
+\lstdefinelanguage{Turtle}{
+  keywords={a, rdf, rdfs, owl, foaf, xsd, base, prefix, mg},
+  sensitive=true,
+  morecomment=[l]{\#}, % Line comments
+  morestring=[b]",
+  morestring=[b]',
+  alsoletter={\@}, % Allow the @ character in identifiers
+  commentstyle=\color{gray},
+  keywordstyle=\color{blue},
+  stringstyle=\color{red},
+}
 
 \hyphenation{OpenAI Model-Go HuggingFace} 
 
@@ -294,9 +308,7 @@
 %% If your work has an appendix, this is the place to put it.
 \appendix
 
-\section{Disclaimers}
-The information in this article is for general informational purposes only and does not constitute legal advice. Views, opinions, and recommendations expressed are solely those of the author(s) and do not represent any organization. Do not rely on this material as a substitute for professional legal advice tailored to your specific circumstances.
-
+\input{APPENDIX}
 
 \end{document}
 \endinput

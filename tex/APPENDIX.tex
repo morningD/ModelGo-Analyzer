@@ -1,0 +1,40 @@
+
+\section{Disclaimers}
+The information in this article is for general informational purposes only and does not constitute legal advice. Views, opinions, and recommendations expressed are solely those of the author(s) and do not represent any organization. Do not rely on this material as a substitute for professional legal advice tailored to your specific circumstances.
+
+\section{Encoded Rules}
+\label{apdx:rules}
+Here is a code snippet:
+
+\begin{tcolorbox}[title=MGLicenseRule.ttl > GPL-3.0-derivative-rule-1, colback=white, colframe=gray, boxrule=0.2mm, boxsep=1mm, left=0mm, right=0mm, top=0.1mm, bottom=0.1mm] %  width=\textwidth
+  \begin{lstlisting}[language=Turtle, breaklines=false, columns=fullflexible]
+@prefix mg: <http://~/rdf/terms#> .
+mg:GPL-3.0-derivative-rule-1 a mg:Rule ;
+  mg:hasOutputDef mg:derivative ;
+  mg:targetActionType mg:Combine ;
+  mg:targetInputWorkForm mg:code ;
+  mg:targetOutputWorkForm mg:code ;
+  mg:relicense mg:compatible-license ;
+  mg:hasPublishRestriction mg:include_license_restriction, 
+    mg:include_notice_restriction, mg:disclose_self_restriction, 
+    mg:state_changes_restriction, mg:gnu_freedom_restriction;
+  mg:allowSharing true .
+  \end{lstlisting}
+\end{tcolorbox}
+
+\begin{tcolorbox}[title=MGLicenseRule.ttl > Llama2-derivative-rule, colback=white, colframe=gray, boxrule=0.2mm, boxsep=1mm, left=0mm, right=0mm, top=0.1mm, bottom=0.1mm] %  width=\textwidth
+  \begin{lstlisting}[language=Turtle, breaklines=false, columns=fullflexible]
+@prefix mg: <http://~/rdf/terms#> .
+mg:Llama2-derivative-rule a mg:Rule ;
+  mg:hasOutputDef mg:derivative ;
+  mg:targetActionType mg:Amalgamate, mg:Combine, 
+    mg:Modify, mg:Train, mg:Embed, mg:Distill ;
+  mg:targetInputWorkForm mg:weights, mg:exe ;
+  mg:targetOutputWorkForm mg:weights, mg:exe ;
+  mg:relicense mg:any-license ;
+  mg:hasPublishRestriction mg:include_license_restriction ;
+  mg:hasUseRestriction mg:llama2_exclusive_use_restriction, 
+    mg:use_behavior_restriction ;
+  mg:allowSharing true .
+  \end{lstlisting}
+\end{tcolorbox}

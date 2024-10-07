@@ -121,12 +121,12 @@ To facilitate automated reasoning for these dependencies, the next step is to de
 \subsection{License Rule Encoding and Reasoning}
 \label{sec:rule}
 Typically, licenses are designed to govern the use and distribution of specific types of works. 
-For example, the GPL-3.0 is tailored for software and object code, while CC licenses focus on literary, musical, and visual works. 
+For example, the GPL-3.0 is tailored for source code and object code, while CC licenses focus on literary, musical, and artistic works. 
 As a result, it is challenging to map their rules within a unified framework for logical reasoning.
 Meanwhile, many ML projects actually incorporate non-standard licensing components, as mentioned in Section~\ref{sec:intro}.
 If we consider these claimed licenses to be invalid, then they would not pose any license compliance issues.
 However, the validity of these licenses depends on specific cases and the dispute resolution process by the jurisdictional courts in accordance with the applicable laws in different regions.
-As a license analyzer, we aim to maximize the detection of all potential legal risks under various interpretations,rather than merely granting a green light with low confidence.
+As a license analyzer, we aim to maximize the detection of all potential legal risks under various interpretations, rather than merely granting a green light with low confidence.
 To this end, we perform three generalizations to encode license rules.
 
 The first generalization is called \emph{fuzz form matching}. 
@@ -135,36 +135,67 @@ For instance, we expand the license terms of GPL-3.0 concerning source code to i
 In this way, we can extend the scope of interpretation of GPL-3.0 to cover models and datasets.
 
 The second generalization is called \emph{composition-based rule alignment}, which aims to resolve the pervasive ambiguities across different licensing frameworks. 
-This ambiguity often arises in non-standard scenarios, for example, when licensing a model under GPL-3.0, it may be unclear whether \emph{model aggregation} (a technology used in federated learning~\cite{li2021model}) triggers the \emph{aggregate} clause in GPL-3.0.
+This ambiguity often arises in non-standard scenarios, for example, when licensing a model under GPL-3.0, it may be unclear whether \emph{model aggregation} (a technology used in federated learning~\cite{li2021model}) triggers the "Aggregate" clause in GPL-3.0.
 Therefore, we propose a composition-based method to align these rules. 
 Specifically, we generalize the concept of action to represent the compositional relationships between input and output. 
 For instance, the action \emph{Combine} signifies that the input work has been entirely included in the output work without modification. 
-This action corresponds to terms such as \emph{Link} and \emph{Aggregate} in software licenses, \emph{Collection} in CC licenses, and \emph{MoE} in model licenses.
-In the case of \emph{model aggregation}, which produces an output that contains parts of the input works and is difficult to separate, it is not considered a \emph{Combine}. Consequently, according to our rule alignment, it will not activate the \emph{Aggregate} clause in GPL-3.0.
-The complete rule alignment method utilized in the MG Analyzer can be found in Table~\ref{???}.
+This action corresponds to terms such as "Link" and "Aggregate" in software licenses, "Collection" in CC licenses, and "MoE" in model licenses.
+In the case of \emph{model aggregation}, which produces an output that contains parts of the input works and is difficult to separate, it is not considered a \emph{Combine}. Consequently, according to our rule alignment, it will not activate the "Aggregate" clause in GPL-3.0.
 
+The complete rule alignment method utilized in the MG Analyzer can be found in Table~\ref{tab:action}.
+It is worth mentioning that the meanings of these actions have been broadened and may differ from their original definitions. 
+In some cases, multiple actions may align with the same license terms. 
+For instance, the license term "Modify" can align with both the actions \emph{Modify} and \emph{Amalgamate}, as such licenses do not distinguish the extent of changes made or whether those changes can be reverted.
 
-\begin{table}[]
-    \caption{List of Supported Actions in MG Analyzer Following Rule Alignment. \textcolor{Construct}{OSS}, \textcolor{Ruling}{Free-content}, \textcolor{Request}{Model}}
+\begin{table}[t]
+    \caption{List of Supported Actions in MG Analyzer Following Rule Alignment. The symbols $=$ and $\approx$ denote that the Types/Forms of output work and input work are the same and may differ, respectively. The corresponding license terms in \textcolor{Construct}{OSS}, \textcolor{Ruling}{Free-content}, and \textcolor{Request}{Model} for each action are listed. }
     \tiny
-    \begin{tabular}{|l|c|c|p{3.5cm}|p{1.5cm}|}
+    \label{tab:action}
+    \begin{tabular}{|p{0.8cm}|c|c|p{3.6cm}|p{1.5cm}|}
     \hline
     \rowcolor[gray]{.8}
     Action & Type & Form & Composition & Terms \\ \hline
 
-    Copy & $=$ & $=$ & Input and output are exactly equal. & Copy Duplicate \\ \hline
-    Combine & $\approx$ & $\approx$ & Entire input included in output. & \textcolor{Construct}{Link} \textcolor{Construct}{Aggregate} \textcolor{Request}{MoE} \textcolor{Ruling}{Arrange} \textcolor{Ruling}{Collection} \\ \hline
+    Copy & $=$ & $=$ & Output and input are exactly \textbf{same}. & Copy Duplicate \\ \hline
 
-    Modify & $=$ & $=$ & Output includes a significant portion of the input and can be reverted. &  \\ \hline
-    Amalgamate & $=$ & $=$ & Output includes portions of the input but cannot be reverted. &               \\ \hline
-    Train & $=$ & $=$ & Output shares a similar structure with the input and may contain a negligible portion of it. &               \\ \hline
-    Generate & $\approx$ & $\approx$ & &               \\ \hline
-    Distill &      &      &             &               \\ \hline
-    Publish &      &      &             &               \\ \hline
+    Combine & $\approx$ & $\approx$ & \textbf{Entire} input included in output. & \textcolor{Construct}{Link} \textcolor{Construct}{Aggregate} \textcolor{Request}{MoE} \textcolor{Ruling}{Arrange} \textcolor{Ruling}{Collect} \\ \hline
+
+    Modify & $=$ & $=$ & Output includes a \textbf{significant} portion of input and \textbf{can be reverted}. & Modify \textcolor{Request}{Fine-tune}   \\ \hline
+
+    Amalgamate & $=$ & $=$ & Output includes portions of input but \textbf{cannot be reverted}. & Modify \textcolor{Ruling}{Remix} \textcolor{Request}{Fusion} \\ \hline
+
+    Train & $=$ & $=$ & Output has the \textbf{same structure} as input and may contain a \textbf{negligible} portion of it. & \textcolor{Ruling}{Alter Adapt} \textcolor{Request}{Train} \\ \hline
+
+    Generate & $\approx$ & $\approx$ & Output does not contain any portion of input and may \textbf{perform differently} from it. & Output \textcolor{Request}{Generate} \newline \textcolor{Request}{Synthetic} \\ \hline
+
+    Distill & $=$ & $=$ & Output does not contain any portion of input but \textbf{performs similarly} to it. & \textcolor{Request}{Distill Transfer} \newline \textcolor{Ruling}{Extract} \\ \hline
+
+    Embed & $=$ & $=$ & Output does not contain any portion of input, but there has a \textbf{mapping} that converts input to output. & \textcolor{Ruling}{Translate Transform} \\ \hline
+
+    Publish & $=$ & $\approx$ & Output is the \textbf{same} as the input but may have a \textbf{different form}.  & \textcolor{Construct}{Redistribute} \textcolor{Ruling}{Perform Display Disseminate} \\ \hline
     \end{tabular}
 \end{table}
 
+The final aspect is \emph{applicable term generalization}, where we encode the triggering conditions of a license term into the following properties: range of input work forms, range of output work forms, and types of actions.
+Figure~\ref{fig:mgrule} illustrates an example of the GPL-3.0 derivatives rule\footnote{The original license text reads: "You may convey a work based on the Program ... in the form of source code ... provided that you also meet all of these conditions: ... stating that you modified it ... it is released under this License ... keep intact all notices ... license the entire work, as a whole, under this License ..." .}, which represents the Combine action applied to input and output works in code format. 
+This action triggers the "derivative" clause in GPL-3.0, indicating that the license of the output work must be compatible with GPL-3.0 (e.g., APGL-3.0). Additionally, five restrictions apply to the output work if it is to be republished, as dictated by this \emph{definition dependency}.
+This rule does not include any \emph{Use Restrictions}, which apply to output works regardless of whether they are republished. 
+We found this subtle distinction to be crucial in ML license analysis, as most OSS license terms are triggered by distribution, and their definitions of "distribution" typically exclude publishing as a service. 
+However, in the case of models, the common deployment method is through a web interface,  leading to many OSS license restrictions being circumvented in such scenarios.
 
+Furthermore, multiple rules may lead to the same output definition, and we also provide the option of \emph{fuzz form matching} within the rules to enhance the interpretive capabilities of the MG Analyzer.
+It is worth mentioning that the reasoning behind the restrictions derived from the rules requires further analysis for validation. 
+Taking the rule in Figure~\ref{fig:mgrule} as an example, whether the final work remains in a Raw form determines whether the warnings about disclosing code should be reported.
+We present snippets of encoded rules written in Turtle format in Appendix~\ref{apdx:rules}.
+The list of supported licenses, whose terms have been encoded in MG Analyzer, is shown in Table~\ref{tab:licenses}, covering nearly all top-ranking licenses for published models on HuggingFace.
+
+\begin{figure}[t]
+    \centering
+    \includegraphics{fig/mgrule.pdf}
+    \caption{Example of a Generalized GPL-3.0 Derivatives Rule in MG Analyzer.}
+    \Description{}
+    \label{fig:mgrule}
+\end{figure}
 
 % In addition, some ML concepts have no definition in other licensing framework but The latter has clause toward 
 

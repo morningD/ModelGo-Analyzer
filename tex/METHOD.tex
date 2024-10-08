@@ -56,7 +56,7 @@ For the flexibility issue \ding{172}, we use the following terms to abstract key
 A work can have a license assigned through a Register License action, or its license can be determined through rules applied in the Reasoning Stage (see Figure~\ref{fig:framework}).
 
 \textbf{Action}: Represents operations performed on a Work, including Modify, Train and Combine, etc. 
-In practice, we broaden the definition of these operations to make the vocabulary adaptable to different types of works. (See ref~xxxxx for more details.)
+In practice, we broaden the definition of these operations to make the vocabulary adaptable to different types of works. (See Table~\ref{tab:action} for more details.)
 
 \textbf{Work Type}: Includes software, dataset, model, and mixed-type. It is used to describe both the nature of the work and to identify the types of materials intended by a license. 
 We use this information to detect any mismatch between the work type and the license.
@@ -188,7 +188,7 @@ Furthermore, multiple rules may lead to the same output definition, and we also 
 It is worth mentioning that the reasoning behind the restrictions derived from the rules requires further analysis for validation. 
 Taking the rule in Figure~\ref{fig:mgrule} as an example, whether the final work remains in a Raw form determines whether the warnings about disclosing code should be reported.
 We present snippets of our encoded rules written in Turtle format in Appendix~\ref{apdx:rules}.
-The list of supported licenses, whose terms have been encoded in MG Analyzer, is shown in Table~\ref{tab:licenses}, covering nearly all top-ranking licenses for published models on HuggingFace.
+The list of supported licenses, whose terms have been encoded in MG Analyzer, is shown in Table~\ref{tab:licenses}, covering nearly all top-ranking licenses for published models on HuggingFace\footnote{\url{https://huggingface.co/models}}.
 
 \begin{figure}[t]
     \centering
@@ -212,16 +212,7 @@ In such cases, the MG Analyzer will select one of these copyleft licenses and re
 \subsection{Compliance Analysis}
 \label{sec:analysis}
 
-At this stage, we establish all necessary dependency properties through automated reasoning to enable compliant license analysis. 
-The analysis rules are designed to assess and report the validity of the base workflow information, the fulfillment of granted rights, work restrictions, and overall license compliance. 
-In addition, the Publish action should be invoked to signify the completion of the workflow, along with an assigned public manner and work form. 
-MG Analyzer considers three republication scenarios: internal, share, and sell, each of which typically involves different terms and conditions in the licenses.
-For instance, if we publish the final work for sale, the related licenses should grant rights for redistribution, sublicensing, and commercial use. 
-Appendix~\ref{apdx:rules} presents the logic code for rights granting analysis, and the full list of reported notices, warnings, and errors is shown in Table~\ref{tab:report}.
-
-Due to its staged logic rule reasoning design, MG Analyzer has considerable extensibility, enabling the incorporation of additional licenses and analysis targets, provided that it can reason based on our proposed three dependency properties.
-
-\begin{table}[]
+\begin{table}[tp]
     \caption{List of \textcolor{Ruling}{Notices}, \textcolor{Construct}{Warnings}, and \textcolor{Request}{Errors} reported by MG Analyzer. The triggered work is denoted as ?work. }
     \scriptsize
     \label{tab:report}
@@ -274,3 +265,16 @@ Due to its staged logic rule reasoning design, MG Analyzer has considerable exte
 
     \end{tabular}
 \end{table}
+
+
+At this stage, we establish all necessary dependency properties through automated reasoning to enable compliant license analysis. 
+The analysis rules are designed to assess and report the validity of the base workflow information, the fulfillment of granted rights, work restrictions, and overall license compliance. 
+In addition, the Publish action should be invoked to signify the completion of the workflow, along with an assigned public manner and work form. 
+MG Analyzer considers three republication scenarios: internal, share, and sell, each of which typically involves different terms and conditions in the licenses.
+For instance, if we publish the final work for sale, the related licenses should grant rights for redistribution, sublicensing, and commercial use. 
+
+Appendix~\ref{apdx:rules} presents the logic code for rights granting analysis, and the full list of reported notices, warnings, and errors is shown in Table~\ref{tab:report}.
+Due to its staged logic rule reasoning design, MG Analyzer has considerable extensibility, enabling the incorporation of additional licenses and analysis targets, provided that it can reason based on our proposed dependencies information.
+Beyond compliance analysis, our vision is to promote ML workflow supply chain management and improve FAIRness~\cite{wilkinson2016fair} in model publishing. 
+We position our vocabulary and tool as a first step toward a linked open model production data.
+

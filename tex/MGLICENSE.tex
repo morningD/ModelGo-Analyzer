@@ -152,7 +152,23 @@ However, some CC licenses, such as CC-BY-NC-4.0, offer additional options that p
 This may explain why many models are licensed under these licenses\footnote{There are 9659 models on HuggingFace licensed under CC-BY-NC-4.0 (more than Llama2), and 668 of them have garnered 1k+ downloads (accessed on October 8, 2024).}, despite the fact that they were not originally drafted for models.
 
 \ding{174} \textbf{For model licenses}, aside from the proposed MG licenses, most model licenses are not intended for general publishing purposes. 
-For example, the Llama2 license is specifically drafted to govern the Llama2 model and its derivatives, failing to meet reusable standards.
+For example, the terms in Llama2 license is specifically drafted to govern the Llama2 model and its derivatives, failing to meet reusable standards.
+Additionally, since the purpose of these licenses is often to protect the IP rights of proprietary models, they are usually revocable and prohibit sublicensing.
+Although a set of well-defined licenses known as OpenRAIL-M~\cite{contractor2022behavioral} exists, their nearly identical rules make it difficult to accommodate the diverse needs in model publishing.
+
+Based on the above findings, we conclude that it is necessary to draft new standardized and flexible licenses for general model publishing.
+To address this, we collaborated with a law firm to draft a set of model licenses, tentatively referred to as MG Licenses\footnote{Link to license text temporarily hidden due to double-blind policy.}. 
+As reflecting in Table~\ref{tab:licenses}, our licenses include specific definitions and terms related to ML concepts, offering greater clarity compared to OSS and free-content licenses. 
+Most importantly, following the philosophy of CC licenses, we designed MG Licenses to be flexible and easy to use, providing five options to fullfill various publishing scenarios.
+The options include: BY (Attribution), NC (Non-Commercial), ND (No Derivatives), RAI (Responsible Use of AI), and OS (Open Source\footnote{At the time of writing, the Open Source Initiative has only released a draft v. 0.0.9 version of the Open Source AI definition, and our MG licenses with the OS option are not OSI-approved at present.}).
+We drafted nine preset licenses using these options, including MG0, which does not apply any options.
+The flexibility of our licenses is reflected in table~\ref{tab:licenses}, where their freedom scores are evenly distributed between 3.5 and 8.5, indicating that they form a superset of all other model licenses\footnote{AI2-ImpAct-MR and AI2-ImpACT-HR prohibit sharing copies, we do not consider such restrictions to be common in model publishing, so we have excluded them.}.
+To promote transparency, we introduced a \emph{Model Sheet} as an attachment to each MG License, inspired by MDL~\cite{benjamin2019towards}. 
+This sheet assists model users in understanding the rights and restrictions granted by the license terms and helps model developers identify the most suitable license for their needs.
+
+In the next section, we explore which licenses can protect your model from misuse beyond your intended purposes. 
+For example, licensee may close source your GPL-licensed model without violating your license, even if it does contains code disclosure clauses. 
+To do this, we evaluate some of the popular licenses for model publishing, as well as the MG licenses, using MG Analyzer.
 
 %we drafted a new set of model licenses to 
 

@@ -6,8 +6,11 @@ The information in this article is for general informational purposes only and d
 
 \section{Model Sheet}
 \label{apdx:model_sheet}
+Table~\ref{tab:model_sheet1} and Table~\ref{tab:model_sheet2} present the \emph{Model Sheet} included in the Attachment of our proposed MG Licenses. 
+For instance, the \emph{Model Sheet} for MG-BY-NC indicates that this license is revocable, prohibits commercial use of the model, its output, associated code, documentation, and derivatives, and does not require disclosure of source weights or impose responsible AI restrictions. 
+In comparison, MG-BY-OS has fewer restrictions, with its primary requirement being the disclosure of model weights.
 
-\begin{table}[ht]
+\begin{table}[h]
   \centering
   \caption{Model Sheet of MG-BY-NC.}
   \footnotesize
@@ -41,7 +44,7 @@ The information in this article is for general informational purposes only and d
   \label{tab:model_sheet1}
 \end{table}
 
-\begin{table}[ht]
+\begin{table}[h]
   \centering
   \caption{Model Sheet of MG-BY-OS.}
   \footnotesize
@@ -77,9 +80,9 @@ The information in this article is for general informational purposes only and d
   \label{tab:model_sheet2}
 \end{table}
 
-\section{Encoded Rules}
+\section{Encoded Rules and Reasoning Logic}
 \label{apdx:rules}
-Here is a code snippet:
+In this section, we present the encoded "derivative" rules for the GPL-3.0 and Llama2 licenses in Turtle format, followed by a snippet of the reasoning logic employed for license determination and rights granting analysis in Notation3.
 
 \begin{tcolorbox}[title=MGLicenseRule.ttl > GPL-3.0-derivative-rule-1, colback=white, colframe=gray, boxrule=0.2mm, boxsep=1mm, left=0mm, right=0mm, top=0.1mm, bottom=0.1mm] %  width=\textwidth
   \begin{lstlisting}[language=Turtle, breaklines=false, columns=fullflexible, basicstyle=\footnotesize]
@@ -114,60 +117,63 @@ mg:Llama2-derivative-rule a mg:Rule ;
   \end{lstlisting}
 \end{tcolorbox}
 
-\begin{figure*}[ht]
-\begin{tcolorbox}[title=ruling.n3 > License Determination Logic (snippet), colback=white, colframe=gray, boxrule=0.2mm, boxsep=1mm, left=0mm, right=0mm, top=0.1mm, bottom=0.1mm, width=\textwidth] %  width=\textwidth
+
+\begin{tcolorbox}[title=ruling.n3 > License Determination Logic (snippet), colback=white, colframe=gray, boxrule=0.2mm, boxsep=1mm, left=0mm, right=0mm, top=0.1mm, bottom=0.1mm] %  width=\textwidth
   \begin{lstlisting}[language=Turtle, breaklines=false, columns=fullflexible, basicstyle=\footnotesize]
 @prefix log: <http://www.w3.org/2000/10/swap/log#> .
 @prefix list: <http://www.w3.org/2000/10/swap/list#> .
 @prefix mg: <http://~/rdf/terms#> .
-{ # CASE-3: There have multiple rulings require the output work's license should be compatible, but these ruling has a same license.
+{ # CASE-3: There have multiple rulings require the output work's license 
+ # should be compatible, and a compatible solution exists.
     ?outw a mg:Work .
-    _:x log:notIncludes { ?outw mg:hasLicense ?li } . # This work does not have a license yet
-    # If all relied wroks have a license, we can determind the license of this work
-    ( { ?outw mg:hasReliedwork ?relw } { ?relw mg:hasLicense ?li } ) log:forAllIn _:t . 
-    # There is no ruling that NOT allow relicesnse (For exclude CASE-2)
-    ({?outw!mg:hasRuling!mg:hasRule mg:relicense ?reli } {?reli log:notEqualTo mg:none-license}) log:forAllIn _:t .
-    # Collect all compatible-relicensable license into a list
+    _:x log:notIncludes { ?outw mg:hasLicense ?li } .
+    # If all relied wroks have a license, we can determind the license of this work.
+    ({?outw mg:hasReliedwork ?relw} {?relw mg:hasLicense ?li}) log:forAllIn _:t . 
+    # There is no ruling that NOT allow relicesnse (For exclude CASE-2).
+    ({?outw!mg:hasRuling!mg:hasRule mg:relicense ?reli } 
+    {?reli log:notEqualTo mg:none-license}) log:forAllIn _:t .
+    # Collect all compatible-relicensable licenses into a list.
     ( ?li
         { 
             ?outw mg:hasRuling ?rling .
             ?rling!mg:hasRule mg:relicense ?rule .
             ?rule log:equalTo mg:compatible-license . # Compatible
-            ?rling mg:hasLicense ?li . # This ruling should bind a license which provides a compatible license list
+            ?rling mg:hasLicense ?li .
             ?li mg:hasCompatibleLicense ?clist.
         }
     ?li_list ) log:collectAllIn _:t . # (CASE-1 will yield an empty list here) .
     ?li_list list:first ?li_1st .
     ?li_1st mg:hasCompatibleLicense ?compat_list_1st .
-    # Check wether exist a compatible license from 1st that also in all other (include self) compatible lists
     _:x log:includes { ?cli list:in ?compat_list_1st .
-        ({?li_list!list:member mg:hasCompatibleLicense ?compat_list_other} {?cli list:in ?compat_list_other} ) log:forAllIn _:t . } .
-} => { ?outw mg:hasLicense ?li_1st . } .
+        ({?li_list!list:member mg:hasCompatibleLicense ?compat_list_other} 
+        {?cli list:in ?compat_list_other} ) log:forAllIn _:t . } .
+} => { 
+    ?outw mg:hasLicense ?li_1st . 
+} .
   \end{lstlisting}
 \end{tcolorbox}
-\end{figure*}
 
-\begin{figure*}[ht]
-  \begin{tcolorbox}[title=analysis\_granting.n3 > Right Reserved Error, colback=white, colframe=gray, boxrule=0.2mm, boxsep=1mm, left=0mm, right=0mm, top=0.1mm, bottom=0.1mm, width=\textwidth] %  width=\textwidth
+
+\begin{tcolorbox}[title=analysis\_granting.n3 > Right Reserved Error, colback=white, colframe=gray, boxrule=0.2mm, boxsep=1mm, left=0mm, right=0mm, top=0.1mm, bottom=0.1mm] %  width=\textwidth
   \begin{lstlisting}[language=Turtle, breaklines=false, columns=fullflexible, basicstyle=\footnotesize]
-{ # Error [Right Reserved]. Report a error if the license reserves you the right to do your action
+{ # Error [Right Reserved]. License reserves the right for your action.
     ?req a mg:Request .
-    ?req!mg:grant mg:hasUsage ?req_usage . # There may be multiple mg:Usage inside a mg:Right
+    ?req!mg:grant mg:hasUsage ?req_usage . # There may be multiple mg:Usage.
     ?req mg:targetAction ?a .
     ?req mg:targetWork ?outw .
     ?req <- mg:hasRequest ?inw .
-    ?inw mg:hasLicense ?li . # The checking target work must have a license, otherwise this checking will be skipped
-    ( ?r { ?li!mg:reserve mg:hasUsage ?r . } ?reserved_list ) log:collectAllIn _:x . # Collect all reserved rights according to the license
-    ?req_usage list:in ?reserved_list . # Check if the required usage is in the reserved list
+    ?inw mg:hasLicense ?li . # The checking target work must have a license.
+    # Collect all reserved rights according to the license.
+    ( ?r { ?li!mg:reserve mg:hasUsage ?r . } ?reserved_list ) log:collectAllIn _:x .
+    ?req_usage list:in ?reserved_list .
     (?a ?inw ?outw ?req_usage) log:skolem ?geniri . # Keep unique
-    ("** Error ** [Right Reserved] " ?req_usage " is reserved by " ?li " license for " ?a " action on " ?inw " to produce " ?outw) 
-        string:concatenation ?report_content .
+    ("** Error ** [Right Reserved] " ?req_usage " is reserved by " ?li " license for " 
+        ?a " action on " ?inw " to produce " ?outw) string:concatenation ?content .
 } => {
     ?geniri a mg:Error ;
         mg:reportBy ?a ;
         mg:reportType "Right Reserved" ;
-        mg:content ?report_content .
+        mg:content ?content .
 } .
   \end{lstlisting}
-  \end{tcolorbox}
-\end{figure*}
+\end{tcolorbox}

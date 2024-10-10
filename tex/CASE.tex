@@ -1,0 +1,53 @@
+\section{Experiments}
+\label{sec:case}
+This section seeks to answer a key question: \emph{Should I continue using traditional OSS and free-content licenses to publish my model, and what are the associated risks?}
+To explore this question, we evaluate commonly adopted licenses in the context of model publishing by MG Analyzer to assess whether they are still effective as intended.
+The example workflow involves combining two models and publishing them as a service, as shown in Figure~\ref{fig:case1}.
+Here, we consider two scenarios: 1) publishing the combined model as a service; 2) publishing the data generated from the combined model.
+Models A and B are non-binding works that correspond to the settings in Table~\ref{tab:result}, with their respective analysis results also presented in the table.
+Model C is an intermediate work created by combining A and B, and Data D is the generated output from C. 
+Work E involves republishing C as a service with the intent to sell, while Work F involves republishing D as a literary form, also with the intent to sell.
+To be more convincing, we use real-world models and their respective licenses for demonstration.
+
+\begin{figure}[t]
+    \centering
+    \includegraphics{fig/case1.pdf}
+    \caption{Example Workflow: Combine Models, Then Publish.}
+    \Description{}
+    \label{fig:case1}
+\end{figure}
+
+\begin{table}[]
+    \caption{Settings and Analysis Results.}
+    \footnotesize
+    \begin{tabular}{|ll|}
+    \hline \rowcolor[gray]{.8}
+    \multicolumn{1}{|l|}{Work: License} & Work: Report code. \\ \hline
+    \multicolumn{1}{|p{3.2cm}|}{(i) C: AGPL-3.0. D: Unlicense. \newline (ii) D: Unlicense } & \multicolumn{1}{p{4.5cm}|}{ (i) E: N1N2N3$\times$2; \textbf{W5}$\times$2; W1$\times$3. F: W1$\times$3. \newline (ii) E: W1$\times$2. F: W1.} \\ \hline
+    \multicolumn{2}{|p{8cm}|}{\textbf{OSS License Setting:} \newline
+    (i) A$\leftarrow$PhoBERT~\cite{nguyen2020phobert}: AGPL-3.0. B$\leftarrow$CKIP-Transformers~\cite{lin2022hantrans}: GPL-3.0. \newline
+    (ii) A$\leftarrow$PhoBERT~\cite{nguyen2020phobert}: AGPL-3.0. B$\leftarrow$\emph{None}.
+    }\\ \hline \hline
+
+    \multicolumn{1}{|p{3.2cm}|}{C: Unlicense. D: Unlicense.} & E: W1$\times$2, \textbf{E2}$\times$2. F: W1$\times$2 . \\ \hline
+    \multicolumn{2}{|p{8cm}|}{\textbf{Free-content License Setting:}\newline
+        A$\leftarrow$ MPT-Chat~\cite{MosaicML2023Introducing}: CC-BY-NC-SA-4.0.  B$\leftarrow$Command R+~\cite{cohereforai2024c4ai}: CC-BY-NC-4.0.
+    } \\ \hline \hline
+
+    \multicolumn{1}{|p{3.2cm}|}{(iii) D: Unlicense. \newline (iv) D: Unlicense.} & \multicolumn{1}{p{4.5cm}|}{ (iii) E: N1; N2: \textbf{W5} . F: \emph{None}. \newline (iv) E: N1; N2; W2$\times$2; \textbf{E2}; \textbf{E5}. F: W2, \textbf{E5}.} \\ \hline
+    \multicolumn{2}{|p{8cm}|}{\textbf{Model License Setting:}\newline
+        (iii) A$\leftarrow$ MG-BY-OS. B$\leftarrow$\emph{None}. (iv) A$\leftarrow$ MG-BY-NC. B$\leftarrow$\emph{None}.
+    } \\ \hline
+    \end{tabular}
+    \label{tab:result}
+\end{table}
+
+First, we evaluate two OSS licenses: AGPL-3.0 and GPL-3.0, which are considered enforceable open-source licenses with copyleft clauses.
+In the setting (i), Work E triggers two \emph{Disclose Source Code} warnings (code W5, refer to Table~\ref{tab:report} for code definitions), and AGPL-3.0 successfully proliferates to Work C.
+However, with a small adjustment, we can circumvent these clauses by republishing the generated content rather than providing the model as a service. 
+As demonstrated by Work D, there is no W5 warning, and the content is licensed under the Unlicense.
+Furthermore, the condition in AGPL-3.0 that triggers the disclose code clauses related to remote access is \emph{you modify the Program}, which means you can directly republish copies as a service to circumvent this clause.
+As reflected in setting (ii), there are no more W5 warnings, only two warnings related to the non-standard licensing remain.
+
+
+

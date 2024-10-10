@@ -37,7 +37,7 @@ In this stage, MG Analyzer evaluates the validity of the base workflow informati
 % 机器学习流程的描述（特别是用于许可分析）并不简单，原因有1）同时存在多种形式的组建和许可；2）组件间的依赖关系可能是隐含的和嵌套的；3）输出的定义是取决于许可的
 The representation of ML workflows, particularly when considering license analysis scenarios, differs significantly from common software workflows for the following three reasons.
 \ding{172} ML workflows often involve various components (e.g., code, datasets, images, model weights, services), each governed by licenses from different frameworks. 
-Additionally, non-standard licensing practices are prevalent in current ML projects, for instance, the C4AI Command R+ model~\cite{cohereforai2024c4ai} is licensed under a free-content license: CC BY-NC-4.0. 
+Additionally, non-standard licensing practices are prevalent in current ML projects~\cite{rajbahadur2021can, duan2024modelgo}, for instance, the C4AI Command R+ model~\cite{cohereforai2024c4ai} is licensed under a free-content license: CC BY-NC-4.0. 
 Therefore, the representation should be flexible enough to cover such situations.
 
 \ding{173} The component dependencies in ML workflows may be implicit and nested. 
@@ -70,7 +70,7 @@ We use mixed-form to represent the cases involving collections of works.
 \textbf{LicenseInfo}: This contains the essential license information derived from conditions, including the license name, ID, intended types of works, whether it is copyleft or permissive, as well as granted and reserved rights, etc.
 While the license name is sufficient to describe the base workflow, to enable reasoning, LicenseInfo should bind rules, which we will discuss in the next section.
 
-At this stage, we can describe a base ML workflow, as illustrated\footnote{The "mg" prefix is omitted, and some properties are merged or filtered for presentation.} schematically in Figure~\ref{fig:wf} (The RDF graph can be referred to in \emph{gen.ttl} in Figure~\ref{fig:framework}).
+At this stage, we can describe a base ML workflow, as illustrated\footnote{~The "mg" prefix is omitted and some properties are merged or filtered for presentation.} schematically in Figure~\ref{fig:wf} (The RDF graph can be referred to in \emph{gen.ttl} in Figure~\ref{fig:framework}).
 In this base workflow, the derived input and output of each Action can be represented as blank nodes, serving as placeholders. 
 These placeholders will be populated by reasoning the output yielded by the previous action and the input for the current action, respectively.
 
@@ -96,7 +96,7 @@ The corresponding implementation in the MG Analyzer is illustrated in the Reason
 New instance nodes called \emph{Ruling} are created to track the definition dependencies and triggered rules for each work, determining their applicable licenses in an alternating manner.
 
 The \emph{rights-using dependencies} describe the rights that must be granted for actions performed on works. 
-For example, when executing a training action on a model, it requires the rights to \emph{use} and \emph{modify} (termed as Usage in MG vocabulary) from the model's license\footnote{An example of such rights granting can be found in the Llama2 Community License~\cite{meta2024llama2}, which states, "You are granted a ... to use, reproduce, distribute, copy, create derivative works of, and make modifications to the Llama Materials.}.
+For example, when executing a training action on a model, it requires the rights to \emph{use} and \emph{modify} (termed as Usage in MG vocabulary) from the model's license\footnote{~An example of such rights granting can be found in the Llama2 Community License~\cite{meta2024llama2}, which states, "You are granted a ... to use, reproduce, distribute, copy, create derivative works of, and make modifications to the Llama Materials.}.
 Similarly, the rights-using dependencies should proliferate according to compositional dependencies.
 For instance, the requirement to \emph{modify} a model extends to all its submodels.
 In the MG Analyzer, we create new nodes called \emph{Request} to represent this dependency.
@@ -178,7 +178,7 @@ In some cases, multiple actions may align with the same license terms.
 For instance, the license term "Modify" can align with both the actions \emph{Modify} and \emph{Amalgamate}, as such licenses do not distinguish the extent of changes made or whether those changes can be reverted.
 
 The final aspect is \emph{applicable term generalization}, where we encode the triggering conditions of a license term into the following properties: range of input work forms, range of output work forms, and types of actions.
-Figure~\ref{fig:mgrule} illustrates an example of the GPL-3.0 derivatives rule\footnote{The original GPL-3.0 license text reads: "You may convey a work based on the Program ... in the form of source code ... provided that you also meet all of these conditions: ... stating that you modified it ... it is released under this License ... keep intact all notices ... license the entire work, as a whole, under this License ..." .}, which represents the Combine action applied to input and output works in code format. 
+Figure~\ref{fig:mgrule} illustrates an example of the GPL-3.0 derivatives rule\footnote{~The original GPL-3.0 license text reads: "You may convey a work based on the Program ... in the form of source code ... provided that you also meet all of these conditions: ... stating that you modified it ... it is released under this License ... keep intact all notices ... license the entire work, as a whole, under this License ..." .}, which represents the Combine action applied to input and output works in code format. 
 This action triggers the "derivative" clause in GPL-3.0, indicating that the license of the output work must be compatible with GPL-3.0 (e.g., APGL-3.0). Additionally, five restrictions apply to the output work if it is to be republished, as dictated by this \emph{definition dependency}.
 This rule does not include any \emph{Use Restrictions}, which apply to output works regardless of whether they are republished. 
 We found this subtle distinction to be crucial in ML license analysis, as most OSS license terms are triggered by distribution, and their definitions of "distribution" typically exclude publishing as a service. 
@@ -188,7 +188,7 @@ Furthermore, multiple rules may lead to the same output definition, and we also 
 It is worth mentioning that the reasoning behind the restrictions derived from the rules requires further analysis for validation. 
 Taking the rule in Figure~\ref{fig:mgrule} as an example, whether the final work remains in a Raw form determines whether the warnings about disclosing code should be reported.
 We present snippets of our encoded rules written in Turtle format in Appendix~\ref{apdx:rules}.
-The list of supported licenses, whose terms have been encoded in MG Analyzer, is shown in Table~\ref{tab:licenses}, covering nearly all top-ranking licenses for published models on HuggingFace\footnote{\url{https://huggingface.co/models}}.
+The list of supported licenses, whose terms have been encoded in MG Analyzer, is shown in Table~\ref{tab:licenses}, covering nearly all top-ranking licenses for published models on HuggingFace\footnote{~\url{https://huggingface.co/models}}.
 
 \begin{figure}[t]
     \centering
@@ -216,52 +216,54 @@ In such cases, the MG Analyzer will select one of these copyleft licenses and re
     \caption{List of \textcolor{Ruling}{Notices}, \textcolor{Construct}{Warnings}, and \textcolor{Request}{Errors} reported by MG Analyzer. The triggered work is denoted as ?work. }
     \scriptsize
     \label{tab:report}
-    \begin{tabular}{|p{2.4cm}|p{4.8cm}|}
+    \begin{tabular}{|c|p{2.25cm}|p{4.6cm}|}
     \hline
     \rowcolor[gray]{.8}
-    Report Type & Report Content \\ \hline
+    Code & Report Type & Report Content \\ \hline
     
-    \textcolor{Ruling}{Include License} & The original license file from ?work should be retained.  \\ \hline
+    N1 & \textcolor{Ruling}{Include License} & The original license file from ?work should be retained.  \\ \hline
 
-    \textcolor{Ruling}{Include Notice} & The notices (e.g., attribution, copyleft, patent, trademark) from ?work should be retained. \\ \hline
+    N2 & \textcolor{Ruling}{Include Notice} & The notices (e.g., attribution, copyleft, patent, trademark) from ?work should be retained. \\ \hline
 
-    \textcolor{Ruling}{State Changes} & A notice stating the modifications made to ?work should be provided. \\ \hline
+    N3 &\textcolor{Ruling}{State Changes} & A notice stating the modifications made to ?work should be provided. \\ \hline
 
-    \textcolor{Ruling}{ImpACT Reports} & You need to complete a Derivative Impact Report. \\ \hline
+    N4 &\textcolor{Ruling}{ImpACT Reports} & You need to complete a Derivative Impact Report. \\ \hline
 
-    \textcolor{Construct}{License Type Mismatch} & Non-standard licensing of ?work. \\ \hline
+    W1 &\textcolor{Construct}{License Type Mismatch} & Non-standard licensing of ?work. \\ \hline
     
-    \textcolor{Construct}{Revocable License} & The license of ?work is revocable. \\ \hline
+    W2 &\textcolor{Construct}{Revocable License} & The license of ?work is revocable. \\ \hline
     
-    \textcolor{Construct}{Possibly Revocable License} & The revocability of the license of ?work is not claimed. \\ \hline
+    W3 &\textcolor{Construct}{Possibly Revocable License} & The revocability of the license of ?work is not claimed. \\ \hline
 
-    \textcolor{Construct}{Right Not Granted} & The required right is not explicitly granted by ?work. \\ \hline
+    W4 &\textcolor{Construct}{Right Not Granted} & The required right is not explicitly granted by ?work. \\ \hline
 
-    \textcolor{Construct}{Disclose Source Code} & This work should disclose its source code. \\ \hline
+    W5 &\textcolor{Construct}{Disclose Source Code} & This work should disclose its source code. \\ \hline
 
-    \textcolor{Construct}{Disclose Unmodified Code} & The unmodified source code of ?work should be disclosed. \\ \hline
+    W6 &\textcolor{Construct}{Disclose Unmodified Code} & The unmodified source code of ?work should be disclosed. \\ \hline
 
-    \textcolor{Construct}{Use Behavior} & The use of this work must comply with the usage behavior restrictions of ?work. \\ \hline
+    W7 &\textcolor{Construct}{Use Behavior} & The use of this work must comply with the usage behavior restrictions of ?work. \\ \hline
 
-    \textcolor{Construct}{Runtime Control} & There is a runtime restriction clause in ?work (e.g., forced updates). \\ \hline
+    W8 &\textcolor{Construct}{Runtime Control} & There is a runtime restriction clause in ?work (e.g., forced updates). \\ \hline
 
-    \textcolor{Request}{Wrong Work Type or Form} & The type of ?work is inconsistent with its form. \\ \hline
+    E1 &\textcolor{Request}{Wrong Work Type or Form} & The type of ?work is inconsistent with its form. \\ \hline
 
-    \textcolor{Request}{Right Reserved} & The required right is reserved by the license of ?work. \\ \hline
+    E2 &\textcolor{Request}{Right Reserved} & The required right is reserved by the license of ?work. \\ \hline
     
-    \textcolor{Request}{Not Allowed to Share} & Redistribution of this work is prohibited. \\ \hline
+    E3 &\textcolor{Request}{Not Allowed to Share} & Redistribution of this work is prohibited. \\ \hline
 
-    \textcolor{Request}{Not Allowed to Sublicense} & Sublicensing of ?work is prohibited. \\ \hline
+    E4 &\textcolor{Request}{Not Allowed to Sublicense} & Sublicensing of ?work is prohibited. \\ \hline
 
-    \textcolor{Request}{Cannot Be Relicensed} & The license of this work is invalid because ?work cannot be relicensed, or relicensing is prohibited. \\ \hline
+    E5 &\textcolor{Request}{No Commercial Use} & Commercial use of ?work is prohibited. \\ \hline
 
-    \textcolor{Request}{GNU Freedom Conflict} & The additional terms applied in this work may violate the GNU freedom clauses of ?work. \\ \hline
+    E6 &\textcolor{Request}{Cannot Be Relicensed} & The license of this work is invalid because ?work cannot be relicensed, or relicensing is prohibited. \\ \hline
 
-    \textcolor{Request}{CC Freedom Conflict} & The additional terms applied in this work may violate the CC freedom clauses of ?work. \\ \hline
+    E7 &\textcolor{Request}{GNU Freedom Conflict} & The additional terms applied in this work may violate the GNU freedom clauses of ?work. \\ \hline
 
-    \textcolor{Request}{Llama2/3 Exclusive} & Using Llama2/3's output in non-Llama2/3 derivatives is prohibited. \\ \hline
+    E8 &\textcolor{Request}{CC Freedom Conflict} & The additional terms applied in this work may violate the CC freedom clauses of ?work. \\ \hline
 
-    \textcolor{Request}{Exclusive License} & The additional terms applied in this work are prohibited by the license of ?work. \\ \hline
+    E9 &\textcolor{Request}{Llama2/3 Exclusive} & Using Llama2/3's output in non-Llama2/3 derivatives is prohibited. \\ \hline
+
+    E10 &\textcolor{Request}{Exclusive License} & The additional terms applied in this work are prohibited by the license of ?work. \\ \hline
 
     \end{tabular}
 \end{table}

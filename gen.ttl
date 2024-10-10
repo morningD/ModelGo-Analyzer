@@ -3,51 +3,18 @@
 
 :reg2 a mg:RegisterLicense ;
     mg:actionId "reg2" ;
-    mg:hasInput [ mg:targetLicense mg:CC-BY-ND-4.0 ;
-            mg:targetWork :FreeLaw ] ;
-    mg:yieldOutputWork :combine7 .
+    mg:hasInput [ mg:targetLicense mg:AGPL-3.0 ;
+            mg:targetWork :PhoBERT ] ;
+    mg:yieldOutputWork :publish3 .
 
-:reg3 a mg:RegisterLicense ;
-    mg:actionId "reg3" ;
-    mg:hasInput [ mg:targetLicense mg:CC-BY-NC-SA-4.0 ;
-            mg:targetWork :arXiv ] ;
-    mg:yieldOutputWork :embed6 .
-
-:reg5 a mg:RegisterLicense ;
-    mg:actionId "reg5" ;
-    mg:hasInput [ mg:targetLicense mg:GPL-3.0 ;
-            mg:targetWork :BigTranslate ] ;
-    mg:yieldAuxWork :embed6 .
-
-:BigTranslate a mg:work ;
+:PhoBERT a mg:work ;
     mg:hasWorkForm mg:weights ;
     mg:hasWorkType mg:model ;
-    mg:workName "BigTranslate" .
+    mg:workName "PhoBERT" .
 
-:FreeLaw a mg:work ;
-    mg:hasWorkForm mg:literary ;
-    mg:hasWorkType mg:dataset ;
-    mg:workName "FreeLaw" .
-
-:arXiv a mg:work ;
-    mg:hasWorkForm mg:literary ;
-    mg:hasWorkType mg:dataset ;
-    mg:workName "arXiv" .
-
-:publish8 a mg:Publish ;
-    mg:actionId "publish8" ;
-    mg:hasInput [ mg:targetPublishPolicy mg:sell ] ;
+:publish3 a mg:Publish ;
+    mg:actionId "publish3" ;
+    mg:hasInput [ mg:targetPublishPolicy mg:sell ;
+            mg:targetWorkForm mg:service-form ] ;
     mg:hasOutput [ ] .
-
-:combine7 a mg:Combine ;
-    mg:actionId "combine7" ;
-    mg:hasInput [ ] ;
-    mg:hasOutput [ ] ;
-    mg:yieldOutputWork :publish8 .
-
-:embed6 a mg:Embed ;
-    mg:actionId "embed6" ;
-    mg:hasInput [ ] ;
-    mg:hasOutput [ ] ;
-    mg:yieldOutputWork :combine7 .
 

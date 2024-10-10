@@ -33,41 +33,41 @@ The information in this article is for general informational purposes only and d
 Here is a code snippet:
 
 \begin{tcolorbox}[title=MGLicenseRule.ttl > GPL-3.0-derivative-rule-1, colback=white, colframe=gray, boxrule=0.2mm, boxsep=1mm, left=0mm, right=0mm, top=0.1mm, bottom=0.1mm] %  width=\textwidth
-  \begin{lstlisting}[language=Turtle, breaklines=false, columns=fullflexible]
+  \begin{lstlisting}[language=Turtle, breaklines=false, columns=fullflexible, basicstyle=\footnotesize]
 @prefix mg: <http://~/rdf/terms#> .
 mg:GPL-3.0-derivative-rule-1 a mg:Rule ;
-  mg:hasOutputDef mg:derivative ;
-  mg:targetActionType mg:Combine ;
-  mg:targetInputWorkForm mg:code ;
-  mg:targetOutputWorkForm mg:code ;
-  mg:relicense mg:compatible-license ;
-  mg:hasPublishRestriction mg:include_license_restriction, 
-    mg:include_notice_restriction, mg:disclose_self_restriction, 
-    mg:state_changes_restriction, mg:gnu_freedom_restriction;
-  mg:allowSharing true .
+    mg:hasOutputDef mg:derivative ;
+    mg:targetActionType mg:Combine ;
+    mg:targetInputWorkForm mg:code ;
+    mg:targetOutputWorkForm mg:code ;
+    mg:relicense mg:compatible-license ;
+    mg:hasPublishRestriction mg:include_license_restriction, 
+        mg:include_notice_restriction, mg:disclose_self_restriction, 
+        mg:state_changes_restriction, mg:gnu_freedom_restriction ;
+    mg:allowSharing true .
   \end{lstlisting}
 \end{tcolorbox}
 
 \begin{tcolorbox}[title=MGLicenseRule.ttl > Llama2-derivative-rule, colback=white, colframe=gray, boxrule=0.2mm, boxsep=1mm, left=0mm, right=0mm, top=0.1mm, bottom=0.1mm] %  width=\textwidth
-  \begin{lstlisting}[language=Turtle, breaklines=false, columns=fullflexible]
+  \begin{lstlisting}[language=Turtle, breaklines=false, columns=fullflexible, basicstyle=\footnotesize]
 @prefix mg: <http://~/rdf/terms#> .
 mg:Llama2-derivative-rule a mg:Rule ;
-  mg:hasOutputDef mg:derivative ;
-  mg:targetActionType mg:Amalgamate, mg:Combine, 
-    mg:Modify, mg:Train, mg:Embed, mg:Distill ;
-  mg:targetInputWorkForm mg:weights, mg:exe ;
-  mg:targetOutputWorkForm mg:weights, mg:exe ;
-  mg:relicense mg:any-license ;
-  mg:hasPublishRestriction mg:include_license_restriction ;
-  mg:hasUseRestriction mg:llama2_exclusive_use_restriction, 
-    mg:use_behavior_restriction ;
-  mg:allowSharing true .
+    mg:hasOutputDef mg:derivative ;
+    mg:targetActionType mg:Amalgamate, mg:Combine, 
+      mg:Modify, mg:Train, mg:Embed, mg:Distill ;
+    mg:targetInputWorkForm mg:weights, mg:exe ;
+    mg:targetOutputWorkForm mg:weights, mg:exe ;
+    mg:relicense mg:any-license ;
+    mg:hasPublishRestriction mg:include_license_restriction ;
+    mg:hasUseRestriction mg:llama2_exclusive_use_restriction, 
+        mg:use_behavior_restriction ;
+    mg:allowSharing true .
   \end{lstlisting}
 \end{tcolorbox}
 
 \begin{figure*}[ht]
 \begin{tcolorbox}[title=ruling.n3 > License Determination Logic (snippet), colback=white, colframe=gray, boxrule=0.2mm, boxsep=1mm, left=0mm, right=0mm, top=0.1mm, bottom=0.1mm, width=\textwidth] %  width=\textwidth
-  \begin{lstlisting}[language=Turtle, breaklines=false, columns=fullflexible]
+  \begin{lstlisting}[language=Turtle, breaklines=false, columns=fullflexible, basicstyle=\footnotesize]
 @prefix log: <http://www.w3.org/2000/10/swap/log#> .
 @prefix list: <http://www.w3.org/2000/10/swap/list#> .
 @prefix mg: <http://~/rdf/terms#> .
@@ -100,7 +100,7 @@ mg:Llama2-derivative-rule a mg:Rule ;
 
 \begin{figure*}[ht]
   \begin{tcolorbox}[title=analysis\_granting.n3 > Right Reserved Error, colback=white, colframe=gray, boxrule=0.2mm, boxsep=1mm, left=0mm, right=0mm, top=0.1mm, bottom=0.1mm, width=\textwidth] %  width=\textwidth
-  \begin{lstlisting}[language=Turtle, breaklines=false, columns=fullflexible]
+  \begin{lstlisting}[language=Turtle, breaklines=false, columns=fullflexible, basicstyle=\footnotesize]
 { # Error [Right Reserved]. Report a error if the license reserves you the right to do your action
     ?req a mg:Request .
     ?req!mg:grant mg:hasUsage ?req_usage . # There may be multiple mg:Usage inside a mg:Right

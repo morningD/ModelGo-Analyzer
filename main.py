@@ -6,11 +6,11 @@ import subprocess
 # 6 Corpus, 5 Image DS, 2 Music DS, 1 3D DS, 1 Video DS, 10 Models
 
 # wiki_text = register_license(Work('Wikipedia', 'dataset', 'literary'), target_license='CC-BY-SA-4.0') # Corpus, https://en.wikipedia.org/wiki/Wikipedia:Copyrights
-stack_exchange_text = register_license(Work('StackExchange', 'dataset', 'literary'), target_license='CC-BY-SA-4.0') # Corpus, https://stackexchange.com/
+#stack_exchange_text = register_license(Work('StackExchange', 'dataset', 'literary'), target_license='CC-BY-SA-4.0') # Corpus, https://stackexchange.com/
 free_law_text = register_license(Work('FreeLaw', 'dataset', 'literary'), target_license='CC-BY-ND-4.0') # Corpus, https://free.law/
-arxiv_text = register_license(Work('arXiv', 'dataset', 'literary'), target_license='CC-BY-NC-SA-4.0') # Corpus, https://info.arxiv.org/help/license/index.html
+#arxiv_text = register_license(Work('arXiv', 'dataset', 'literary'), target_license='CC-BY-NC-SA-4.0') # Corpus, https://info.arxiv.org/help/license/index.html
 # pubmed_text = register_license(Work('PubMed', 'dataset', 'literary'), target_license='CC-BY-NC-ND-4.0') # Corpus, https://www.ncbi.nlm.nih.gov/pmc/tools/textmining/
-deep_sequoia_text = register_license(Work('Deep-sequoia', 'dataset', 'literary'), target_license='LGPLLR') # Corpus, http://deep-sequoia.inria.fr/
+#deep_sequoia_text = register_license(Work('Deep-sequoia', 'dataset', 'literary'), target_license='LGPLLR') # Corpus, http://deep-sequoia.inria.fr/
 
 # midjourney_img = register_license(Work('Midjourney_gen', 'dataset', 'vision'), target_license='CC-BY-NC-4.0') # Image, https://docs.midjourney.com/docs/terms-of-service
 # flickr_img = register_license(Work('Flickr', 'dataset', 'vision'), target_license='CC-BY-NC-SA-4.0') # Image, https://www.flickr.com/creativecommons/
@@ -31,15 +31,39 @@ deep_sequoia_text = register_license(Work('Deep-sequoia', 'dataset', 'literary')
 # detr_model = register_license(Work('DETR', 'model', 'weights'), target_license='Apache-2.0') # Image Segmentation https://github.com/facebookresearch/detr
 # xclip_model = register_license(Work('X-Clip', 'model', 'weights'), target_license='MIT') # Video2Text, https://huggingface.co/microsoft/xclip-base-patch32
 # i2vgen_model = register_license(Work('I2VGen-XL', 'model', 'weights'), target_license='CC-BY-NC-ND-4.0') # Image2Video, https://huggingface.co/damo-vilab/MS-Image2Video
-bigtranslate_model = register_license(Work('BigTranslate', 'model', 'weights'), target_license='GPL-3.0') # Text Translation, https://huggingface.co/James-WYang/BigTranslate
+#bigtranslate_model = register_license(Work('BigTranslate', 'model', 'weights'), target_license='GPL-3.0') # Text Translation, https://huggingface.co/James-WYang/BigTranslate
 # bert_model = register_license(Work('BERT', 'model', 'weights'), target_license='Apache-2.0') # Text, https://huggingface.co/bert-base-uncased
 # bloom_model = register_license(Work('BLOOM', 'model', 'weights'), target_license='OpenRAIL-M') # Text Generation, https://huggingface.co/bigscience/bloom
 # llama2_model = register_license(Work('Llama2', 'model', 'weights'), target_license='Llama2') # Text Generation, https://huggingface.co/meta-llama/Llama-2-7b
+#ckip_model = register_license(Work('CKIP-Transformers', 'model', 'weights'), target_license='GPL-3.0') # Text Generation, https://github.com/ckiplab/ckip-transformers
+phobert_model = register_license(Work('PhoBERT', 'model', 'weights'), target_license='AGPL-3.0') # Text Generation, https://huggingface.co/vinai/phobert-base-v2
+#mptchart_model = register_license(Work('MPT-Chat', 'model', 'weights'), target_license='CC-BY-NC-SA-4.0') # Text Generation, https://huggingface.co/mosaicml/mpt-7b-chat
+#commandr_model = register_license(Work('C4AI-Command-R+', 'model', 'weights'), target_license='CC-BY-NC-4.0') # Text Generation, https://huggingface.co/CohereForAI/c4ai-command-r-plus-08-2024
+
+#mgbyos_model = register_license(Work('MGBYOS', 'model', 'weights'), target_license='MG-BY-OS')
+#mgbync_model = register_license(Work('MGBYNC', 'model', 'weights'), target_license='MG-BY-NC') # MG Licenses
+
 
 #flow = combine([whisper_model, detr_model])
 #flow = combine([embed(arxiv_text, aux_flows=[bigtranslate_model]), embed(stack_exchange_text, aux_flows=[bigtranslate_model]), deep_sequoia_text, free_law_text])
-flow = combine([embed(arxiv_text, aux_flows=[bigtranslate_model]), free_law_text])
-flow = publish(flow, policy = 'sell')
+
+
+# Case-1
+#flow = combine([ckip_model, phobert_model])
+#flow = combine([mptchart_model, commandr_model])
+
+#flow = generate(combine([ckip_model, phobert_model]), aux_flows=[free_law_text])
+#flow = generate(combine([mptchart_model, commandr_model]), aux_flows=[free_law_text])
+
+#flow = phobert_model
+#flow = generate(mgbync_model, aux_flows=[free_law_text])
+#flow = generate(phobert_model, aux_flows=[free_law_text])
+#flow = mgbyos_model
+#flow = mgbync_model
+flow = phobert_model
+
+#flow = publish(flow, form='literary', policy = 'sell') # literary/service-form
+flow = publish(flow, form='service-form', policy = 'sell') # literary/service-form
 # Save the gen graph to a new Turtle file
 flow.graph.serialize(destination="gen.ttl", format="ttl")
 

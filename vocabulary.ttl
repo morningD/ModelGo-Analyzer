@@ -98,22 +98,22 @@ mg:Embed a rdfs:Class ;
 
 mg:Amalgamate a rdfs:Class ;
     rdfs:subClassOf mg:Action ;
-    rdfs:lable "Embed"@en ;
+    rdfs:lable "Amalgamate"@en ;
     rdfs:comment "TODO." .
 
 mg:Distill a rdfs:Class ;
     rdfs:subClassOf mg:Action ;
-    rdfs:lable "Embed"@en ;
+    rdfs:lable "Distill"@en ;
     rdfs:comment "TODO." .
 
-mg:Genreate a rdfs:Class ;
+mg:Generate a rdfs:Class ;
     rdfs:subClassOf mg:Action ;
-    rdfs:lable "Embed"@en ;
+    rdfs:lable "Generate"@en ;
     rdfs:comment "TODO." .
 
 mg:Modify a rdfs:Class ;
     rdfs:subClassOf mg:Action ;
-    rdfs:lable "Embed"@en ;
+    rdfs:lable "Modify"@en ;
     rdfs:comment "TODO." .
 
 mg:Train a rdfs:Class ;

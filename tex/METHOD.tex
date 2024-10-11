@@ -4,7 +4,7 @@
 \begin{figure*}[t]
     \centering
     \includegraphics[width=\linewidth]{fig/framework.pdf}
-    \caption{Overview of MG Analyzer ("mg" is the prefix of our proposed vocabulary).}
+    \caption{Overview of MG Analyzer. ("mg" is the prefix for our proposed vocabulary.)}
     \Description{}
     \label{fig:framework}
 \end{figure*}
@@ -14,34 +14,34 @@ Before delving into the detailed design that answers these questions, we first p
 As illustrated in Figure~\ref{fig:framework}, the process of MG Analyzer is divided into three main parts: Construction, Reasoning, and Analysis.
 
 In the \textbf{Construction Stage}, user-input workflow descriptions (written in Python) are converted into an RDF graph (saved as \emph{gen.ttl} in Turtle format) that contains the base information of the workflow. 
-This conversion is achieved with the help of RDFLib~\cite{Krech_RDFLib_2023} and the MG vocabulary, which is part of our analyzer. 
-RDFLib provides an API for writing RDF graphs, while the MG vocabulary defines the specific semantics to represent the concepts and dependencies in ML projects.
+This conversion is achieved with the help of RDFLib~\cite{Krech_RDFLib_2023} and the \emph{MG Vocabulary}, which is part of our analyzer. 
+RDFLib provides an API for writing RDF graphs, while the MG Vocabulary defines the specific semantics to represent the concepts and dependencies in ML projects.
 Then, we apply reasoning rules (written in Notation3~\cite{arndt2023notation3}) for the complete workflow construction using the EYE reasoner~\cite{verborgh2015drawing}.
-The reasoner concludes new properties that represent the input and output chains between components, enabling further reasoning about the \emph{compositional dependencies} among them (reflecting Question (i); see Section~\ref{sec:wf} for details).
+The reasoner concludes new properties that represent the input and output chains between components, followed by further reasoning to identify the \emph{compositional dependencies} among them (reflecting Question (i); see Section~\ref{sec:wf} for details).
 
 The main tasks in \textbf{Reasoning Stage} involve concluding the \emph{definition dependencies} and \emph{rights-using} dependencies. 
 This is achieved through two substeps.
 First, a new property called \emph{ruling} is created to record the definition of the output work in relation to the input work within the context of licensing.
 For example, if we merge GPL-licensed code into another software, the resulting work is considered a \emph{derivative} of the original work. 
-This relationship, which we refer to as \emph{definition dependencies}, is crucial for determining the compliant license of the output work. 
+This relationship, which we refer to as \emph{definition dependencies}, is crucial for determining the applicable license of the output work. 
 We recursively identify such dependencies and ascertain the licenses of indeterminate works until all works in the workflow have a license.
-Based on the RDF workflow graph with complete license assignments, we can execute the second step of reasoning, termed \emph{request}, which records \emph{rights-using} dependencies that represent the rights required for the work according to practical reuse methods (reflecting Question (ii); see Section~\ref{sec:rule} for details). 
+Based on the RDF workflow graph with complete license assignments, we can execute the second step of reasoning, called \emph{request}, which infers \emph{rights-using} dependencies that represent the rights required for the work according to practical reuse methods (reflecting Question (ii); see Section~\ref{sec:rule} for details). 
 
 So far, all necessary information for license analysis has been concluded before entering the final \textbf{Analysis Stage}. 
 In this stage, MG Analyzer evaluates the validity of the base workflow information, checks for the satisfaction of rights granting, and assesses license compliance and conflicts. 
-\emph{Reports} are genreated to present these results in the workflow graph (reflecting Question (iii); see Section~\ref{sec:analysis} for details).
-
+Entities of the class \emph{Report} are genreated to present these results in RDF format (reflecting Question (iii); see Section~\ref{sec:analysis} for details).
 
 \subsection{ML Workflow Representation}
 \label{sec:wf}
 % 机器学习流程的描述（特别是用于许可分析）并不简单，原因有1）同时存在多种形式的组建和许可；2）组件间的依赖关系可能是隐含的和嵌套的；3）输出的定义是取决于许可的
 The representation of ML workflows, particularly when considering license analysis scenarios, differs significantly from common software workflows for the following three reasons.
+
 \ding{172} ML workflows often involve various components (e.g., code, datasets, images, model weights, services), each governed by licenses from different frameworks. 
-Additionally, non-standard licensing practices are prevalent in current ML projects~\cite{rajbahadur2021can, duan2024modelgo}, for instance, the C4AI Command R+ model~\cite{cohereforai2024c4ai} is licensed under a free-content license: CC BY-NC-4.0. 
+Additionally, non-standard licensing practices are prevalent in current ML projects~\cite{rajbahadur2021can, duan2024modelgo}, for instance, the C4AI Command R+ model~\cite{cohereforai2024c4ai} is licensed under a free-content license: CC-BY-NC-4.0. 
 Therefore, the representation should be flexible enough to cover such situations.
 
 \ding{173} The component dependencies in ML workflows may be implicit and nested. 
-For instance, Openjourney~\cite{openjourney2024prompthero} is fine-tuned based on the StableDiffusion~\cite{rombach2022high} model and the data generated by Midjourney~\cite{midjourney2024terms}. 
+For instance, Openjourney~\cite{openjourney2024prompthero} is fine-tuned based on StableDiffusion~\cite{rombach2022high} model and the data generated by Midjourney~\cite{midjourney2024terms}. 
 In this case, knowledge from Midjourney is transferred to Openjourney without explicit compositional inclusion. 
 Therefore, the representation should consider the multifarious dependencies present within ML projects.
 
@@ -49,22 +49,22 @@ Therefore, the representation should consider the multifarious dependencies pres
 A common case in the OSS field is that republishing Software as a Service (SaaS) is considered to convey a \emph{derivative} under AGPL-3.0 but has \emph{no definition} under GPL-3.0. 
 Therefore, terms like \emph{derivative} and \emph{independent} should be contextualized within specific licenses, and our representation should be capable of reflecting such meanings.
 
-Therefore, we propose the MG Vocabulary to describe the properties and classes in an ML workflow.
-For the flexibility issue \ding{172}, we use the following terms to abstract key concepts in the workflow:
+Therefore, we propose the MG Vocabulary to describe the properties and classes within ML workflows.
+For the flexibility issue \ding{172}, we use the following terms to abstract key concepts of ML workflows:
 
 \textbf{Work}: Represents the components (e.g., models, datasets), each with a unique Type and Form. 
-A work can have a license assigned through a Register License action, or its license can be determined through rules applied in the Reasoning Stage (see Figure~\ref{fig:framework}).
+A work can have a license assigned through a Register License Action, or its license can be determined through rules applied in the Reasoning Stage (ref Figure~\ref{fig:framework}).
 
 \textbf{Action}: Represents operations performed on a Work, including Modify, Train and Combine, etc. 
 In practice, we broaden the definition of these operations to make the vocabulary adaptable to different types of works. (See Table~\ref{tab:action} for more details.)
 
 \textbf{Work Type}: Includes software, dataset, model, and mixed-type. It is used to describe both the nature of the work and to identify the types of materials intended by a license. 
-We use this information to detect any mismatch between the work type and the license.
+We utilize this information to detect mismatches between a work's type and its license.
 
 \textbf{Work Form}: Divided into three subclasses: Raw, Binary, and Service to provide flexibility. 
-For example, source code, model weights, and corpus fall under Raw; compiled programs are considered Binary; and services like SaaS or online chat LLMs are categorized as Service.
+For example, source code, model weights, and corpus fall under Raw; compiled programs are considered Binary; and SaaS or online chat LLMs are categorized as Service.
 Additionally, three general terms are offered: raw-form, binary-form, and service-form, which can work in conjunction with the work type. 
-This approach helps represent situations that lack a formal ontology, such as "a dataset published as a service".
+This approach helps represent concepts that lack a formal designation, such as "a dataset published as a service".
 We use mixed-form to represent the cases involving collections of works.
 
 \textbf{LicenseInfo}: This contains the essential license information derived from conditions, including the license name, ID, intended types of works, whether it is copyleft or permissive, as well as granted and reserved rights, etc.
@@ -75,10 +75,10 @@ In this base workflow, the derived input and output of each Action can be repres
 These placeholders will be populated by reasoning the output yielded by the previous action and the input for the current action, respectively.
 
 For dependency issues discussed in \ding{173} and \ding{174}, we identify three potential types of dependencies in an ML project: \textbf{compositional, definition, and rights-using}. These dependencies are visually represented by different colored dashed arrows in Figure~\ref{fig:wf}.
-\emph{Compositional dependencies} are categorized into four types: Mixwork, Subwork, Auxwork, and Provenance, each representing the containment relationships between input and output works.
+\emph{Compositional dependencies} are categorized into four types: \emph{Mixwork}, \emph{Subwork}, \emph{Auxwork}, and \emph{Provenance}, each representing the containment relationships between input and output works.
 For example, when the output work includes the input work or a part of it, the input is considered the Mixwork of the output. 
 This type of dependency is vital for license analysis because all actions performed on the output work, including any rights usage, will proliferate to the Mixwork components.
-For instance, when fine-tuning a MoE model, the fine-tuning operation will cascade to all submodels. 
+For instance, when fine-tuning an ensemble model~\cite{furlanello2018born}, the fine-tuning operation will cascade to all submodels. 
 Consequently, the license terms related to fine-tuning for each submodel are triggered, meaning that any constraints or rights imposed on the submodels must be honored. 
 Additionally, if a work includes Mixworks in different forms, such as code and weights, we need to generalize the output's form to raw-form to accommodate these variations.
 A similar approach applies to the work type as well.
@@ -88,15 +88,15 @@ Provenance is specifically used for the Register License action to indicate that
 
 The \emph{definition dependencies} represent the relationships between works based on the definitions established by their licenses. 
 For example, if a new work is created by modifying GPL-licensed code, that modification is considered a \emph{derivative} of the original work.
-These dependencies should be understood in the context of the original license and can extend to subsequent actions if the same conditions are activated again.
+These dependencies should be understood in the context of the original license and can extend to subsequent actions if the same conditions are activated again (e.g., a \emph{derivative} of a \emph{derivative} is likely still a \emph{derivative}).
 These dependencies are the main factor in determining the applicable license and restrictions for the output work. 
-For example, under GPL-3.0, the republication of \emph{derivatives} must apply the same license.
-Additionally, a work may have multiple definition dependencies in a complex workflow, and these dependencies should be simultaneously satisfied (if possible; otherwise, an error should be reported) during license determination.
+For example, if the original work is under GPL-3.0, the republication of \emph{derivatives} must also apply the GPL-3.0 license.
+Additionally, a work may have multiple definition dependencies in a complex workflow, and these dependencies should be simultaneously satisfied during license determination (if possible; otherwise, an error should be reported).
 The corresponding implementation in the MG Analyzer is illustrated in the Reasoning Stage of Figure~\ref{fig:framework}. 
 New instance nodes called \emph{Ruling} are created to track the definition dependencies and triggered rules for each work, determining their applicable licenses in an alternating manner.
 
 The \emph{rights-using dependencies} describe the rights that must be granted for actions performed on works. 
-For example, when executing a training action on a model, it requires the rights to \emph{use} and \emph{modify} (termed as Usage in MG vocabulary) from the model's license\footnote{~An example of such rights granting can be found in the Llama2 Community License~\cite{meta2024llama2}, which states, "You are granted a ... to use, reproduce, distribute, copy, create derivative works of, and make modifications to the Llama Materials.}.
+For example, when executing a Train action on a model, it requires the rights to \emph{use} and \emph{modify} (termed as \emph{Usage} in MG Vocabulary) from the model's license\footnote{~An example of such rights granting can be found in the Llama2 Community License, which states, "You are granted a ... to use, reproduce, distribute, copy, create derivative works of, and make modifications to the Llama Materials.}.
 Similarly, the rights-using dependencies should proliferate according to compositional dependencies.
 For instance, the requirement to \emph{modify} a model extends to all its submodels.
 In the MG Analyzer, we create new nodes called \emph{Request} to represent this dependency.
@@ -113,7 +113,7 @@ To facilitate automated reasoning for these dependencies, the next step is to de
 \begin{figure}[t]
     \centering
     \includegraphics[width=\linewidth]{fig/wf.pdf}
-    \caption{A Typical ML Workflow Represented by MG Analyzer. Dashed arrows with different colors indicate the properties related to three kinds of dependencies: \textcolor{Construct}{compositional}, \textcolor{Ruling}{definition}, and \textcolor{Request}{rights-using} dependencies.}
+    \caption{A Typical ML Workflow Represented by MG Analyzer. Dashed arrows with different colors indicate properties related to three types of dependencies: \textcolor{Construct}{compositional}, \textcolor{Ruling}{definition}, and \textcolor{Request}{rights-using} dependencies.}
     \Description{}
     \label{fig:wf}
 \end{figure}
@@ -122,7 +122,7 @@ To facilitate automated reasoning for these dependencies, the next step is to de
 \label{sec:rule}
 
 \begin{table}[t]
-    \caption{List of Supported Actions in MG Analyzer Following Rule Alignment. The symbols $=$ and $\approx$ denote that the Types/Forms of output work and input work are the same and may differ, respectively. The corresponding license terms in \textcolor{Construct}{OSS}, \textcolor{Ruling}{Free-content}, and \textcolor{Request}{Model} for each action are listed. }
+    \caption{Supported Actions in MG Analyzer Following Rule Alignment. The symbols $=$ and $\approx$ indicate that the Type/Form of output work and input work are the same and may differ, respectively. The corresponding \textcolor{Construct}{OSS}, \textcolor{Ruling}{Free-content}, and \textcolor{Request}{Model} license terms for each action are listed. }
     \tiny
     \label{tab:action}
     \begin{tabular}{|p{0.8cm}|c|c|p{3.6cm}|p{1.5cm}|}
@@ -151,7 +151,7 @@ To facilitate automated reasoning for these dependencies, the next step is to de
 \end{table} 
 
 Typically, licenses are designed to govern the use and distribution of specific types of works. 
-For example, the GPL-3.0 is tailored for source code and object code, while CC licenses focus on literary, musical, and artistic works. 
+For example, GPL-3.0 is tailored for source code and object code, while CC licenses focus on literary, musical, and artistic works. 
 As a result, it is challenging to map their rules within a unified framework for logical reasoning.
 Meanwhile, many ML projects actually incorporate non-standard licensing components, as mentioned in Section~\ref{sec:intro}.
 If we consider these claimed licenses to be invalid, then they would not pose any license compliance issues.
@@ -165,12 +165,12 @@ For instance, we expand the license terms of GPL-3.0 concerning source code to i
 In this way, we can extend the scope of interpretation of GPL-3.0 to cover models and datasets.
 
 The second generalization is called \emph{composition-based rule alignment}, which aims to resolve the pervasive ambiguities across different licensing frameworks. 
-This ambiguity often arises in non-standard scenarios, for example, when licensing a model under GPL-3.0, it may be unclear whether \emph{model aggregation} (a technology used in federated learning~\cite{li2021model}) triggers the "Aggregate" clause in GPL-3.0.
+This ambiguity often arises in non-standard scenarios, for example, when licensing a model under GPL-3.0, it may be unclear whether \emph{Model Aggregation} (a technology used in federated learning~\cite{li2021model}) triggers the "Aggregate" clause in GPL-3.0.
 Therefore, we propose a composition-based method to align these rules. 
 Specifically, we generalize the concept of action to represent the compositional relationships between input and output. 
 For instance, the action \emph{Combine} signifies that the input work has been entirely included in the output work without modification. 
 This action corresponds to terms such as "Link" and "Aggregate" in software licenses, "Collection" in CC licenses, and "MoE" in model licenses.
-In the case of \emph{model aggregation}, which produces an output that contains parts of the input works and is difficult to separate, it is not considered a \emph{Combine}. Consequently, according to our rule alignment, it will not activate the "Aggregate" clause in GPL-3.0.
+In the case of \emph{Model Aggregation}, which produces an output that contains parts of the input and is difficult to separate, it is not considered a \emph{Combine}. Consequently, according to our rule alignment, it will not activate the "Aggregate" clause in GPL-3.0.
 
 The complete rule alignment method utilized in the MG Analyzer can be found in Table~\ref{tab:action}.
 It is worth mentioning that the meanings of these actions have been broadened and may differ from their original definitions. 
@@ -178,17 +178,17 @@ In some cases, multiple actions may align with the same license terms.
 For instance, the license term "Modify" can align with both the actions \emph{Modify} and \emph{Amalgamate}, as such licenses do not distinguish the extent of changes made or whether those changes can be reverted.
 
 The final aspect is \emph{applicable term generalization}, where we encode the triggering conditions of a license term into the following properties: range of input work forms, range of output work forms, and types of actions.
-Figure~\ref{fig:mgrule} illustrates an example of the GPL-3.0 derivatives rule\footnote{~The original GPL-3.0 license text reads: "You may convey a work based on the Program ... in the form of source code ... provided that you also meet all of these conditions: ... stating that you modified it ... it is released under this License ... keep intact all notices ... license the entire work, as a whole, under this License ..." .}, which represents the Combine action applied to input and output works in code format. 
-This action triggers the "derivative" clause in GPL-3.0, indicating that the license of the output work must be compatible with GPL-3.0 (e.g., APGL-3.0). Additionally, five restrictions apply to the output work if it is to be republished, as dictated by this \emph{definition dependency}.
+Figure~\ref{fig:mgrule} illustrates an example of the GPL-3.0 derivatives rule\footnote{~The original GPL-3.0 license text reads: "You may convey a work based on the Program ... in the form of source code ... provided that you also meet all of these conditions: ... stating that you modified it ... it is released under this License ... keep intact all notices ... license the entire work, as a whole, under this License ..." .}, which represents the Combine action applied to input works in code format, resulting in a code output.
+This action triggers the "derivative" clause in GPL-3.0, indicating that the license of the output work must be compatible with GPL-3.0 (e.g., APGL-3.0). Additionally, five restrictions must apply to the output work if it is to be republished, as dictated by this \emph{definition dependency}.
 This rule does not include any \emph{Use Restrictions}, which apply to output works regardless of whether they are republished. 
 We found this subtle distinction to be crucial in ML license analysis, as most OSS license terms are triggered by distribution, and their definitions of "distribution" typically exclude publishing as a service. 
-However, in the case of models, the common deployment method is through a web interface,  leading to many OSS license restrictions being circumvented in such scenarios.
+However, in the case of models, the common deployment method is through a web interface,  leading to many OSS license restrictions being circumvented in such scenarios (ref Section~\ref{sec:case}).
 
-Furthermore, multiple rules may lead to the same output definition, and we also provide the option of \emph{fuzz form matching} within the rules to enhance the interpretive capabilities of the MG Analyzer.
-It is worth mentioning that the reasoning behind the restrictions derived from the rules requires further analysis for validation. 
-Taking the rule in Figure~\ref{fig:mgrule} as an example, whether the final work remains in a Raw form determines whether the warnings about disclosing code should be reported.
+Furthermore, multiple rules may lead to the same output definition, and we provide the option of \emph{fuzz form matching} by enabling \emph{fuzz rules} to enhance the interpretive capabilities of the MG Analyzer.
+It is worth mentioning that the reasoning results behind the restrictions derived from these rules require further analysis for validation.
+Taking the rule in Figure~\ref{fig:mgrule} as an example,  the presence of additional discrimination terms in the final work that violate GNU freedom~\cite{greenbaum2016the} dictates whether errors related to GNU freedom conflicts should be reported.
 We present snippets of our encoded rules written in Turtle format in Appendix~\ref{apdx:rules}.
-The list of supported licenses, whose terms have been encoded in MG Analyzer, is shown in Table~\ref{tab:licenses}, covering nearly all top-ranking licenses for published models on HuggingFace\footnote{~\url{https://huggingface.co/models}}.
+The list of supported licenses, whose terms have been encoded in MG Analyzer, is shown in Table~\ref{tab:licenses}, covering nearly all top-ranking licenses for published models on HuggingFace\footnote{~\url{https://huggingface.co/models}}, a popular model publishing platform.
 
 \begin{figure}[t]
     \centering
@@ -198,11 +198,11 @@ The list of supported licenses, whose terms have been encoded in MG Analyzer, is
     \label{fig:mgrule}
 \end{figure}
 
-With the MG Vocabulary, the base ML workflow with compositional dependencies, and encoded license rules, we can reason to derive the definition and rights-using dependencies, thereby determining the applicable licenses for intermediate works. 
-The license determination in the MG Analyzer follows an incremental and minimal non-compliance strategy, where the new license only applies to the incremental parts of the work without affecting the original work (a common practice in licensing). 
-Furthermore, to avoid introducing additional compliance issues during analysis, we use the \emph{Unlicense} as the default when applicable.
+With MG Vocabulary, the ML workflow with compositional dependencies, and encoded license rules, we can reason to derive the definition and rights-using dependencies, thereby determining the applicable licenses for intermediate works. 
+The license determination in the MG Analyzer follows an incremental and minimal noncompliance strategy, where the new license only applies to the incremental parts of the work without affecting the original work (a common practice in licensing). 
+Furthermore, to avoid introducing additional compliance issues during analysis, we use \emph{Unlicense} as the default license when applicable.
 However, an exception arises with the license proliferation clauses found in copyleft licenses, such as GPL-3.0 and OSL-3.0, which require that the entire new work be licensed under the same terms. 
-Our analyzer incorporates reasoning logic to identify applicable licensing solutions (a snippet of logic in Notation3 can be found in Appendix~\ref{apdx:rules}), but unresolved conflicts may occur if multiple copyleft clauses are triggered. 
+Our analyzer incorporates reasoning logic to identify applicable licensing solutions (a snippet of logic can be found in Appendix~\ref{apdx:rules}), but unresolved conflicts may occur if multiple copyleft clauses are triggered. 
 In such cases, the MG Analyzer will select one of these copyleft licenses and report an error during the Analysis Stage.
 
 % In addition, some ML concepts have no definition in other licensing framework but The latter has clause toward 
@@ -213,7 +213,7 @@ In such cases, the MG Analyzer will select one of these copyleft licenses and re
 \label{sec:analysis}
 
 \begin{table}[tp]
-    \caption{List of \textcolor{Ruling}{Notices}, \textcolor{Construct}{Warnings}, and \textcolor{Request}{Errors} reported by MG Analyzer. The triggered work is denoted as ?work. }
+    \caption{List of \textcolor{Ruling}{Notices}, \textcolor{Construct}{Warnings}, and \textcolor{Request}{Errors} Reported by MG Analyzer. The triggered work is denoted as ?work. }
     \scriptsize
     \label{tab:report}
     \begin{tabular}{|c|p{2.25cm}|p{4.6cm}|}

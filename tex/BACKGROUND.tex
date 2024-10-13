@@ -17,7 +17,7 @@ Furthermore, the crowd-sourced nature of ML components may also lead to over-per
 For these reasons, license compliance issues in the ML field remain nearly unexplored. Rajbahadur \textit{et al.}~\cite{rajbahadur2021can} investigated license provenance issues in ML datasets and found instances of non-compliance between their licenses and the licenses of their data sources.
 Building on these findings, Duan \textit{et al.}~\cite{duan2024modelgo} proposed a tool that analyzes conflicts directly based on the licenses of data sources and provided guidelines to minimize such conflicts.
 However, their tool is limited to generating analysis reports and lacks the ability to visualize and exchange ML workflows, making it difficult to extend or integrate external resources from the web (e.g., linking to another workflow via URI).
-Therefore, in this work, we propose an ontology describing ML workflows using RDF graphs, making it both extensible and linkable, and then analyze license compliance through an automated reasoning engine.
+Therefore, in this work, we propose an ontology describing ML workflows using RDF graphs (a visualized workflow is provided in Appendix~\ref{apdx:grapher}), making it both extensible and linkable, and then analyze license compliance through an automated reasoning engine.
 
 \subsection{Model Licensing}
 Today, we have many OSS licenses to accommodate diverse publishing scenarios~\cite{rosen2005open}. However, do they still function as intended in model publishing scenarios? The answer is no. While these licenses aim to govern the use and distribution of software, they lack definitions of ML concepts, which compromises their effectiveness (ref. Section~\ref{sec:license}).

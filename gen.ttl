@@ -1,20 +1,55 @@
 @prefix : <http://example.org/ns#> .
 @prefix mg: <http://www.modelgo.li/rdf/terms#> .
 
+:reg1 a mg:RegisterLicense ;
+    mg:actionId "reg1" ;
+    mg:hasInput [ mg:targetLicense mg:CC-BY-ND-4.0 ;
+            mg:targetWork :FreeLaw ] ;
+    mg:yieldAuxWork :gen5 .
+
 :reg2 a mg:RegisterLicense ;
     mg:actionId "reg2" ;
+    mg:hasInput [ mg:targetLicense mg:GPL-3.0 ;
+            mg:targetWork :CKIP-Transformers ] ;
+    mg:yieldOutputWork :combine4 .
+
+:reg3 a mg:RegisterLicense ;
+    mg:actionId "reg3" ;
     mg:hasInput [ mg:targetLicense mg:AGPL-3.0 ;
             mg:targetWork :PhoBERT ] ;
-    mg:yieldOutputWork :publish3 .
+    mg:yieldOutputWork :combine4 .
+
+:CKIP-Transformers a mg:work ;
+    mg:hasWorkForm mg:weights ;
+    mg:hasWorkType mg:model ;
+    mg:workName "CKIP-Transformers" .
+
+:FreeLaw a mg:work ;
+    mg:hasWorkForm mg:literary ;
+    mg:hasWorkType mg:dataset ;
+    mg:workName "FreeLaw" .
 
 :PhoBERT a mg:work ;
     mg:hasWorkForm mg:weights ;
     mg:hasWorkType mg:model ;
     mg:workName "PhoBERT" .
 
-:publish3 a mg:Publish ;
-    mg:actionId "publish3" ;
+:publish6 a mg:Publish ;
+    mg:actionId "publish6" ;
     mg:hasInput [ mg:targetPublishPolicy mg:sell ;
-            mg:targetWorkForm mg:service-form ] ;
+            mg:targetWorkForm mg:literary ] ;
     mg:hasOutput [ ] .
+
+:combine4 a mg:Combine ;
+    mg:actionId "combine4" ;
+    mg:hasInput [ ] ;
+    mg:hasOutput [ ] ;
+    mg:yieldOutputWork :gen5 .
+
+:gen5 a mg:Generate ;
+    mg:actionId "gen5" ;
+    mg:hasInput [ mg:targetWorkForm mg:raw-form ;
+            mg:targetWorkType mg:dataset ] ;
+    mg:hasOutput [ ] ;
+    mg:yieldOutputWork :publish6 .
 

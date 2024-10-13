@@ -35,7 +35,7 @@ free_law_text = register_license(Work('FreeLaw', 'dataset', 'literary'), target_
 # bert_model = register_license(Work('BERT', 'model', 'weights'), target_license='Apache-2.0') # Text, https://huggingface.co/bert-base-uncased
 # bloom_model = register_license(Work('BLOOM', 'model', 'weights'), target_license='OpenRAIL-M') # Text Generation, https://huggingface.co/bigscience/bloom
 # llama2_model = register_license(Work('Llama2', 'model', 'weights'), target_license='Llama2') # Text Generation, https://huggingface.co/meta-llama/Llama-2-7b
-#ckip_model = register_license(Work('CKIP-Transformers', 'model', 'weights'), target_license='GPL-3.0') # Text Generation, https://github.com/ckiplab/ckip-transformers
+ckip_model = register_license(Work('CKIP-Transformers', 'model', 'weights'), target_license='GPL-3.0') # Text Generation, https://github.com/ckiplab/ckip-transformers
 phobert_model = register_license(Work('PhoBERT', 'model', 'weights'), target_license='AGPL-3.0') # Text Generation, https://huggingface.co/vinai/phobert-base-v2
 #mptchart_model = register_license(Work('MPT-Chat', 'model', 'weights'), target_license='CC-BY-NC-SA-4.0') # Text Generation, https://huggingface.co/mosaicml/mpt-7b-chat
 #commandr_model = register_license(Work('C4AI-Command-R+', 'model', 'weights'), target_license='CC-BY-NC-4.0') # Text Generation, https://huggingface.co/CohereForAI/c4ai-command-r-plus-08-2024
@@ -52,7 +52,7 @@ phobert_model = register_license(Work('PhoBERT', 'model', 'weights'), target_lic
 #flow = combine([ckip_model, phobert_model])
 #flow = combine([mptchart_model, commandr_model])
 
-#flow = generate(combine([ckip_model, phobert_model]), aux_flows=[free_law_text])
+flow = generate(combine([ckip_model, phobert_model]), aux_flows=[free_law_text])
 #flow = generate(combine([mptchart_model, commandr_model]), aux_flows=[free_law_text])
 
 #flow = phobert_model
@@ -60,10 +60,10 @@ phobert_model = register_license(Work('PhoBERT', 'model', 'weights'), target_lic
 #flow = generate(phobert_model, aux_flows=[free_law_text])
 #flow = mgbyos_model
 #flow = mgbync_model
-flow = phobert_model
+#flow = phobert_model
 
-#flow = publish(flow, form='literary', policy = 'sell') # literary/service-form
-flow = publish(flow, form='service-form', policy = 'sell') # literary/service-form
+flow = publish(flow, form='literary', policy = 'sell') # literary/service-form
+#flow = publish(flow, form='service-form', policy = 'sell') # literary/service-form
 # Save the gen graph to a new Turtle file
 flow.graph.serialize(destination="gen.ttl", format="ttl")
 

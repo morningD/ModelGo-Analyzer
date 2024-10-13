@@ -92,11 +92,11 @@ These dependencies should be understood in the context of the original license a
 These dependencies are the main factor in determining the applicable license and restrictions for the output work. 
 For example, if the original work is under GPL-3.0, the republication of \emph{derivatives} must also apply the GPL-3.0 license.
 Additionally, a work may have multiple definition dependencies in a complex workflow, and these dependencies should be simultaneously satisfied during license determination (if possible; otherwise, an error should be reported).
-The corresponding implementation in the MG Analyzer is illustrated in the Reasoning Stage of Figure~\ref{fig:framework}. 
+The corresponding implementation in the MG Analyzer is illustrated in the \emph{Reasoning Stage} of Figure~\ref{fig:framework}. 
 New instance nodes called \emph{Ruling} are created to track the definition dependencies and triggered rules for each work, determining their applicable licenses in an alternating manner.
 
 The \emph{rights-using dependencies} describe the rights that must be granted for actions performed on works. 
-For example, when executing a Train action on a model, it requires the rights to \emph{use} and \emph{modify} (termed as \emph{Usage} in MG Vocabulary) from the model's license\footnote{~An example of such rights granting can be found in the Llama2 Community License, which states, "You are granted a ... to use, reproduce, distribute, copy, create derivative works of, and make modifications to the Llama Materials.}.
+For example, when executing a Train action on a model, it requires the rights to \emph{use} and \emph{modify} (termed as \emph{Usage} in MG Vocabulary) from the model's license\footnote{~An example of such rights granting can be found in the Llama 2 Community License, which states, \emph{"You are granted a ... to use, reproduce, distribute, copy, create derivative works of, and make modifications to the Llama Materials."}.}.
 Similarly, the rights-using dependencies should proliferate according to compositional dependencies.
 For instance, the requirement to \emph{modify} a model extends to all its submodels.
 In the MG Analyzer, we create new nodes called \emph{Request} to represent this dependency.
@@ -178,7 +178,7 @@ In some cases, multiple actions may align with the same license terms.
 For instance, the license term "Modify" can align with both the actions \emph{Modify} and \emph{Amalgamate}, as such licenses do not distinguish the extent of changes made or whether those changes can be reverted.
 
 The final aspect is \emph{applicable term generalization}, where we encode the triggering conditions of a license term into the following properties: range of input work forms, range of output work forms, and types of actions.
-Figure~\ref{fig:mgrule} illustrates an example of the GPL-3.0 derivatives rule\footnote{~The original GPL-3.0 license text reads: "You may convey a work based on the Program ... in the form of source code ... provided that you also meet all of these conditions: ... stating that you modified it ... it is released under this License ... keep intact all notices ... license the entire work, as a whole, under this License ..." .}, which represents the Combine action applied to input works in code format, resulting in a code output.
+Figure~\ref{fig:mgrule} illustrates an example of the GPL-3.0 derivatives rule\footnote{~The original GPL-3.0 license text reads: \emph{"You may convey a work based on the Program ... in the form of source code ... provided that you also meet all of these conditions: ... stating that you modified it ... it is released under this License ... keep intact all notices ... license the entire work, as a whole, under this License ..."} .}, which represents the Combine action applied to input works in code format, resulting in a code output.
 This action triggers the "derivative" clause in GPL-3.0, indicating that the license of the output work must be compatible with GPL-3.0 (e.g., APGL-3.0). Additionally, five restrictions must apply to the output work if it is to be republished, as dictated by this \emph{definition dependency}.
 This rule does not include any \emph{Use Restrictions}, which apply to output works regardless of whether they are republished. 
 We found this subtle distinction to be crucial in ML license analysis, as most OSS license terms are triggered by distribution, and their definitions of "distribution" typically exclude publishing as a service. 
@@ -193,7 +193,7 @@ The list of supported licenses, whose terms have been encoded in MG Analyzer, is
 \begin{figure}[t]
     \centering
     \includegraphics{fig/mgrule.pdf}
-    \caption{Example of a Generalized GPL-3.0 Derivatives Rule in MG Analyzer.}
+    \caption{The Example of a Generalized GPL-3.0 Derivatives Rule in MG Analyzer.}
     \Description{}
     \label{fig:mgrule}
 \end{figure}
@@ -203,7 +203,7 @@ The license determination in the MG Analyzer follows an incremental and minimal 
 Furthermore, to avoid introducing additional compliance issues during analysis, we use \emph{Unlicense} as the default license when applicable.
 However, an exception arises with the license proliferation clauses found in copyleft licenses, such as GPL-3.0 and OSL-3.0, which require that the entire new work be licensed under the same terms. 
 Our analyzer incorporates reasoning logic to identify applicable licensing solutions (a snippet of logic can be found in Appendix~\ref{apdx:rules}), but unresolved conflicts may occur if multiple copyleft clauses are triggered. 
-In such cases, the MG Analyzer will select one of these copyleft licenses and report an error during the Analysis Stage.
+In such cases, the MG Analyzer will select one of these copyleft licenses and report an error during the \emph{Analysis Stage}.
 
 % In addition, some ML concepts have no definition in other licensing framework but The latter has clause toward 
 
@@ -261,7 +261,7 @@ In such cases, the MG Analyzer will select one of these copyleft licenses and re
 
     E8 &\textcolor{Request}{CC Freedom Conflict} & The additional terms applied in this work may violate the CC freedom clauses of ?work. \\ \hline
 
-    E9 &\textcolor{Request}{Llama2/3 Exclusive} & Using Llama2/3's output in non-Llama2/3 derivatives is prohibited. \\ \hline
+    E9 &\textcolor{Request}{Llama 2/3 Exclusive} & Using Llama 2/3's output in non-Llama 2/3 derivatives is prohibited. \\ \hline
 
     E10 &\textcolor{Request}{Exclusive License} & The additional terms applied in this work are prohibited by the license of ?work. \\ \hline
 
@@ -278,5 +278,5 @@ For instance, if we publish the final work for sale, the related licenses should
 Appendix~\ref{apdx:rules} presents the logic code for rights granting analysis, and the full list of reported notices, warnings, and errors is shown in Table~\ref{tab:report}.
 Due to its staged logic rule reasoning design, MG Analyzer has considerable extensibility, enabling the incorporation of additional licenses and analysis targets, provided that it can reason based on our proposed dependencies information.
 Beyond compliance analysis, our vision is to promote ML workflow supply chain management and improve FAIRness~\cite{wilkinson2016fair} in model publishing. 
-We position our vocabulary and tool as a first step toward a linked open model production data.
+We position our vocabulary and tool as a first step toward Linked Open Model Production Data~\cite{bizer2008linked}.
 

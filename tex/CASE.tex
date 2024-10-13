@@ -22,7 +22,7 @@ To be more convincing, we use real-world models and their respective licenses fo
     \footnotesize
     \begin{tabular}{|ll|}
     \hline \rowcolor[gray]{.8}
-    \multicolumn{1}{|l|}{Work: License} & Work: Report code. \\ \hline
+    \multicolumn{1}{|l|}{\textbf{Work: License}} & \textbf{Work: Report code} \\ \hline
     \multicolumn{1}{|p{3.2cm}|}{(i) C: AGPL-3.0. D: Unlicense. \newline (ii) D: Unlicense } & \multicolumn{1}{p{4.5cm}|}{ (i) E: N1N2N3$\times$2; \textbf{W5}$\times$2; W1$\times$3. F: W1$\times$3. \newline (ii) E: W1$\times$2. F: W1.} \\ \hline
     \multicolumn{2}{|p{8cm}|}{\textbf{OSS License Setting:} \newline
     (i) A$\leftarrow$PhoBERT~\cite{nguyen2020phobert}: AGPL-3.0. B$\leftarrow$CKIP-Transformers~\cite{lin2022hantrans}: GPL-3.0. \newline
@@ -59,11 +59,11 @@ In setting (iv), the non-commercial use error E5 is reported by the generated Wo
 As a model license, we do not enforce licensing on generated content, allowing Work D to be licensed under the Unlicense, albeit with certain restrictions.
 A summary of the rights granted and restrictions imposed by these licenses can be found in their \emph{Model Sheet} provided in Appendix~\ref{apdx:model_sheet}.
 
-It is worth mentioning that all results were obtained with fuzzy form matching enabled, maximizing the detection of potential risks.
+It is worth mentioning that all results were obtained with \emph{fuzzy form matching} enabled, maximizing the detection of potential risks.
 If these \emph{fuzz rules} were disabled, fewer issues would be reported. 
 Furthermore, our MG Analyzer is designed to help developers be aware of potential compliance issues in ML projects. 
 Its results should not be considered legal advice or a defense in dispute resolution. Please refer to our disclaimers in Appendix~\ref{apdx:disclamers}.
 
-\begin{tcolorbox}
+\begin{tcolorbox}[boxrule=0.2mm, boxsep=1mm, left=0mm, right=0mm, top=0.1mm, bottom=0.1mm]
     \textbf{Summary}: GPL, AGPL, and CC licenses can be easily circumvented, leading to unintended misuse of the ML models they govern. In contrast, MG Licenses offer greater clarity and flexibility tailored to various publishing scenarios, promoting a more standardized and transparent approach to model licensing.
 \end{tcolorbox}

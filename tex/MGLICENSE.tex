@@ -1,4 +1,4 @@
-\section{MG Licenses}
+\section{MG Licenses and Comparison Results}
 \label{sec:license}
 
 \begin{table*}[tp]
@@ -140,7 +140,7 @@ The statistical results of a previous study~\cite{duan2024modelgo} support part 
 
 To reveal the underlying dilemmas in model licensing, we provide comprehensive comparisons of these licenses in Table~\ref{tab:licenses}.
 Based on the terms of these licenses, we evaluated each license's clarity score and freedom score, each encompassing sub-items as defined in the table.
-A higher clarity score indicates that the license is more clearly defined in model publishing scenarios, while a higher freedom\footnote{~Our freedom score reflects only the amount of restrictions stipulated in a license and should not be confused with the definitions of freedom in free software~\cite{perens1999open}.} score signifies fewer restrictions on republished copies and derivatives.
+A higher clarity score indicates that the license is more clearly defined in model publishing scenarios, while a higher freedom\footnote{~Our freedom score reflects only the amount of restrictions stipulated in a license and should not be confused with the definitions of "Freedom" in free software~\cite{perens1999open}.} score signifies fewer restrictions on republished copies and derivatives.
 The significant findings are summarized below:
 
 \ding{172} \textbf{For OSS licenses}, most are not well defined in the context of model publishing, primarily due to the absence of clauses addressing ML activities (Rules) and the lack of coverage for publishing as a service (Remote).
@@ -149,7 +149,7 @@ Additionally, commercial use and behavioral restrictions are not stipulated in m
 
 \ding{173} \textbf{For free-content and dataset licenses}, their average clarity score is only slightly better than that of OSS licenses, and they also lack coverage for publishing as a service.
 However, some CC licenses, such as CC-BY-NC-4.0, offer additional options that prohibit the commercial use of the work, unlike OSS licenses. 
-This may explain why many models are published under these licenses\footnote{~There are 9659 models on HuggingFace licensed under CC-BY-NC-4.0 (more than Llama 2), and 668 of them have garnered 1k+ downloads (accessed on October 8, 2024).}, despite the fact that they were not originally drafted for models.
+This may explain why many models are published under these licenses\footnote{~There are 9,730 models on HuggingFace licensed under CC-BY-NC-4.0 (more than Llama 2), and 770 of them have garnered 1k+ downloads, please ref to Appendix~\ref{apdx:count}.}, despite the fact that they were not originally drafted for models.
 
 \ding{174} \textbf{For model licenses}, aside from the proposed MG licenses, most model licenses are not intended for general publishing purposes. 
 For example, the terms in Llama 2 license is specifically drafted to govern the Llama 2 model and its derivatives\footnote{For example, Clause 1.v. of the Llama 2 license reads: \emph{"You will not use the Llama Materials or any output or results of the Llama Materials to improve any other large language model (excluding Llama 2 or derivative works thereof)."}.}, failing to meet reusable standards.
@@ -162,7 +162,7 @@ As reflecting in Table~\ref{tab:licenses}, our licenses include specific definit
 Most importantly, following the philosophy of CC licenses, MG Licenses are designed to be flexible and easy to use, offering five options to accommodate various publishing scenarios.
 The options include: BY (Attribution), NC (Non-Commercial), ND (No Derivatives), RAI (Responsible Use of AI), and OS (Open Source)\footnote{~At the time of writing, the Open Source Initiative has only released a draft v. 0.0.9 version of the Open Source AI definition, and our MG licenses with the OS option are not OSI-approved at present.}.
 We drafted nine preset licenses using these options, including MG0, which does not apply any options.
-The flexibility of our licenses is reflected in table~\ref{tab:licenses}, where their freedom scores are evenly distributed between 3.5 and 8.5, indicating that they form a superset of all other model licenses\footnote{~AI2-ImpACT-MR and AI2-ImpACT-HR prohibit sharing copies, we do not consider such restrictions to be common in model publishing, so we have excluded them. For further details, refer to Figure~\ref{fig:license} in Appendix~\ref{apdx:model_sheet}.}.
+The flexibility of our licenses is reflected in table~\ref{tab:licenses}, where their freedom scores are evenly distributed between 3.5 and 8.5, indicating that they form a superset of all other model licenses\footnote{~AI2-ImpACT-MR and AI2-ImpACT-HR prohibit sharing copies, we do not consider such restrictions to be common in model publishing, so we have excluded them. For details on how to substitute other licenses with MG licenses, refer to Appendix~\ref{apdx:model_sheet}.}.
 To promote transparency, we introduced a \emph{Model Sheet} as an attachment to each MG License, inspired by MDL~\cite{benjamin2019towards}. 
 This sheet assists model users in understanding the rights and restrictions granted by the license terms and helps model developers identify the most suitable license for their needs (ref Appendix~\ref{apdx:model_sheet}).
 

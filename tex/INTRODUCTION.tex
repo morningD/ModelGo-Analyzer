@@ -33,16 +33,16 @@ The main contributions of our paper are:
     \item We identified the challenges of license compliance and model licensing in ML projects.
     %and conduct a comprehensive analysis of the deficiencies in current model publishing practices.
     
-    \item We developed MG Analyzer based on semantic technologies to enable automated reasoning for license analysis in ML projects. 
-    It incorporates a dedicated vocabulary capable of describing ML workflows with complex dependencies and the rules of OSS, data, and model licenses. 
+    \item We developed MG Analyzer using semantic technologies to automate license analysis in ML projects.
+    It includes a vocabulary for describing ML workflows with dependencies and license rules.
     We also provide a interface to convert user-input workflow descriptions into RDF graphs following this vocabulary. 
-    Based on these graphs, MG Analyzer constructs dependencies, performs reasoning, and detects potential license conflicts.
+    Users can convert workflow descriptions into RDF graphs, enabling the tool to construct dependencies, reason, and detect license conflicts.
     \item We drafted a set of model licenses called MG Licenses to promote more standardized model publishing. These licenses are well-defined and cover a complete spectrum of model publishing scenarios. Furthermore, we have integrated support for MG Licenses within MG Analyzer.
     \item To the best of our knowledge, MG Analyzer and Licenses represent the first attempt at standardizing model publishing. The proposed code and license drafts are available at (link temporarily hidden due to double-blind policy).
 \end{itemize}
 
 The rest of the paper is organized as follows.
-Section~\ref{sec:related} presents the motivation for this work, drawing on related studies and background.
+Section~\ref{sec:related} presents background and related studies.
 Section~\ref{sec:analyzer} introduces our proposed vocabulary for workflow descriptions and the license analysis tool.
 Section~\ref{sec:license} offers a comprehensive comparison of commonly used licenses and briefly outlines the advantages of the new model licenses we propose.
 Section~\ref{sec:case} presents license analysis results to demonstrate the risks associated with non-standard licensing, while Section~\ref{sec:conclusion} concludes the paper.

@@ -41,13 +41,11 @@
     mg:hasOutput [ ] .
 
 :combine4 a mg:Combine ;
-    mg:actionId "combine4" ;
     mg:hasInput [ ] ;
     mg:hasOutput [ ] ;
     mg:yieldOutputWork :gen5 .
 
 :gen5 a mg:Generate ;
-    mg:actionId "gen5" ;
     mg:hasInput [ mg:targetWorkForm mg:raw-form ;
             mg:targetWorkType mg:dataset ] ;
     mg:hasOutput [ ] ;

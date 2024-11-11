@@ -1,0 +1,40 @@
+@prefix math: <http://www.w3.org/2000/10/swap/math#> .
+@prefix list: <http://www.w3.org/2000/10/swap/list#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix string: <http://www.w3.org/2000/10/swap/string#> .
+@prefix log: <http://www.w3.org/2000/10/swap/log#> .
+@prefix mg: <http://www.modelgo.li/rdf/terms#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix : <http://example.org/ns#>.
+
+
+{   
+    # Request target work info (request to)
+    ?inw a mg:Work .
+    ?inw mg:workName ?inwn .
+    # Request info
+    ?inw mg:hasRequest ?re .
+    ?re mg:grant ?right .
+    ?right mg:hasUsage ?use .
+    # Request target action info 
+    ?re mg:targetAction ?act .
+    ?act a ?actType .
+    ?actType rdfs:subClassOf mg:Action .
+    # Request source work info (request by)
+    ?re mg:targetWork ?outw .
+    ?outw mg:workName ?outwn .
+} log:query {
+    # Request target work info (request to)
+    ?inw mg:workName ?inwn .
+    # Request info
+    ?inw mg:hasRequest ?re .
+    ?re mg:grant ?right .
+    ?right mg:hasUsage ?use .
+    # Request target action info 
+    ?re mg:targetAction ?act .
+    ?act a ?actType .
+    # Request source work info (request by)
+    ?re mg:targetWork ?outw .
+    ?outw mg:workName ?outwn .
+} .

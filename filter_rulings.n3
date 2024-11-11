@@ -8,31 +8,35 @@
 @prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
 @prefix : <http://example.org/ns#>.
 
-{ # Not complete yet
-    ?ru a mg:Ruling .
+{   
+    # Ruling target work info (rule to)
+    ?outw a mg:Work .
+    ?outw mg:workName ?outwn .
+    # Ruling info
+    ?outw mg:hasRuling ?ru .
+    ?ru mg:hasRule ?rule .
+    ?ru mg:hasOutputDef ?def .
+    ?ru mg:hasLicense ?lic .
+    # Ruling target action info
     ?ru mg:targetAction ?act .
     ?act a ?actType .
     ?actType rdfs:subClassOf mg:Action .
+    # Ruling source work info (rule from)
     ?ru mg:targetWork ?inw .
     ?inw mg:hasWorkForm ?inwf .
     ?inw mg:workName ?inwn .
+} log:query {
+    ?outw mg:workName ?outwn .
+    # Ruling info
+    ?outw mg:hasRuling ?ru .
     ?ru mg:hasRule ?rule .
     ?ru mg:hasOutputDef ?def .
     ?ru mg:hasLicense ?lic .
-    ?ru <- mg:hasRuling ?outw .
-    ?outw mg:hasWorkForm ?outwf .
-    ?outw mg:workName ?outwn .
-} log:query { 
-    # Note: The properties list here does not reflect the real properties path, we simplify it for visualization purposes
-    ?ru a mg:Ruling .
+    # Ruling target action info
     ?ru mg:targetAction ?act .
+    ?act a ?actType .
+    # Ruling source work info
     ?ru mg:targetWork ?inw .
     ?inw mg:hasWorkForm ?inwf .
     ?inw mg:workName ?inwn .
-    ?ru mg:hasRule ?rule .
-    ?ru mg:hasOutputDef ?def .
-    ?ru mg:hasLicense ?lic .
-    ?ru <- mg:hasRuling ?outw .
-    ?outw mg:hasWorkForm ?outwf .
-    ?outw mg:workName ?outwn .
 } .

@@ -110,7 +110,7 @@ def publish(target_flow: Workflow, action_label: str='publish', form: Optional[s
     if form: # If target form is provided
         g.add((input_bn, MG.targetWorkForm, MG[form]))
     g.add((airi, MG.hasOutput, BNode())) # Add this blank node as placeholder for output
-    g.add((EX[target_flow.latest_action_id], MG.yieldOutputWork, airi))
+    g.add((EX[target_flow.latest_action_id], MG.yieldAsInputWork, airi))
     target_flow.update_action_id(action_id)
 
     return target_flow
@@ -128,12 +128,13 @@ def base_action(target_flows: Union[Iterable['Workflow'], 'Workflow'], action_ty
     
     # Link the new action and previous action
     if isinstance(target_flows, Workflow):
-        g.add((EX[target_flows.latest_action_id], MG.yieldOutputWork, airi)) # Add yieldOutputWork property between actions
+        g.add((EX[target_flows.latest_action_id], MG.yieldAsInputWork, airi)) # Add yieldAsInputWork property between actions
     elif isinstance(target_flows, Iterable):
         for f in target_flows: 
-            g.add((EX[f.latest_action_id], MG.yieldOutputWork, airi)) # Iteratively add yieldOutputWork properties
+            g.add((EX[f.latest_action_id], MG.yieldAsInputWork, airi)) # Iteratively add yieldAsInputWork properties
 
     # Complete the new action's properties
+    g.add((airi, MG.actionId, Literal(action_id)))
     g.add((airi, RDF.type, MG[action_type]))
     input_bn = BNode() # Blank node for input
     g.add((airi, MG.hasInput, input_bn)) # Add a blank node as input, which will be populated later by <rules_construct.n3>
@@ -142,12 +143,12 @@ def base_action(target_flows: Union[Iterable['Workflow'], 'Workflow'], action_ty
     if aux_flows: # If there provided aux works, such as the dataset and code used for training and will not be published with the trained model
         for af in aux_flows: 
             flow.merge(af)
-            g.add((EX[af.latest_action_id], MG.yieldAuxWork, airi))
+            g.add((EX[af.latest_action_id], MG.yieldAsAuxwork, airi))
 
     if sub_flows: # If there provided sub works, such as the dataset or code used for training and will be published with the trained model
         for sf in sub_flows: 
             flow.merge(sf)
-            g.add((EX[sf.latest_action_id], MG.yieldSubWork, airi))
+            g.add((EX[sf.latest_action_id], MG.yieldAsSubWork, airi))
 
     if form: # If there provied a expected work form for output, add target work type to the input node
         g.add((input_bn, MG.targetWorkForm, MG[form]))

@@ -47,30 +47,30 @@
     ?output mg:hasAuxwork ?work .
 } .
 
-# Add the TargetWork from hasOutput to the next action's hasInput if "yieldOutputWork" is provided.
+# Add the TargetWork from hasOutput to the next action's hasInput if "yieldAsInputWork" is provided.
 {
     ?action a mg:Action .
-    ?action mg:yieldOutputWork ?next_action .
+    ?action mg:yieldAsInputWork ?next_action .
     ?action!mg:hasOutput mg:targetWork ?work .
     ?next_action mg:hasInput ?input .
 } => {
     ?input mg:targetWork ?work .
 } .
 
-# Add the TargetAuxwork from hasOutput to the next action's hasInput->targetAuxwork if "yieldAuxWork" is provided.
+# Add the TargetAuxwork from hasOutput to the next action's hasInput->targetAuxwork if "yieldAsAuxwork" is provided.
 {
     ?action a mg:Action .
-    ?action mg:yieldAuxWork ?next_action .
+    ?action mg:yieldAsAuxwork ?next_action .
     ?action!mg:hasOutput mg:targetWork ?work .
     ?next_action mg:hasInput ?input .
 } => {
     ?input mg:targetAuxwork ?work .
 } .
 
-# Add the TargetSubwork from hasOutput to the next action's hasInput if "yieldSubWork" is provided.
+# Add the TargetSubwork from hasOutput to the next action's hasInput if "yieldAsSubWork" is provided.
 {
     ?action a mg:Action .
-    ?action mg:yieldSubWork ?next_action .
+    ?action mg:yieldAsSubWork ?next_action .
     ?action!mg:hasOutput mg:targetWork ?work .
     ?next_action mg:hasInput ?input .
 } => {
@@ -101,7 +101,8 @@
 } => {
     ?geniri a mg:Work ; # Generate the hasOutput property
         mg:hasProvenance ?inw ;
-        mg:hasLicense ?license .
+        mg:hasLicense ?license ;
+        mg:hasLicenseSource mg:license_source_register .
     ?action!mg:hasOutput mg:targetWork ?geniri .
 } .
 
@@ -134,14 +135,30 @@
     ?action mg:hasOutput ?out .
     ?inw mg:hasWorkForm ?wf .
     ?inw mg:hasWorkType ?wt .
-    ?inw mg:hasLicenseInfo ?linfo .
     (?action "outputWork") log:skolem ?geniri . 
 } => {
     ?geniri a mg:Work ; # Hold same work form, type, and license info as the input work
         mg:hasMixwork ?inw ;
         mg:hasWorkForm ?wf ;
+        mg:hasWorkType ?wt .
+    ?out mg:targetWork ?geniri .
+} .
+
+##   Train
+# [Train] Reasoning rules for training a model, which adds the 'hasMixwork' property to targetWork,
+# and the output work has same type and form as the input target work.
+{
+    ?action a mg:Train .
+    ?action!mg:hasInput mg:targetWork ?inw .
+    ?action mg:hasOutput ?out .
+    ?inw mg:hasWorkType ?wt .
+    ?inw mg:hasWorkForm ?wf .
+    (?action "outputWork") log:skolem ?geniri . # Only one unique output work is created for each train
+} => {
+    ?geniri a mg:Work ;
         mg:hasWorkType ?wt ;
-        mg:hasLicenseInfo ?linfo .
+        mg:hasWorkForm ?wf ;
+        mg:hasMixwork ?inw .
     ?out mg:targetWork ?geniri .
 } .
 
@@ -253,41 +270,6 @@
         mg:hasMixwork ?inw .
 } .
 
-
-##   Train
-# [Train] Reasoning rules for training a model, which adds the 'hasMixwork' property to targetWork,
-# and the output work has same type and form as the input target work.
-{
-    ?action a mg:Train .
-    ?action!mg:hasInput mg:targetWork ?inw .
-    ?action mg:hasOutput ?out .
-    ?inw mg:hasWorkType ?wt .
-    ?inw mg:hasWorkForm ?wf .
-    (?action "outputWork") log:skolem ?geniri . # Only one unique output work is created for each train
-} => {
-    ?out mg:targetWork ?geniri .
-    ?geniri a mg:Work ;
-        mg:hasWorkType ?wt ;
-        mg:hasWorkForm ?wf ;
-        mg:hasMixwork ?inw .
-} .
-
-# # Meanwhile add 'hasAuxwork' and 'hasSubwork' to targetAuxwork and targetSubwork accordingly if they exist.  ======>> We already globally write this rule, deprecated it.
-# {
-#     ?action a mg:Train .
-#     ?action!mg:hasInput mg:targetAuxwork ?inaw .
-#     (?action "outputWork") log:skolem ?geniri . 
-# } => {
-#     ?geniri mg:hasAuxwork ?inaw .
-# } .
-# {
-#     ?action a mg:Train .
-#     ?action!mg:hasInput mg:targetSubwork ?insw .
-#     (?action "outputWork") log:skolem ?geniri . 
-# } => {
-#     ?geniri mg:hasSubwork ?insw .
-# } .
-
 ##   Embed
 # [Embed] Reasoning rules for embed data (or something unknown), which adds the 'hasSubwork' property to targetWork,
 # and the output work has same type and form as the input target work.
@@ -339,7 +321,7 @@
     ?geniri a mg:Work ;
         mg:hasWorkType ?wt ;
         mg:hasWorkForm ?wf ;
-        mg:hasAuxwork ?inw . # Key difference
+        mg:hasAuxwork ?inw . # Key difference, the input target work is treated as auxwork
 } .
 
 ##   Publish

@@ -5,19 +5,19 @@
     mg:actionId "reg1" ;
     mg:hasInput [ mg:targetLicense mg:CC-BY-ND-4.0 ;
             mg:targetWork :FreeLaw ] ;
-    mg:yieldAuxWork :gen5 .
+    mg:yieldAsAuxwork :gen5 .
 
 :reg2 a mg:RegisterLicense ;
     mg:actionId "reg2" ;
     mg:hasInput [ mg:targetLicense mg:GPL-3.0 ;
             mg:targetWork :CKIP-Transformers ] ;
-    mg:yieldOutputWork :combine4 .
+    mg:yieldAsInputWork :combine4 .
 
 :reg3 a mg:RegisterLicense ;
     mg:actionId "reg3" ;
     mg:hasInput [ mg:targetLicense mg:AGPL-3.0 ;
             mg:targetWork :PhoBERT ] ;
-    mg:yieldOutputWork :combine4 .
+    mg:yieldAsInputWork :combine4 .
 
 :CKIP-Transformers a mg:work ;
     mg:hasWorkForm mg:weights ;
@@ -41,13 +41,15 @@
     mg:hasOutput [ ] .
 
 :combine4 a mg:Combine ;
+    mg:actionId "combine4" ;
     mg:hasInput [ ] ;
     mg:hasOutput [ ] ;
-    mg:yieldOutputWork :gen5 .
+    mg:yieldAsInputWork :gen5 .
 
 :gen5 a mg:Generate ;
+    mg:actionId "gen5" ;
     mg:hasInput [ mg:targetWorkForm mg:raw-form ;
             mg:targetWorkType mg:dataset ] ;
     mg:hasOutput [ ] ;
-    mg:yieldOutputWork :publish6 .
+    mg:yieldAsInputWork :publish6 .
 

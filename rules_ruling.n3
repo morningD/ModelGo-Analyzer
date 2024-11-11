@@ -67,8 +67,15 @@
 
 # License Determination. Find the license of the output work according to its rulings
 # The default license in Unlicense, if there are multiple copyleft licenses are triggered, then try to find a compatible license as solution.
+# NOTE: The found solution may not be valid. We assign the license as compliantly as possible to enable further analysis; any corresponding errors will be reported during the analysis phase.
 
-{ # CASE-1: All rulings allow relicense output work
+# We use these LicenseSource to record the reason of a license determination, this source infomation can be used in further reporting.
+mg:license_source_ruling_relicense_pass a mg:LicenseSource . # All relied licenses allow relicensing, default license is used (e.g., Unlicense).
+mg:license_source_ruling_relicense_fail a mg:LicenseSource . # There have multiple licenses unallow relicesing, one of non-relicensable license is used.
+mg:license_source_ruling_copyleft_pass a mg:LicenseSource . # There have multiple licenses that require a compatible assignment and a solution can be found by ruling.
+mg:license_source_ruling_copyleft_fail a mg:LicenseSource . # There have multiple licenses that require a compatible assignment and NO solution can be found by ruling.
+
+{ # CASE-1: All rulings allow relicense output work. (any, any) -> Unlicense
     ?outw a mg:Work .
     _:x log:notIncludes { ?outw mg:hasLicense ?li } . # This work does not have a license yet
     # If all relied wroks have a license, we can determind the license of this work
@@ -78,11 +85,11 @@
     ({?outw!mg:hasRuling!mg:hasRule mg:relicense ?reli } {?reli log:equalTo mg:any-license}) log:forAllIn _:t .
 } => {
     # Use default: Unlicense
-    ?outw mg:hasLicense mg:Unlicense .
-    ?outw :assign "any-license" .
+    ?outw mg:hasLicense mg:Unlicense ;
+        mg:hasLicenseSource mg:license_source_ruling_relicense_pass .
 }.
 
-{ # CASE-2: One of ruling NOT allows relicense output work
+{ # CASE-2: One of ruling NOT allows relicense output work. (none, any/compat) -> none
     ?outw a mg:Work .
     _:x log:notIncludes { ?outw mg:hasLicense ?li } . # This work does not have a license yet
     # If all relied wroks have a license, we can determind the license of this work
@@ -99,9 +106,45 @@
     ?li_list ) log:collectAllIn _:t .
     ?li_list list:first ?li_first # Select the first non-relicensable license as the license for the output work.
 } => {
-    ?outw mg:hasLicense ?li_first .
+    ?outw mg:hasLicense ?li_first ;
+        mg:hasLicenseSource mg:license_source_ruling_relicense_fail .
 } .
-{ # CASE-3: There have multiple rulings require the output work's license should be compatible, but these ruling has a same license
+
+{ # CASE-3: There have multiple rulings require the output work's license should be compatible, and these ruling has a same (compatible) license. (compat1, compat2) -> compat
+    ?outw a mg:Work .
+    _:x log:notIncludes { ?outw mg:hasLicense ?li } . # This work does not have a license yet
+    # If all relied wroks have a license, we can determind the license of this work
+    ( { ?outw mg:hasReliedwork ?relw } { ?relw mg:hasLicense ?li } ) log:forAllIn _:t . 
+
+    # There is no ruling that NOT allow relicesnse (For exclude CASE-2)
+    ( {?outw!mg:hasRuling!mg:hasRule mg:relicense ?reli } {?reli log:notEqualTo mg:none-license} ) log:forAllIn _:t .
+
+    # Collect all compatible-relicensable license to a list
+    ( ?li
+        { 
+            ?outw mg:hasRuling ?rling .
+            ?rling!mg:hasRule mg:relicense ?rule .
+            ?rule log:equalTo mg:compatible-license . # Compatible
+            ?rling mg:hasLicense ?li . # This ruling should bind a license which provides a compatible license list
+            ?li mg:hasCompatibleLicense ?clist.
+        }
+    ?li_list ) log:collectAllIn _:t . # (CASE-1 will yield a empty list here).
+
+    ?li_list list:first ?li_1st .
+    ?li_1st mg:hasCompatibleLicense ?compat_list_1st .
+    
+    # Check wether exist a compatible license from 1st that also in all other (include self) compatible lists
+     _:x log:includes # Return true if there is a license included in all compatible list.
+        {   
+            ?cli list:in ?compat_list_1st .
+            ( {?li_list!list:member mg:hasCompatibleLicense ?compat_list_other} {?cli list:in ?compat_list_other} ) log:forAllIn _:t .
+        } .
+} => {
+    ?outw mg:hasLicense ?li_1st ;
+        mg:hasLicenseSource mg:license_source_ruling_copyleft_pass .
+} .
+
+{ # CASE-4: There have multiple rulings require the output work's license should be compatible, and no compatible solution exist. (incompat1, incompat2) -> incompat
     ?outw a mg:Work .
     _:x log:notIncludes { ?outw mg:hasLicense ?li } . # This work does not have a license yet
     # If all relied wroks have a license, we can determind the license of this work
@@ -125,37 +168,12 @@
     ?li_1st mg:hasCompatibleLicense ?compat_list_1st .
     
     # Check wether exist a compatible license from 1st that also in all other (include self) compatible lists
-     _:x log:includes 
+     _:x log:notIncludes # (CASE-3 will yield false here), return true if there is not a license included in all compatible list.
         {   
             ?cli list:in ?compat_list_1st .
-            ({?li_list!list:member mg:hasCompatibleLicense ?compat_list_other} {?cli list:in ?compat_list_other} ) log:forAllIn _:t .
+            ( {?li_list!list:member mg:hasCompatibleLicense ?compat_list_other} {?cli list:in ?compat_list_other} ) log:forAllIn _:t .
         } .
 } => {
-    ?outw mg:hasLicense ?li_1st .
-} .
-
-# TODO: CASE-4?
-
-############################   Debug: find work that need assign license
-# { # All ruling allow relicense output work
-#     ?outw a mg:Work .
-#     _:x log:notIncludes { ?outw mg:hasLicense ?li } . # This work does not have a license yet
-# } => {
-#     ?outw :need_assign "license" .
-# }.
-############################   Debug: find work that is ready to assign license
-# { # All ruling allow relicense output work
-#     ?outw a mg:Work .
-#     _:x log:notIncludes { ?outw mg:hasLicense ?li } . # This work does not have a license yet
-#     # If all relied wroks have a license, we can determind the license of this work
-#     ( { ?outw mg:hasReliedwork ?relw } { ?relw mg:hasLicense ?li } ) log:forAllIn _:t . 
-# } => {
-#     ?outw :ready_assign "any-license" .
-# }.
-############################  Debug: Check wether all work has license
-{
-    ( {?work a mg:Work} {?work mg:hasLicense ?li} ) log:forAllIn _:t . 
-} =>
-{
-    :license :done_assige 'ok' .
+    ?outw mg:hasLicense ?li_1st ;
+        mg:hasLicenseSource mg:license_source_ruling_copyleft_fail .
 } .

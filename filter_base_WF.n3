@@ -33,32 +33,6 @@
     ?inw mg:workName ?iname .
 } .
 
-{   # Input auxworks
-    ?actionType rdfs:subClassOf mg:Action . 
-    ?a a ?actionType .
-    ?a mg:hasInput ?input .
-    ?input mg:targetAuxwork ?auxw .
-    #?auxw a mg:Work .
-    ?auxw mg:workName ?auxname .
-} log:query {
-    ?input mg:targetAuxwork ?auxw .
-    #?auxw a mg:Work .
-    ?auxw mg:workName ?auxname .
-} .
-
-{   # Input subworks
-    ?actionType rdfs:subClassOf mg:Action . 
-    ?a a ?actionType .
-    ?a mg:hasInput ?input .
-    ?input mg:targetSubwork ?subw .
-    ?subw a mg:Work .
-    ?subw mg:workName ?subname .
-} log:query {
-    ?input mg:targetSubwork ?subw .
-    ?subw a mg:Work .
-    ?subw mg:workName ?subname .
-} .
-
 {   # Output name
     ?actionType rdfs:subClassOf mg:Action . 
     ?a a ?actionType .
@@ -98,9 +72,39 @@
     ?work mg:hasWorkForm ?form .
 } .
 
-{   # Action flow info
-    ?a a mg:Action .
-    ?a mg:yieldOutputWork ?next .
+{   # Work's subwork
+    ?work a mg:Work .
+    ?work mg:hasSubwork ?subw .
 } log:query {
-    ?a mg:yieldOutputWork ?next .
+    ?work a mg:Work .
+    ?work mg:hasSubwork ?subw .
+} .
+
+{   # Work's auxwork
+    ?work a mg:Work .
+    ?work mg:hasAuxwork ?auxw .
+} log:query {
+    ?work a mg:Work .
+    ?work mg:hasAuxwork ?auxw .
+} .
+
+{   # Action flow info: output -> input
+    ?a a mg:Action .
+    ?a mg:yieldAsInputWork ?next .
+} log:query {
+    ?a mg:yieldAsInputWork ?next .
+} .
+
+{   # Action flow info: auxwork -> auxwork
+    ?a a mg:Action .
+    ?a mg:yieldAsAuxwork ?next .
+} log:query {
+    ?a mg:yieldAsAuxwork ?next .
+} .
+
+{   # Action flow info: subwork -> subwork
+    ?a a mg:Action .
+    ?a mg:yieldAsSubwork ?next .
+} log:query {
+    ?a mg:yieldAsSubwork ?next .
 } .

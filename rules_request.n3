@@ -18,6 +18,17 @@
     ?mixwork mg:hasRequest ?request .
 } .
 
+# Request Proliferation Rule for Subworks in Publish action. Add the final work's publish related request to its Subworks
+{
+    ?request a mg:Request .
+    ?request mg:targetAction ?action .
+    ?action a mg:Publish .
+    ?request <- mg:hasRequest ?work . # Input work of publish action
+    ?work mg:hasSubwork ?subwork . # Subwork of this input work
+} => {
+    ?subwork mg:hasRequest ?request .
+} .
+
 
 # [Combine] Request creating rule, which
 # asks 'merge' right granting from original work
@@ -75,7 +86,7 @@
     ?inw mg:hasRequest ?geniri .
 } .
 
-# [ALL action] Asks 'use' right granting from auxwork (i.e, dataset) if provided
+# [ALL actions] Ask 'use' right granting from auxwork (i.e, dataset) if provided
 {
     ?action a mg:Action .
     ?action!mg:hasInput mg:targetAuxwork ?inaw .
@@ -92,12 +103,13 @@
     ?inaw mg:hasRequest ?geniri .
 } .
 
-######## Redistribution Related Requests
+######## Publish Related Requests
+# [Publish-sell] Ask 'redistribute', 'sublicense', 'commercial_use' from target (final) work 
 {
     ?action a mg:Publish .
     ?action!mg:hasInput mg:targetPublishPolicy ?policy .
-    ?action!mg:hasInput mg:targetWork ?inw .
     ?policy log:equalTo mg:sell . # sell
+    ?action!mg:hasInput mg:targetWork ?inw .
     ?action!mg:hasOutput mg:targetWork ?outw .
     (?action ?inw ?outw "request") log:skolem ?geniri .
 } => {
@@ -110,11 +122,13 @@
         ] .
     ?inw mg:hasRequest ?geniri .
 } .
+
+# [Publish-share] Ask 'redistribute', 'sublicense' from target (final) work 
 {
     ?action a mg:Publish .
     ?action!mg:hasInput mg:targetPublishPolicy ?policy .
-    ?action!mg:hasInput mg:targetWork ?inw .
     ?policy log:equalTo mg:share . # share
+    ?action!mg:hasInput mg:targetWork ?inw .
     ?action!mg:hasOutput mg:targetWork ?outw .
     (?action ?inw ?outw "request") log:skolem ?geniri .
 } => {
@@ -128,93 +142,4 @@
     ?inw mg:hasRequest ?geniri .
 } .
 
-# Same checking apply to subworks
-{
-    ?action a mg:Publish .
-    ?action!mg:hasInput mg:targetPublishPolicy ?policy .
-    ?action!mg:hasInput mg:targetSubwork ?insw .
-    ?policy log:equalTo mg:sell . # sell
-    ?action!mg:hasOutput mg:targetWork ?outw .
-    (?action ?insw ?outw "request") log:skolem ?geniri .
-} => {
-    ?geniri a mg:Request ;
-        mg:targetWork ?outw ;
-        mg:targetAction ?action ;
-        mg:grant [ 
-            a mg:Right ;
-            mg:hasUsage mg:redistribute, mg:sublicense, mg:commercial_use
-        ] .
-    ?insw mg:hasRequest ?geniri .
-} .
-{
-    ?action a mg:Publish .
-    ?action!mg:hasInput mg:targetPublishPolicy ?policy .
-    ?action!mg:hasInput mg:targetSubwork ?insw .
-    ?policy log:equalTo mg:share . # share
-    ?action!mg:hasOutput mg:targetWork ?outw .
-    (?action ?insw ?outw "request") log:skolem ?geniri .
-} => {
-    ?geniri a mg:Request ;
-        mg:targetWork ?outw ;
-        mg:targetAction ?action ;
-        mg:grant [ 
-            a mg:Right ;
-            mg:hasUsage mg:redistribute, mg:sublicense
-        ] .
-    ?insw mg:hasRequest ?geniri .
-} .
-
-# Same checking apply to mixworks
-{
-    ?action a mg:Publish .
-    ?action!mg:hasInput mg:targetPublishPolicy ?policy .
-    ?action!mg:hasInput mg:targetmixwork ?inmw .
-    ?policy log:equalTo mg:sell . # sell
-    ?action!mg:hasOutput mg:targetWork ?outw .
-    (?action ?inmw ?outw "request") log:skolem ?geniri .
-} => {
-    ?geniri a mg:Request ;
-        mg:targetWork ?outw ;
-        mg:targetAction ?action ;
-        mg:grant [ 
-            a mg:Right ;
-            mg:hasUsage mg:redistribute, mg:sublicense, mg:commercial_use
-        ] .
-    ?inmw mg:hasRequest ?geniri .
-} .
-{
-    ?action a mg:Publish .
-    ?action!mg:hasInput mg:targetPublishPolicy ?policy .
-    ?action!mg:hasInput mg:targetMixwork ?inmw .
-    ?policy log:equalTo mg:share . # share
-    ?action!mg:hasOutput mg:targetWork ?outw .
-    (?action ?inmw ?outw "request") log:skolem ?geniri .
-} => {
-    ?geniri a mg:Request ;
-        mg:targetWork ?outw ;
-        mg:targetAction ?action ;
-        mg:grant [ 
-            a mg:Right ;
-            mg:hasUsage mg:redistribute, mg:sublicense
-        ] .
-    ?inmw mg:hasRequest ?geniri .
-} .
-
-
-# Asks 'use' right granting from subwork (i.e, dataset) if provided, 
-# note that we will create the request of redistribution later if the final work is planned to be published
-# {
-#     ?action a mg:Action .
-#     ?action!mg:hasInput mg:targetSubwork ?insw .
-#     ?action!mg:hasOutput mg:targetWork ?outw .
-#     (?action ?insw ?outw "request") log:skolem ?geniri .
-# } => {
-#     ?geniri a mg:Request ;
-#         mg:targetWork ?outw ;
-#         mg:targetAction ?action ;
-#         mg:grant [ 
-#             a mg:Right ;
-#             mg:hasUsage mg:use
-#         ] .
-#     ?insw mg:hasRequest ?geniri .
-# } .
+# Note: No additional rights are required for publishing under Internal Use.

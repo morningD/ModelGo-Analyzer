@@ -26,15 +26,15 @@ mg:Action a rdfs:Class ;
     rdfs:label "Action"@en ;
     rdfs:comment "The superset of all actions (e.g., registering a license, reusing, publishing) in ModelGo." .
 
-mg:yieldOutputWork a rdfs:Property ; # The output work of domain action will yield to the input work of range action
+mg:yieldAsInputWork a rdfs:Property ; # The output work of domain action will yield to the input work of range action
     rdfs:domain mg:Action ;
     rdfs:range mg:Action .
 
-mg:yieldAuxWork a rdfs:Property ; # The output work of domain action will yield to the input auxwork of range action
+mg:yieldAsAuxwork a rdfs:Property ; # The output work of domain action will yield to the input auxwork of range action
     rdfs:domain mg:Action ;
     rdfs:range mg:Action .
 
-mg:yieldSubWork a rdfs:Property ; # The output work of domain action will yield to the input subwork of range action
+mg:yieldAsSubwork a rdfs:Property ; # The output work of domain action will yield to the input subwork of range action
     rdfs:domain mg:Action ;
     rdfs:range mg:Action .
 
@@ -428,7 +428,15 @@ mg:LicenseCategory a rdfs:Class ;
 mg:any-license a mg:LicenseCategory .
 mg:none-license a mg:LicenseCategory .
 mg:compatible-license a mg:LicenseCategory . # It is a concept which depends on practical license.
-#mg:tbd-license a mg:LicenseCategory . # The final license is not determined yet, need to be decided by the logic rules (N3).
+
+mg:LicenseSource a rdfs:Class ;
+    rdfs:comment "This class is used to record the source of the license assignment of a work." .
+
+mg:hasLicenseSource a rdfs:Property ;
+    rdfs:domain mg:Work ;
+    rdfs:range mg:LicenseSource .
+
+mg:license_source_register a mg:LicenseSource . # License is assgined by a register action
 
 mg:hasRestriction a rdfs:Property ;
     rdfs:range mg:Restriction .     ################ Rename Require: Restriction ->> Condition
@@ -442,12 +450,6 @@ mg:hasUseRestriction rdfs:subPropertyOf mg:hasRestriction ;
 mg:isPublishRestriction a rdfs:Property ;
     rdfs:domain mg:Restriction ;
     rdfs:range xsd:boolean .
-
-# mg:banUseRestriction rdfs:subPropertyOf mg:hasRestriction ;
-#     rdfs:domain mg:Restriction .
-
-# mg:banPublishRestriction rdfs:subPropertyOf mg:hasRestriction ;
-#     rdfs:domain mg:Restriction .
 
 mg:state_changes_restriction a mg:Restriction ; # It is a template for such kind of restriction.
     mg:reportType "State Changes" ;

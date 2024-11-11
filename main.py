@@ -3,8 +3,8 @@ from rdflib import Graph, URIRef, Literal, Namespace
 from rdflib.namespace import RDF, RDFS
 import subprocess
 
-# 6 Corpus, 5 Image DS, 2 Music DS, 1 3D DS, 1 Video DS, 10 Models
 
+"""  Create Work Cases (assign work name, form, type, and register license)  """
 # wiki_text = register_license(Work('Wikipedia', 'dataset', 'literary'), target_license='CC-BY-SA-4.0') # Corpus, https://en.wikipedia.org/wiki/Wikipedia:Copyrights
 #stack_exchange_text = register_license(Work('StackExchange', 'dataset', 'literary'), target_license='CC-BY-SA-4.0') # Corpus, https://stackexchange.com/
 free_law_text = register_license(Work('FreeLaw', 'dataset', 'literary'), target_license='CC-BY-ND-4.0') # Corpus, https://free.law/
@@ -44,9 +44,9 @@ phobert_model = register_license(Work('PhoBERT', 'model', 'weights'), target_lic
 #mgbync_model = register_license(Work('MGBYNC', 'model', 'weights'), target_license='MG-BY-NC') # MG Licenses
 
 
+"""  Construct Workflows (use func defined in actions.py)  """
 #flow = combine([whisper_model, detr_model])
 #flow = combine([embed(arxiv_text, aux_flows=[bigtranslate_model]), embed(stack_exchange_text, aux_flows=[bigtranslate_model]), deep_sequoia_text, free_law_text])
-
 
 # Case-1
 #flow = combine([ckip_model, phobert_model])
@@ -67,7 +67,9 @@ flow = publish(flow, form='literary', policy = 'sell') # literary/service-form
 # Save the gen graph to a new Turtle file
 flow.graph.serialize(destination="gen.ttl", format="ttl")
 
-# Reasoning by N3 Rules
+
+"""  Reasoning by N3 Rules (complete workflow, dependencies, license determindation)  """
+# Workflow Construction
 result = subprocess.run(["eye", "--quiet", "--nope", "--pass", 
                          "vocabulary.ttl", "MGLicenseInfo.ttl", "MGLicenseRule.ttl", "gen.ttl",
                          "rules_init.n3", "rules_construct.n3"], 
@@ -76,51 +78,29 @@ result = subprocess.run(["eye", "--quiet", "--nope", "--pass",
 # Output whole workflow triples, but w/o requests, rulings, and undetermined license of intermediate works.
 Graph().parse(data=result.stdout, format="n3").serialize(destination="out_WF.ttl", format="turtle")
 
-filter_result = subprocess.run(["eye", "--quiet", "--nope",
-                         "out_WF.ttl", "--query", "filter_base_WF.n3"], 
-                         stdout=subprocess.PIPE, check=True)
-
-# Output base workflow triples like input, output and license
-Graph().parse(data=filter_result.stdout, format="n3").serialize(destination="out_base_WF.ttl", format="turtle")
-
-filter_result = subprocess.run(["eye", "--quiet", "--nope",
-                         "out_WF.ttl", "--query", "filter_works.n3"], 
-                         stdout=subprocess.PIPE, check=True)
-
-# Output Mixwork, Auxwork, Subwork and Provenance relationship triples
-Graph().parse(data=filter_result.stdout, format="n3").serialize(destination="out_works.ttl", format="turtle")
-
-
-# Reasoning of Ruling
+# Reasoning: ruling
 result = subprocess.run(["eye", "--quiet", "--nope", "--pass", 
                          "vocabulary.ttl", "MGLicenseInfo.ttl", "MGLicenseRule.ttl", "out_WF.ttl",
                          "rules_ruling.n3"], 
                          stdout=subprocess.PIPE, check=True)
-# Output rulings
+# Output WF after 'ruling'
 Graph().parse(data=result.stdout, format="n3").serialize(destination="out_WF_ruling.ttl", format="turtle")
-#Graph().parse(data=result.stdout, format="n3").serialize(destination="out_ruling.ttl", format="turtle")
 
-# Output base work after ruling
+# Output base work after 'ruling'
 filter_result = subprocess.run(["eye", "--quiet", "--nope",
                          "out_WF_ruling.ttl", "--query", "filter_base_WF.n3"], 
                          stdout=subprocess.PIPE, check=True)
 Graph().parse(data=filter_result.stdout, format="n3").serialize(destination="out_base_WF_after_ruling.ttl", format="turtle")
 
-# filter_result = subprocess.run(["eye", "--quiet", "--nope",
-#                          "out_WF_ruling.ttl", "--query", "filter_rulings.n3"], 
-#                          stdout=subprocess.PIPE, check=True)
-
-# # Output rulings
-# Graph().parse(data=filter_result.stdout, format="n3").serialize(destination="out_ruling.ttl", format="turtle")
-
-# Reasoning of Request
+# Reasoning: request
 result = subprocess.run(["eye", "--quiet", "--nope", "--pass", 
                          "vocabulary.ttl", "MGLicenseInfo.ttl", "MGLicenseRule.ttl", "out_WF_ruling.ttl",
                          "rules_request.n3"], 
                          stdout=subprocess.PIPE, check=True)
-# Output WF with requests
+# Output WF after 'request'
 Graph().parse(data=result.stdout, format="n3").serialize(destination="out_WF_ruling_request.ttl", format="turtle")
 
+"""  Analysis Results (report notice, warnining, error)  """
 # Analysis of request
 analysis_result = subprocess.run(["eye", "--quiet", "--nope", "--pass-only-new", 
                          "vocabulary.ttl", "MGLicenseInfo.ttl", "MGLicenseRule.ttl", "out_WF_ruling_request.ttl",
@@ -145,6 +125,28 @@ analysis_result = subprocess.run(["eye", "--quiet", "--nope", "--pass-only-new",
 
 Graph().parse(data=analysis_result.stdout, format="n3").serialize(destination="out_analysis_conflict.ttl", format="turtle")
 
+
+"""  Filtered Graphs (Visualization)  """
+### Base Workflow Information
+filter_result = subprocess.run(["eye", "--quiet", "--nope",
+                         "out_WF.ttl", "--query", "filter_base_WF.n3"], 
+                         stdout=subprocess.PIPE, check=True)
+# Output base workflow triples like input, output and license
+Graph().parse(data=filter_result.stdout, format="n3").serialize(destination="out_filter_base_WF.ttl", format="turtle")
+
+### Compositional Dependencies: Mixwork, Subwork, Auxwork
+filter_result = subprocess.run(["eye", "--quiet", "--nope",
+                         "out_WF.ttl", "--query", "filter_works.n3"], 
+                         stdout=subprocess.PIPE, check=True)
+# Output Mixwork, Auxwork, Subwork and Provenance relationship triples
+Graph().parse(data=filter_result.stdout, format="n3").serialize(destination="out_filter_compositional.ttl", format="turtle")
+
+# filter_result = subprocess.run(["eye", "--quiet", "--nope",
+#                          "out_WF_ruling.ttl", "--query", "filter_rulings.n3"], 
+#                          stdout=subprocess.PIPE, check=True)
+
+# # Output rulings
+# Graph().parse(data=filter_result.stdout, format="n3").serialize(destination="out_ruling.ttl", format="turtle")
 
 # filter_result = subprocess.run(["eye", "--quiet", "--nope",
 #                          "out_WF_request.ttl", "--query", "filter_base_WF.n3"], 

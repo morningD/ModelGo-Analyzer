@@ -27,7 +27,7 @@
     ("** Warning ** [Right Not Explicitly Granted] " ?req_usage " is not explicitly granted by " ?li " license for " ?a " action on " ?inw " to produce " ?outw) string:concatenation ?report_content .
 } => {
     ?geniri a mg:Warning ;
-        mg:reportBy ?a ;
+        mg:reportedBy ?a ;
         mg:reportType "Right Not Explicitly Granted" ;
         mg:content ?report_content .
 } .
@@ -48,7 +48,7 @@
     ("** Error ** [Right Reserved] " ?req_usage " is reserved by " ?li " license for " ?a " action on " ?inw " to produce " ?outw) string:concatenation ?report_content .
 } => {
     ?geniri a mg:Error ;
-        mg:reportBy ?a ;
+        mg:reportedBy ?a ;
         mg:reportType "Right Reserved" ;
         mg:content ?report_content .
 } .

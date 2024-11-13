@@ -9,8 +9,69 @@
 @prefix : <http://example.org/ns#>.
 
 
+####    Triggered restrictions collect rules  ####
+# Gather all triggered restrictions for a given 'Publish' action, which is useful for further analysis
+{ # CASE-1: Internal Use
+    ?action a mg:Publish .
+    ?action mg:targetPublishPolicy ?policy .
+    ?policy log:equalTo mg:internal . # Only internal use, not public publish
+    ?action!mg:hasOutput mg:targetWork ?outw .
+    ?outw mg:hasRuling ?rl .
+    ?rl mg:hasRule ?ru .
+    ?ru mg:hasUseRestriction ?rest . # Only use restrictions are triggered
+
+    ?outw mg:workName ?wname .
+    ?rl!mg:targetWork mg:workName ?rlwname .
+    ("** Analysis [Triggered Restriction] ** " ?wname " has a triggered restriction " ?rest " from " ?rlwname) string:concatenation ?report_content .
+} => {
+    _:triggered a mg:TriggeredRestriction ;
+        mg:reportedBy ?rl ;
+        mg:hasRestriction ?rest ;
+        mg:reportType "Triggered Restriction" ;
+        mg:content ?report_content .
+} .
+{ # CASE-2: Share or Sell (ruling of iteself)
+    ?action a mg:Publish .
+    ?action mg:targetPublishPolicy ?policy .
+    ?policy list:in (mg:share mg:sell) . # Share or Sell, public publish
+    ?action!mg:hasOutput mg:targetWork ?outw .
+    ?outw mg:hasRuling ?rl .
+    ?rl mg:hasRule ?ru .
+    ?ru mg:hasRestriction ?rest . # Both use and publish restrictions are triggered
+
+    ?outw mg:workName ?wname .
+    ?rl!mg:targetWork mg:workName ?rlwname .
+    ("** Analysis [Triggered Restriction] ** " ?wname " has a triggered restriction " ?rest " from " ?rlwname) string:concatenation ?report_content .
+} => {
+    _:triggered a mg:TriggeredRestriction ;
+        mg:reportedBy ?rl ;
+        mg:hasRestriction ?rest ;
+        mg:reportType "Triggered Restriction" ;
+        mg:content ?report_content .
+} .
+{ # CASE-3: Share or Sell (subrulings from its subworks)
+    ?action a mg:Publish .
+    ?action mg:targetPublishPolicy ?policy .
+    ?policy list:in (mg:share mg:sell) . # Share or Sell, public publish
+    ?action!mg:hasOutput mg:targetWork ?outw .
+    ?outw mg:hasSubruling ?rl .
+    ?rl mg:hasRule ?ru .
+    ?ru mg:hasPublishRestriction ?rest . # Only publish restrictions are triggered
+
+    ?outw mg:workName ?wname .
+    ?rl!mg:targetWork mg:workName ?rlwname .
+    ("** Analysis [Triggered Restriction] ** " ?wname " has a triggered restriction " ?rest " from " ?rlwname) string:concatenation ?report_content .
+} => {
+    _:triggered a mg:TriggeredRestriction ;
+        mg:reportedBy ?rl ;
+        mg:hasRestriction ?rest ;
+        mg:reportType "Triggered Restriction" ;
+        mg:content ?report_content .
+} .
+
+
 ####    Generate license analysis report rules  ####
-# Warning [License Type Mismatch]. Report a warning if the license's target work type does not match the actual work type
+# Warning W1 [License Type Mismatch]. Report a warning if the license's target work type does not match the actual work type
 
 {   
     ?work a mg:Work .
@@ -25,13 +86,12 @@
     ("** Warning ** [License Type Mismatch] " ?wname " is a " ?wtype " but it have a " ?ltype " license: " ?lid) string:concatenation ?report_content .
 } => {
     _:warning a mg:Warning ;
-        mg:reportBy ?work ;
+        mg:reportedBy ?work ;
         mg:reportType "License Type Mismatch" ;
         mg:content ?report_content .
 } .
 
-# Warning [Revocable License]. Report a warning if the license of a work is revocable
-
+# Warning W2 [Revocable License]. Report a warning if the license of a work is revocable
 {   
     ?work a mg:Work .
     ?work mg:hasLicense ?license .
@@ -42,13 +102,12 @@
     ("** Warning ** [Revocable License] The " ?lid " license of"  ?wname " is revocable") string:concatenation ?report_content .
 } => {
     _:warning a mg:Warning ;
-        mg:reportBy ?work ;
+        mg:reportedBy ?work ;
         mg:reportType "Revocable License" ;
         mg:content ?report_content .
 } .
 
-# Warning [Possibly Revocable License]. Report a warning if the license of a work is not explictly claim irrevocable
-
+# Warning W3 [Possibly Revocable License]. Report a warning if the license of a work is not explictly claim irrevocable
 {   
     ?work a mg:Work .
     ?work mg:hasLicense ?license .
@@ -60,12 +119,12 @@
     ("** Warning ** [Possibly Revocable License] The " ?lid " license of"  ?wname " is revocable") string:concatenation ?report_content .
 } => {
     _:warning a mg:Warning ;
-        mg:reportBy ?work ;
+        mg:reportedBy ?work ;
         mg:reportType "Possibly Revocable License" ;
         mg:content ?report_content .
 } .
 
-# Error [Wrong Work Type or Form]. The work type cannot be inconsistent with its work form; i.e., a 'software' work cannot have a 'vision' form.
+# Error E1 [Wrong Work Type or Form]. The work type cannot be inconsistent with its work form; i.e., a 'software' work cannot have a 'vision' form.
 {
     ?work a mg:Work .
     ?work mg:hasLicense ?license . # We filter out works that do not have a license
@@ -80,7 +139,7 @@
     ("** Error ** [Wrong Work Type or Form] " ?wname " is a " ?wtype " but it is in " ?wform " form") string:concatenation ?report_content .
 } => {
     _:error a mg:Error ;
-        mg:reportBy ?work ;
+        mg:reportedBy ?work ;
         mg:reportType "Wrong Work Type or Form" ;
         mg:content ?report_content .
 } .

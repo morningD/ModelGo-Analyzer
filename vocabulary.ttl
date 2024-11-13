@@ -438,8 +438,11 @@ mg:hasLicenseSource a rdfs:Property ;
 
 mg:license_source_register a mg:LicenseSource . # License is assgined by a register action
 
+mg:Restriction a rdfs:Class ;
+    rdfs:comment "This class is used to describe the restritions according to license terms." .
+
 mg:hasRestriction a rdfs:Property ;
-    rdfs:range mg:Restriction .     ################ Rename Require: Restriction ->> Condition
+    rdfs:range mg:Restriction .
 
 mg:hasPublishRestriction rdfs:subPropertyOf mg:hasRestriction ;
     rdfs:domain mg:Restriction .
@@ -522,6 +525,12 @@ mg:hasRuling a rdfs:Property ;
     rdfs:domain mg:Work ;
     rdfs:range mg:Ruling .
 
+mg:hasSubruling a rdfs:Property ; # Subruling refers to the rulings for publishing a subwork; it does not affect the License Determination procedure but may involve additional restrictions.
+    rdfs:domain mg:Work ;
+    rdfs:range mg:Ruling .
+
+# NOTE: We do not create rulings for auxworks because they are not intended to be included in the republication; only a 'use' request is generated and checked.
+
 mg:OutputDef a rdfs:Class ; 
     rdfs:comment "The definition of output work, it should be understood in the context of the specific license used in each input work." .
 
@@ -541,11 +550,11 @@ mg:Report a rdfs:Class ;
     rdfs:label "Report"@en ;
     rdfs:comment "The superset of all reports (e.g., notice, warning, error) in ModelGo." .
 
+mg:TriggeredRestriction rdfs:subClassOf mg:Report ;
+    rdfs:comment "Triggered restrictions according to ruling" .
+
 mg:Notice rdfs:subClassOf mg:Report ;
     rdfs:comment "Notices like [Revocable license], [No public license]." . # See the Table1 in ModelGo paper (WWW'24) for more info.
-
-mg:Restriction rdfs:subClassOf mg:Report ;
-    rdfs:comment "Restrictions like [State changes], [Responsible AI use]." .
 
 mg:Warning rdfs:subClassOf mg:Report ;
     rdfs:comment "Warnings like [Disclose self], [Rights not explicitly granted]." .
@@ -553,9 +562,9 @@ mg:Warning rdfs:subClassOf mg:Report ;
 mg:Error rdfs:subClassOf mg:Report ;
     rdfs:comment "Errors like [Cannot relicense], [Rights not granted], [Cannot share]." .
 
-mg:reportBy a rdfs:Property ;
+mg:reportedBy a rdfs:Property ;
     rdfs:domain mg:Report .
-    #rdfs:range mg:Action ; #TBD: Mayby we can let it free and enable reportBy->Work  or reportBy -> [work, action]
+    #rdfs:range mg:Action ; #TBD: Mayby we can let it free and enable reportedBy->Work, reportedBy -> [work, action], reportedBy->Rulings
 
 mg:reportType a rdfs:Property ;
     rdfs:domain mg:Report ;

@@ -59,7 +59,7 @@
 {   # Publish Restrction
     ?outw a mg:Work .
     ?outw mg:workName ?wn .
-    ?outw!mg:targetPublishPolicy list:in (mg:sell mg:share) . # This work will be redistributed.
+    ?outw!mg:hasPublishPolicy list:in (mg:sell mg:share) . # This work will be redistributed.
     #(?w {?outw mg:hasMixwork ?w} ?mixw) log:collectAllIn _:x .
     #( (?outw) ?mixw ) list:append ?w_list .
     #?w_list list:member ?outw .
@@ -81,7 +81,7 @@
 {   # Publish Restrction of mixworks
     ?outw a mg:Work .
     ?outw mg:workName ?wn .
-    ?outw!mg:targetPublishPolicy list:in (mg:sell mg:share) . # This work will be redistributed.
+    ?outw!mg:hasPublishPolicy list:in (mg:sell mg:share) . # This work will be redistributed.
     ?outw mg:hasMixwork ?mixw .
     ?mixw mg:workName ?mixwn .
     ?mixw mg:hasRuling ?ruling . # Gather all rulings related to this work and its mixworks
@@ -101,7 +101,7 @@
 {   # Publish Restrction of subworks
     ?outw a mg:Work .
     ?outw mg:workName ?wn .
-    ?outw!mg:targetPublishPolicy list:in (mg:sell mg:share) . # This work will be redistributed.
+    ?outw!mg:hasPublishPolicy list:in (mg:sell mg:share) . # This work will be redistributed.
     ?outw mg:hasSubwork ?subw .
     ?subw mg:workName ?subwn .
 } => {
@@ -129,7 +129,7 @@
     ?outw a mg:Work .
     ?outw mg:workName ?wn .
     ?outw mg:hasRuling ?ruling . # Gather all rulings related to this work
-    #?outw!mg:targetPublishPolicy list:in (mg:sell mg:share) . # This work will be redistributed.
+    #?outw!mg:hasPublishPolicy list:in (mg:sell mg:share) . # This work will be redistributed.
     ?ruling mg:hasRule ?rule .
 } => {
     ?outw :hasRule ?rule .

@@ -95,7 +95,7 @@ def register_license(target_work: Work, target_license: str='Unlicense', action_
     return flow
 
 # Action to republish a work, allowing assignment of a new work form and publication policy
-def publish(target_flow: Workflow, action_label: str='publish', form: Optional[str] = None, policy: str='share') -> Workflow:  # support policy: internal, share, sell
+def publish(target_flow: Workflow, action_label: str='publish', form: Optional[str] = None, policy: str='share', aux_flows: Optional[Iterable[Workflow]]=None, sub_flows: Optional[Iterable[Workflow]]=None) -> Workflow:  # support policy: internal, share, sell
     g = target_flow.graph
 
     # Add the Publish Action in this graph
@@ -107,6 +107,16 @@ def publish(target_flow: Workflow, action_label: str='publish', form: Optional[s
     input_bn = BNode() # Blank node for input
     g.add((airi, MG.hasInput, input_bn)) # Add a blank node as input, which will be populated later by N3 rules
     g.add((input_bn, MG.targetPublishPolicy, MG[policy]))
+    if aux_flows: # If there provided aux works, such as the dataset and code used for training and will not be published with the trained model
+        for af in aux_flows: 
+            target_flow.merge(af)
+            g.add((EX[af.latest_action_id], MG.yieldAsAuxwork, airi))
+
+    if sub_flows: # If there provided sub works, such as the dataset or code used for training and will be published with the trained model
+        for sf in sub_flows: 
+            target_flow.merge(sf)
+            g.add((EX[sf.latest_action_id], MG.yieldAsSubWork, airi))
+
     if form: # If target form is provided
         g.add((input_bn, MG.targetWorkForm, MG[form]))
     g.add((airi, MG.hasOutput, BNode())) # Add this blank node as placeholder for output

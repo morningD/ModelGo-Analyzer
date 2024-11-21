@@ -1,55 +1,65 @@
 @prefix : <http://example.org/ns#> .
 @prefix mg: <http://www.modelgo.li/rdf/terms#> .
 
-:reg1 a mg:RegisterLicense ;
-    mg:actionId "reg1" ;
-    mg:hasInput [ mg:targetLicense mg:CC-BY-ND-4.0 ;
-            mg:targetWork :FreeLaw ] ;
-    mg:yieldAsAuxwork :gen5 .
-
 :reg2 a mg:RegisterLicense ;
     mg:actionId "reg2" ;
-    mg:hasInput [ mg:targetLicense mg:GPL-3.0 ;
-            mg:targetWork :CKIP-Transformers ] ;
-    mg:yieldAsInputWork :combine4 .
+    mg:hasInput [ mg:targetLicense mg:Llama2 ;
+            mg:targetWork :Llama2 ] ;
+    mg:yieldAsInputWork :combine7 .
 
 :reg3 a mg:RegisterLicense ;
     mg:actionId "reg3" ;
+    mg:hasInput [ mg:targetLicense mg:GPL-3.0 ;
+            mg:targetWork :CKIP-Transformers ] ;
+    mg:yieldAsInputWork :combine6 .
+
+:reg4 a mg:RegisterLicense ;
+    mg:actionId "reg4" ;
     mg:hasInput [ mg:targetLicense mg:AGPL-3.0 ;
             mg:targetWork :PhoBERT ] ;
-    mg:yieldAsInputWork :combine4 .
+    mg:yieldAsInputWork :combine6 .
+
+:reg5 a mg:RegisterLicense ;
+    mg:actionId "reg5" ;
+    mg:hasInput [ mg:targetLicense mg:CC-BY-NC-SA-4.0 ;
+            mg:targetWork :MPT-Chat ] ;
+    mg:yieldAsSubWork :publish8 .
 
 :CKIP-Transformers a mg:work ;
     mg:hasWorkForm mg:weights ;
     mg:hasWorkType mg:model ;
     mg:workName "CKIP-Transformers" .
 
-:FreeLaw a mg:work ;
-    mg:hasWorkForm mg:literary ;
-    mg:hasWorkType mg:dataset ;
-    mg:workName "FreeLaw" .
+:Llama2 a mg:work ;
+    mg:hasWorkForm mg:weights ;
+    mg:hasWorkType mg:model ;
+    mg:workName "Llama2" .
+
+:MPT-Chat a mg:work ;
+    mg:hasWorkForm mg:weights ;
+    mg:hasWorkType mg:model ;
+    mg:workName "MPT-Chat" .
 
 :PhoBERT a mg:work ;
     mg:hasWorkForm mg:weights ;
     mg:hasWorkType mg:model ;
     mg:workName "PhoBERT" .
 
-:publish6 a mg:Publish ;
-    mg:actionId "publish6" ;
-    mg:hasInput [ mg:targetPublishPolicy mg:sell ;
-            mg:targetWorkForm mg:literary ] ;
-    mg:hasOutput [ ] .
-
-:combine4 a mg:Combine ;
-    mg:actionId "combine4" ;
+:combine6 a mg:Combine ;
+    mg:actionId "combine6" ;
     mg:hasInput [ ] ;
     mg:hasOutput [ ] ;
-    mg:yieldAsInputWork :gen5 .
+    mg:yieldAsInputWork :combine7 .
 
-:gen5 a mg:Generate ;
-    mg:actionId "gen5" ;
-    mg:hasInput [ mg:targetWorkForm mg:raw-form ;
-            mg:targetWorkType mg:dataset ] ;
+:combine7 a mg:Combine ;
+    mg:actionId "combine7" ;
+    mg:hasInput [ ] ;
     mg:hasOutput [ ] ;
-    mg:yieldAsInputWork :publish6 .
+    mg:yieldAsInputWork :publish8 .
+
+:publish8 a mg:Publish ;
+    mg:actionId "publish8" ;
+    mg:hasInput [ mg:targetPublishPolicy mg:sell ;
+            mg:targetWorkForm mg:weights ] ;
+    mg:hasOutput [ ] .
 

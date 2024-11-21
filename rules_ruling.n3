@@ -65,32 +65,6 @@
     ?ruling mg:hasOutputDef ?outputDef . # Bind the output definition to the ruling
 } .
 
-# Subruling Creation and Completion for Subworks Publishing. Add a new subruling to the republication work if it contains subworks.
-# (NOTE: Subworks will be published independently alongside the final work; e.g., datasets used in evaluation.
-#        Subruling will not affect the License Determination; But we need this info to analysis the restrictions when publishing. )
-{
-    ?action a mg:Publish .
-    ?action!mg:hasOutput mg:targetWork ?outw . # Republication
-    ?action!mg:hasInput mg:targetWork ?inw .
-    ?inw mg:hasSubwork ?subw .
-    ?subw mg:hasLicense ?linfo .
-    ?linfo mg:hasRule ?rule .
-    ?subw mg:hasWorkForm ?subwf .
-    ?rule mg:targetActionType mg:Publish . # Rule for Publish
-    ?rule mg:targetInputWorkForm ?subwf . # Matching input work form
-    ?rule mg:targetOutputWorkForm ?subwf . # Subwork intended be published under original work form
-    ?rule mg:hasOutputDef ?outputDef . # Find the matching output definition (no use)
-    (?action ?subw ?outw "subruling") log:skolem ?geniri . # Ensure that only one ruling is created for each (Publish, subwork, republication) tuple
-} => {
-    ?geniri a mg:Ruling ;
-        mg:targetWork ?subw ;
-        mg:targetAction ?action ;
-        mg:hasLicense ?linfo ;
-        mg:hasRule ?rule . # Rule is binded
-        #mg:hasOutputDef ?outputDef . # OutputDef is out of context
-    ?outw mg:hasSubruling ?geniri .
-} .
-
 # License Determination. Find the license of the output work according to its rulings
 # The default license in Unlicense, if there are multiple copyleft licenses are triggered, then try to find a compatible license as solution.
 # NOTE: The found solution may not be valid. We assign the license as compliantly as possible to enable further analysis; any corresponding errors will be reported during the analysis phase.

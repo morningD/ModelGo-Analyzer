@@ -1108,8 +1108,8 @@ mg:MG-BY-NC a mg:LicenseInfo ;
         mg:hasUsage mg:patent, mg:copyright, mg:trademark, mg:trademark_use, mg:commercial_use
     ] ;
     
-    mg:hasRule mg:Llama3.1-duplication-rule, mg:Llama3.1-independent-rule, mg:Llama3.1-derivative-rule, mg:Llama3.1-republication-rule ; # Same as Llama3.1, no commercial use is kind of use behavior restriction
-    mg:hasRule mg:Llama3.1-duplication-fuzz-rule, mg:Llama3.1-independent-fuzz-rule, mg:Llama3.1-derivative-fuzz-rule, mg:Llama3.1-republication-fuzz-rule ;
+    mg:hasRule mg:MG-BY-NC-duplication-rule, mg:MG-BY-NC-independent-rule, mg:MG-BY-NC-derivative-rule, mg:MG-BY-NC-republication-rule ; # Similar with Llama3.1, but prohibit commercial use
+    mg:hasRule mg:MG-BY-NC-duplication-fuzz-rule, mg:MG-BY-NC-independent-fuzz-rule, mg:MG-BY-NC-derivative-fuzz-rule, mg:MG-BY-NC-republication-fuzz-rule ;
 
     mg:licenseUrl <https://github.com/Xtra-Computing/ModelGo/blob/main/MG_licenses/MG-BY-NC.txt> .
 
@@ -1138,8 +1138,8 @@ mg:MG-BY-NC-RAI a mg:LicenseInfo ;
         mg:hasUsage mg:patent, mg:copyright, mg:trademark, mg:trademark_use, mg:commercial_use
     ] ;
     
-    mg:hasRule mg:Llama3.1-duplication-rule, mg:Llama3.1-independent-rule, mg:Llama3.1-derivative-rule, mg:Llama3.1-republication-rule ; # Same as Llama3.1, no commercial use is kind of use behavior restriction
-    mg:hasRule mg:Llama3.1-duplication-fuzz-rule, mg:Llama3.1-independent-fuzz-rule, mg:Llama3.1-derivative-fuzz-rule, mg:Llama3.1-republication-fuzz-rule ;
+    mg:hasRule mg:MG-BY-NC-RAI-duplication-rule, mg:MG-BY-NC-RAI-independent-rule, mg:MG-BY-NC-RAI-derivative-rule, mg:MG-BY-NC-RAI-republication-rule ; # Similar with Llama3.1, but prohibit commercial use
+    mg:hasRule mg:MG-BY-NC-RAI-duplication-fuzz-rule, mg:MG-BY-NC-RAI-independent-fuzz-rule, mg:MG-BY-NC-RAI-derivative-fuzz-rule, mg:MG-BY-NC-RAI-republication-fuzz-rule ;
 
     mg:licenseUrl <https://github.com/Xtra-Computing/ModelGo/blob/main/MG_licenses/MG-BY-NC-RAI.txt> .
 
@@ -1168,8 +1168,8 @@ mg:MG-BY-NC-OS a mg:LicenseInfo ;
         mg:hasUsage mg:patent, mg:copyright, mg:trademark, mg:trademark_use, mg:commercial_use
     ] ;
     
-    mg:hasRule mg:MG-BY-NC-OS-duplication-rule, mg:Llama3.1-independent-rule, mg:MG-BY-NC-OS-derivative-rule, mg:MG-BY-NC-OS-republication-rule ; # Same as Llama3.1, no commercial use is kind of use behavior restriction
-    mg:hasRule mg:MG-BY-NC-OS-duplication-fuzz-rule, mg:Llama3.1-independent-fuzz-rule, mg:MG-BY-NC-OS-derivative-fuzz-rule, mg:MG-BY-NC-OS-republication-fuzz-rule ;
+    mg:hasRule mg:MG-BY-NC-OS-duplication-rule, mg:MG-BY-NC-independent-rule, mg:MG-BY-NC-OS-derivative-rule, mg:MG-BY-NC-OS-republication-rule ;
+    mg:hasRule mg:MG-BY-NC-OS-duplication-fuzz-rule, mg:MG-BY-NC-independent-fuzz-rule, mg:MG-BY-NC-OS-derivative-fuzz-rule, mg:MG-BY-NC-OS-republication-fuzz-rule ;
 
     mg:licenseUrl <https://github.com/Xtra-Computing/ModelGo/blob/main/MG_licenses/MG-BY-NC-OS.txt> .
 

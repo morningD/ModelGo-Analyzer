@@ -9,64 +9,175 @@
 @prefix : <http://example.org/ns#>.
 
 
-####    Triggered restrictions collect rules  ####
-# Gather all triggered restrictions for a given 'Publish' action, which is useful for further analysis
-{ # CASE-1: Internal Use
-    ?action a mg:Publish .
-    ?action mg:targetPublishPolicy ?policy .
-    ?policy log:equalTo mg:internal . # Only internal use, not public publish
-    ?action!mg:hasOutput mg:targetWork ?outw .
-    ?outw mg:hasRuling ?rl .
-    ?rl mg:hasRule ?ru .
-    ?ru mg:hasUseRestriction ?rest . # Only use restrictions are triggered
+# Each work intended for publication has a unique PublishTask associated with each Publish action
+:PublishTask a rdfs:Class ;
+    rdfs:comment "This class represents the publishing information and associated triggered restrictions of a work." .
 
-    ?outw mg:workName ?wname .
-    ?rl!mg:targetWork mg:workName ?rlwname .
-    ("** Analysis [Triggered Restriction] ** " ?wname " has a triggered restriction " ?rest " from " ?rlwname) string:concatenation ?report_content .
+:hasPublishTask a rdfs:Property ;
+    rdfs:domain mg:Work ;
+    rdfs:range :PublishTask .
+
+####    Create PublishTask  ####
+{ # Create PublishTask from the final work
+    ?action a mg:Publish .
+    ?action!mg:hasOutput mg:targetWork ?work .
+    ?work mg:hasPublishPolicy ?policy .
+    (?action ?work "PublishTask") log:skolem ?geniri .
 } => {
-    _:triggered a mg:TriggeredRestriction ;
-        mg:reportedBy ?rl ;
-        mg:hasRestriction ?rest ;
-        mg:reportType "Triggered Restriction" ;
-        mg:content ?report_content .
+    ?geniri a :PublishTask ;
+        mg:targetAction ?action ;
+        mg:targetWork ?work ;
+        mg:hasPublishPolicy ?policy .
+    ?work :hasPublishTask ?geniri .
 } .
-{ # CASE-2: Share or Sell (ruling of iteself)
-    ?action a mg:Publish .
-    ?action mg:targetPublishPolicy ?policy .
-    ?policy list:in (mg:share mg:sell) . # Share or Sell, public publish
-    ?action!mg:hasOutput mg:targetWork ?outw .
-    ?outw mg:hasRuling ?rl .
-    ?rl mg:hasRule ?ru .
-    ?ru mg:hasRestriction ?rest . # Both use and publish restrictions are triggered
-
-    ?outw mg:workName ?wname .
-    ?rl!mg:targetWork mg:workName ?rlwname .
-    ("** Analysis [Triggered Restriction] ** " ?wname " has a triggered restriction " ?rest " from " ?rlwname) string:concatenation ?report_content .
+{ # Proliferate Publish Task to mixwork and subwork
+    ?pt a :PublishTask .
+    ?work :hasPublishTask ?pt .
+    ?has list:in (mg:hasMixwork mg:hasSubwork) .
+    ?work ?has ?mwsw .
+    ?pt mg:targetAction ?action .
+    ?pt mg:targetWork ?pubw .
+    (?action ?pubw "PublishTask") log:skolem ?geniri .
 } => {
-    _:triggered a mg:TriggeredRestriction ;
-        mg:reportedBy ?rl ;
-        mg:hasRestriction ?rest ;
-        mg:reportType "Triggered Restriction" ;
-        mg:content ?report_content .
+    ?mwsw :hasPublishTask ?geniri .
 } .
-{ # CASE-3: Share or Sell (subrulings from its subworks)
-    ?action a mg:Publish .
-    ?action mg:targetPublishPolicy ?policy .
-    ?policy list:in (mg:share mg:sell) . # Share or Sell, public publish
-    ?action!mg:hasOutput mg:targetWork ?outw .
-    ?outw mg:hasSubruling ?rl .
-    ?rl mg:hasRule ?ru .
-    ?ru mg:hasPublishRestriction ?rest . # Only publish restrictions are triggered
 
-    ?outw mg:workName ?wname .
-    ?rl!mg:targetWork mg:workName ?rlwname .
-    ("** Analysis [Triggered Restriction] ** " ?wname " has a triggered restriction " ?rest " from " ?rlwname) string:concatenation ?report_content .
+####    Create Ruling for Publishing Subwork  ####
+# Note: Since the rulings of a subwork have no effect on license determination, we create the rulings in this analysis procedure
+{ # The ruling for publishing subwork self
+    ?subw a mg:Work .
+    ?subw :hasPublishTask ?pt .
+    ?work mg:hasSubwork ?subw . 
+    ?pt mg:targetAction ?action .
+    ?subw mg:hasLicense ?linfo .
+    ?linfo mg:hasRule ?rule .
+    ?subw mg:hasWorkForm ?subwf .
+    ?rule mg:targetActionType mg:Publish . # Rule for Publish
+    ?rule mg:targetInputWorkForm ?subwf . # Matching input work form
+    ?rule mg:targetOutputWorkForm ?subwf . # Subwork intended be published under original work form
+    ?rule mg:hasOutputDef ?outputDef . # Find the matching output definition (no use)
+    (?action ?subw ?work "ruling") log:skolem ?geniri . # Ensure that only one ruling is created for each (Publish, subwork, publication) tuple
 } => {
-    _:triggered a mg:TriggeredRestriction ;
-        mg:reportedBy ?rl ;
-        mg:hasRestriction ?rest ;
-        mg:reportType "Triggered Restriction" ;
-        mg:content ?report_content .
+    ?geniri a mg:Ruling ;
+        mg:targetWork ?subw ;
+        mg:targetAction ?action ;
+        mg:hasLicense ?linfo ;
+        mg:hasRule ?rule . # Rule is binded
+        #mg:hasOutputDef ?outputDef . # OutputDef is out of context
+    ?work mg:hasRuling ?geniri . # Add the ruling that publishing subwork to its following work
+} .
+{ # The ruling for publishing mixwork contained in the subwork
+    ?subw a mg:Work .
+    ?subw :hasPublishTask ?pt .
+    ?work mg:hasSubwork ?subw .
+    ?subw mg:hasMixwork ?submixw .
+    ?pt mg:targetAction ?action .
+    ?submixw mg:hasLicense ?linfo .
+    ?linfo mg:hasRule ?rule .
+    ?subw mg:hasWorkForm ?subwf .
+    ?submixw mg:hasWorkForm ?submixwf .
+    ?rule mg:targetActionType mg:Publish . # Rule for Publish
+    ?rule mg:targetInputWorkForm ?submixwf . # Matching input work form
+    ?rule mg:targetOutputWorkForm ?subwf . # Mixwork intended be published under Subwork work form
+    ?rule mg:hasOutputDef ?outputDef . # Find the matching output definition (no use)
+    (?action ?submixw ?subwork "ruling") log:skolem ?geniri . # Ensure that only one ruling is created for each (Publish, subwork, publication) tuple
+} => {
+    ?geniri a mg:Ruling ;
+        mg:targetWork ?submixw ;
+        mg:targetAction ?action ;
+        mg:hasLicense ?linfo ;
+        mg:hasRule ?rule . # Rule is binded
+        #mg:hasOutputDef ?outputDef . # OutputDef is out of context
+    ?subw mg:hasRuling ?geniri . # Add the ruling that publishing subwork to its following work
+}.
+
+
+####    Gather Restrictions  ####
+# We consider that all publish tasks need to be accomplished, not distinguishing between the restrictions they trigger
+
+:TriggeredRestriction a rdfs:Class .
+:triggeredBy a rdfs:Property .
+:hasRestrictionFromMixwork a rdfs:Property .
+:hasRestrictionFromSubwork a rdfs:Property .
+
+
+{ # Restrictions from mixwork
+    ?pt a :PublishTask .
+    ?work :hasPublishTask ?pt .
+    ?work mg:hasRuling ?rl .
+    ?rl mg:targetWork ?mw .
+    ?work mg:hasMixwork ?mw . # According to ruling from mixwork
+    ?mw :hasPublishTask ?pt .
+    (?pt ?rl "TriggeredRestriction") log:skolem ?geniri .
+} => {
+    ?geniri a :TriggeredRestriction ;
+        :triggeredBy ?pt ;
+        :triggeredBy ?rl .
+    ?work :hasRestrictionFromMixwork ?geniri .
+} .
+{ # Restrictions from subwork
+    ?pt a :PublishTask .
+    ?work :hasPublishTask ?pt .
+    ?work mg:hasRuling ?rl .
+    ?rl mg:targetWork ?sw .
+    ?work mg:hasSubwork ?sw . # According to ruling from mixwork
+    ?sw :hasPublishTask ?pt .
+    (?pt ?rl "TriggeredRestriction") log:skolem ?geniri .
+} => {
+    ?geniri a :TriggeredRestriction ;
+        :triggeredBy ?pt ;
+        :triggeredBy ?rl .
+    ?work :hasRestrictionFromSubwork ?geniri .
+} .
+
+{  # CASE: Internal Use
+    ?tr a :TriggeredRestriction .
+    ?tr :triggeredBy ?pt .
+    ?pt a :PublishTask .
+    ?tr :triggeredBy ?rl .
+    ?rl a mg:Ruling .
+    ?work mg:hasRuling ?rl .
+    ?pt!mg:hasPublishPolicy log:equalTo mg:internal . # Only internal use, not public publish
+    ?rl!mg:hasRule mg:hasUseRestriction ?rest . # Use restrictions are triggered
+    (?pt ?rl "TriggeredRestriction") log:skolem ?geniri .
+} => {
+    ?geniri mg:hasRestriction ?rest .
+} .
+{  # CASE: Share or Sell
+    ?tr a :TriggeredRestriction .
+    ?tr :triggeredBy ?pt .
+    ?pt a :PublishTask .
+    ?tr :triggeredBy ?rl .
+    ?rl a mg:Ruling .
+    ?work mg:hasRuling ?rl .
+    ?pt!mg:hasPublishPolicy list:in (mg:share mg:sell) . # Share or Sell, public publish
+    ?rl!mg:hasRule mg:hasRestriction ?rest . # Both Use and Publish restrictions are triggered
+    (?pt ?rl "TriggeredRestriction") log:skolem ?geniri .
+} => {
+    ?geniri mg:hasRestriction ?rest .
+} .
+
+{ # Proliferate Restrictions
+    ?work a mg:Work .
+    ?work mg:hasMixwork ?mw .
+    ?mw :hasRestrictionFromMixwork ?rest .
+} => {
+    ?work :hasRestrictionFromMixwork ?rest .
+} .
+{
+    ?work a mg:Work .
+    ?work mg:hasMixwork ?mw .
+    ?mw :hasRestrictionFromSubwork ?rest .
+} => {
+    ?work :hasRestrictionFromSubwork ?rest .
+} .
+{ 
+    ?work a mg:Work .
+    ?work mg:hasSubwork ?sw .
+    ?has list:in (:hasRestrictionFromMixwork :hasRestrictionFromSubwork) .
+    ?sw ?has ?rest .
+} => {
+    ?work :hasRestrictionFromSubwork :rest .
 } .
 
 
@@ -99,7 +210,7 @@
 
     ?work mg:workName ?wname . # Genreate report content
     ?license mg:licenseId ?lid .
-    ("** Warning ** [Revocable License] The " ?lid " license of"  ?wname " is revocable") string:concatenation ?report_content .
+    ("** Warning ** [Revocable License] The " ?lid " license of " ?wname " is revocable") string:concatenation ?report_content .
 } => {
     _:warning a mg:Warning ;
         mg:reportedBy ?work ;
@@ -116,7 +227,7 @@
 
     ?work mg:workName ?wname . # Genreate report content
     ?license mg:licenseId ?lid .
-    ("** Warning ** [Possibly Revocable License] The " ?lid " license of"  ?wname " is revocable") string:concatenation ?report_content .
+    ("** Warning ** [Possibly Revocable License] The " ?lid " license of " ?wname " does not explicitly claim to be irrevocable") string:concatenation ?report_content .
 } => {
     _:warning a mg:Warning ;
         mg:reportedBy ?work ;
@@ -141,5 +252,53 @@
     _:error a mg:Error ;
         mg:reportedBy ?work ;
         mg:reportType "Wrong Work Type or Form" ;
+        mg:content ?report_content .
+} .
+
+# Notice N1 [Include License]. The original license file should be retained.
+{   
+    ?pt a :PublishTask .
+    ?pt mg:targetWork ?w .
+    ?has list:in (:hasRestrictionFromMixwork :hasRestrictionFromSubwork) . # Both check from mixwork and subwork
+    ?w ?has ?tr .
+    ?tr :triggeredBy ?pt .
+    ?tr :triggeredBy ?rl .
+    ?rl a mg:Ruling .
+    ?tr mg:hasRestriction ?rest . # Retrieve its restrictions
+    ?rest log:equalTo mg:include_license_restriction . # This work has include license restriction
+
+    ?rl mg:targetWork ?inw .
+    ?w mg:workName ?wname .
+    ?inw mg:workName ?inwname .
+    ?inw!mg:hasLicense mg:licenseId ?lid .
+    ("** Notice ** [Include License] To Publish " ?wname ", the " ?lid " license of "  ?inwname " should be retained") string:concatenation ?report_content .
+} => {
+    _:notice a mg:Notice ;
+        mg:reportedBy ?w ;
+        mg:reportType "Include License" ;
+        mg:content ?report_content .
+} .
+
+# Notice N2 [Include Notice]. The notices (e.g., attribution, copyright, patent, trademark) should be retained.
+{   
+    ?pt a :PublishTask .
+    ?pt mg:targetWork ?w .
+    ?has list:in (:hasRestrictionFromMixwork :hasRestrictionFromSubwork) . # Both check from mixwork and subwork
+    ?w ?has ?tr .
+    ?tr :triggeredBy ?pt .
+    ?tr :triggeredBy ?rl .
+    ?rl a mg:Ruling .
+    ?tr mg:hasRestriction ?rest . # Retrieve its restrictions
+    ?rest log:equalTo mg:include_notice_restriction . # This work has include license restriction
+
+    ?rl mg:targetWork ?inw .
+    ?w mg:workName ?wname .
+    ?inw mg:workName ?inwname .
+    ?inw!mg:hasLicense mg:licenseId ?lid .
+    ("** Notice ** [Include Notice] To Publish " ?wname ", the notice files (e.g., attribution, copyright, patent, trademark) of "  ?inwname " should be retained") string:concatenation ?report_content .
+} => {
+    _:notice a mg:Notice ;
+        mg:reportedBy ?w ;
+        mg:reportType "Include Notice" ;
         mg:content ?report_content .
 } .

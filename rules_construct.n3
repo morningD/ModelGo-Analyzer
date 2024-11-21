@@ -22,7 +22,7 @@
     ?work mg:hasWorkForm ?wform .
 } .
 
-# Mixworks relationship proliferation. (Chain rule)
+# Mixwork relationship proliferation. (Chain rule: mix(mix) -> mix)
 {
     ?work a mg:Work .
     ?work!mg:hasMixwork mg:hasMixwork ?mmixw .
@@ -338,7 +338,7 @@
     ?geniri a mg:Work ; # Hold same work form, type, and license info as the input work
         mg:hasMixwork ?inw ;
         mg:hasWorkType ?wt ; # Output has same work type as input
-        mg:targetPublishPolicy ?policy . # Add the publish policy to output (republication) work
+        mg:hasPublishPolicy ?policy . # Add the publish policy to output (republication) work
     ?out mg:targetWork ?geniri .
 } .
 # [Publish] Assign work form of output

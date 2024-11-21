@@ -34,10 +34,10 @@ free_law_text = register_license(Work('FreeLaw', 'dataset', 'literary'), target_
 #bigtranslate_model = register_license(Work('BigTranslate', 'model', 'weights'), target_license='GPL-3.0') # Text Translation, https://huggingface.co/James-WYang/BigTranslate
 # bert_model = register_license(Work('BERT', 'model', 'weights'), target_license='Apache-2.0') # Text, https://huggingface.co/bert-base-uncased
 # bloom_model = register_license(Work('BLOOM', 'model', 'weights'), target_license='OpenRAIL-M') # Text Generation, https://huggingface.co/bigscience/bloom
-# llama2_model = register_license(Work('Llama2', 'model', 'weights'), target_license='Llama2') # Text Generation, https://huggingface.co/meta-llama/Llama-2-7b
+llama2_model = register_license(Work('Llama2', 'model', 'weights'), target_license='Llama2') # Text Generation, https://huggingface.co/meta-llama/Llama-2-7b
 ckip_model = register_license(Work('CKIP-Transformers', 'model', 'weights'), target_license='GPL-3.0') # Text Generation, https://github.com/ckiplab/ckip-transformers
 phobert_model = register_license(Work('PhoBERT', 'model', 'weights'), target_license='AGPL-3.0') # Text Generation, https://huggingface.co/vinai/phobert-base-v2
-#mptchart_model = register_license(Work('MPT-Chat', 'model', 'weights'), target_license='CC-BY-NC-SA-4.0') # Text Generation, https://huggingface.co/mosaicml/mpt-7b-chat
+mptchart_model = register_license(Work('MPT-Chat', 'model', 'weights'), target_license='CC-BY-NC-SA-4.0') # Text Generation, https://huggingface.co/mosaicml/mpt-7b-chat
 #commandr_model = register_license(Work('C4AI-Command-R+', 'model', 'weights'), target_license='CC-BY-NC-4.0') # Text Generation, https://huggingface.co/CohereForAI/c4ai-command-r-plus-08-2024
 
 #mgbyos_model = register_license(Work('MGBYOS', 'model', 'weights'), target_license='MG-BY-OS')
@@ -51,8 +51,9 @@ phobert_model = register_license(Work('PhoBERT', 'model', 'weights'), target_lic
 # Case-1
 #flow = combine([ckip_model, phobert_model])
 #flow = combine([mptchart_model, commandr_model])
+flow = combine([combine([ckip_model, phobert_model]), llama2_model])
 
-flow = generate(combine([ckip_model, phobert_model]), aux_flows=[free_law_text])
+#flow = generate(combine([ckip_model, phobert_model]), aux_flows=[free_law_text])
 #flow = generate(combine([mptchart_model, commandr_model]), aux_flows=[free_law_text])
 
 #flow = phobert_model
@@ -62,7 +63,7 @@ flow = generate(combine([ckip_model, phobert_model]), aux_flows=[free_law_text])
 #flow = mgbync_model
 #flow = phobert_model
 
-flow = publish(flow, form='literary', policy = 'sell') # literary/service-form
+flow = publish(flow, form='weights', policy = 'sell', sub_flows=[mptchart_model]) # literary/service-form
 #flow = publish(flow, form='service-form', policy = 'sell') # literary/service-form
 # Save the gen graph to a new Turtle file
 flow.graph.serialize(destination="gen.ttl", format="ttl")
@@ -95,13 +96,6 @@ result = subprocess.run(["eye", "--quiet", "--nope", "--pass",
 Graph().parse(data=result.stdout, format="n3").serialize(destination="out_WF_ruling_request.ttl", format="turtle")
 
 """  Analysis Results (report notice, warnining, error)  """
-# Analysis of request
-analysis_result = subprocess.run(["eye", "--quiet", "--nope", "--pass-only-new", 
-                         "vocabulary.ttl", "MGLicenseInfo.ttl", "MGLicenseRule.ttl", "out_WF_ruling_request.ttl",
-                         "rules_analysis_granting.n3"], 
-                         stdout=subprocess.PIPE, check=True)
-
-Graph().parse(data=analysis_result.stdout, format="n3").serialize(destination="out_analysis_granting.ttl", format="turtle")
 
 # Analysis of base
 analysis_result = subprocess.run(["eye", "--quiet", "--nope", "--pass-only-new", 
@@ -111,11 +105,19 @@ analysis_result = subprocess.run(["eye", "--quiet", "--nope", "--pass-only-new",
 
 Graph().parse(data=analysis_result.stdout, format="n3").serialize(destination="out_analysis_base.ttl", format="turtle")
 
-# Analysis of conflicts and reprot restrictions thought rulings.
+# Analysis of request
 analysis_result = subprocess.run(["eye", "--quiet", "--nope", "--pass-only-new", 
                          "vocabulary.ttl", "MGLicenseInfo.ttl", "MGLicenseRule.ttl", "out_WF_ruling_request.ttl",
-                         "rules_analysis_conflict.n3"], 
+                         "rules_analysis_granting.n3"], 
                          stdout=subprocess.PIPE, check=True)
+
+Graph().parse(data=analysis_result.stdout, format="n3").serialize(destination="out_analysis_granting.ttl", format="turtle")
+
+# # Analysis of conflicts and reprot restrictions thought rulings.
+# analysis_result = subprocess.run(["eye", "--quiet", "--nope", "--pass-only-new", 
+#                          "vocabulary.ttl", "MGLicenseInfo.ttl", "MGLicenseRule.ttl", "out_WF_ruling_request.ttl",
+#                          "rules_analysis_conflict.n3"], 
+#                          stdout=subprocess.PIPE, check=True)
 
 Graph().parse(data=analysis_result.stdout, format="n3").serialize(destination="out_analysis_conflict.ttl", format="turtle")
 

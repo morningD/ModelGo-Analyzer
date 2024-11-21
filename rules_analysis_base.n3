@@ -271,11 +271,12 @@
     ?w mg:workName ?wname .
     ?inw mg:workName ?inwname .
     ?inw!mg:hasLicense mg:licenseId ?lid .
-    ("** Notice ** [Include License] To Publish " ?wname ", the " ?lid " license of "  ?inwname " should be retained") string:concatenation ?report_content .
+    ?rest mg:reportType ?rtype .
+    ("** Notice ** [" ?rtype "] To Publish " ?wname ", the " ?lid " license of "  ?inwname " should be retained") string:concatenation ?report_content .
 } => {
     _:notice a mg:Notice ;
         mg:reportedBy ?w ;
-        mg:reportType "Include License" ;
+        mg:reportType ?rtype ;
         mg:content ?report_content .
 } .
 
@@ -289,16 +290,205 @@
     ?tr :triggeredBy ?rl .
     ?rl a mg:Ruling .
     ?tr mg:hasRestriction ?rest . # Retrieve its restrictions
-    ?rest log:equalTo mg:include_notice_restriction . # This work has include license restriction
+    ?rest log:equalTo mg:include_notice_restriction .
 
     ?rl mg:targetWork ?inw .
     ?w mg:workName ?wname .
     ?inw mg:workName ?inwname .
     ?inw!mg:hasLicense mg:licenseId ?lid .
-    ("** Notice ** [Include Notice] To Publish " ?wname ", the notice files (e.g., attribution, copyright, patent, trademark) of "  ?inwname " should be retained") string:concatenation ?report_content .
+    ?rest mg:reportType ?rtype .
+    ("** Notice ** [" ?rtype "] To Publish " ?wname ", the notice files (e.g., attribution, copyright, patent, trademark) of "  ?inwname " should be retained") string:concatenation ?report_content .
 } => {
     _:notice a mg:Notice ;
         mg:reportedBy ?w ;
-        mg:reportType "Include Notice" ;
+        mg:reportType ?rtype ;
+        mg:content ?report_content .
+} .
+
+# Notice N3 [State Changes]. A notice stating the modifications made to work should be provided.
+{   
+    ?pt a :PublishTask .
+    ?pt mg:targetWork ?w .
+    ?has list:in (:hasRestrictionFromMixwork :hasRestrictionFromSubwork) . # Both check from mixwork and subwork
+    ?w ?has ?tr .
+    ?tr :triggeredBy ?pt .
+    ?tr :triggeredBy ?rl .
+    ?rl a mg:Ruling .
+    ?tr mg:hasRestriction ?rest . # Retrieve its restrictions
+    ?rest log:equalTo mg:state_changes_restriction .
+    ?rl!mg:hasOutputDef list:in (mg:derivative mg:nodefinition) . # If the new work is a derivative or nodefinition
+
+    ?rl mg:targetWork ?inw .
+    ?w mg:workName ?wname .
+    ?inw mg:workName ?inwname .
+    ?inw!mg:hasLicense mg:licenseId ?lid .
+    ?rest mg:reportType ?rtype .
+    ("** Notice ** [" ?rtype "] To Publish " ?wname ", a notice stating the modifications made to "  ?inwname " should be provided") string:concatenation ?report_content .
+} => {
+    _:notice a mg:Notice ;
+        mg:reportedBy ?w ;
+        mg:reportType ?rtype ;
+        mg:content ?report_content .
+} .
+
+# Notice N4 [Report Impact]. This work requires publisher to submit a Derivative Impact Report according to the related license.
+{   
+    ?pt a :PublishTask .
+    ?pt mg:targetWork ?w .
+    ?has list:in (:hasRestrictionFromMixwork :hasRestrictionFromSubwork) . # Both check from mixwork and subwork
+    ?w ?has ?tr .
+    ?tr :triggeredBy ?pt .
+    ?tr :triggeredBy ?rl .
+    ?rl a mg:Ruling .
+    ?tr mg:hasRestriction ?rest . # Retrieve its restrictions
+    ?rest log:equalTo mg:report_impact_restriction . # This work has include license restriction
+
+    ?rl mg:targetWork ?inw .
+    ?w mg:workName ?wname .
+    ?inw mg:workName ?inwname .
+    ?inw!mg:hasLicense mg:licenseId ?lid .
+    ?rest mg:reportType ?rtype .
+    ("** Notice ** [" ?rtype "] " ?inwname " requires publisher to submit a Derivative Impact Report according to "  ?lid ) string:concatenation ?report_content .
+} => {
+    _:notice a mg:Notice ;
+        mg:reportedBy ?w ;
+        mg:reportType ?rtype ;
+        mg:content ?report_content .
+} .
+
+# Warning W5 [Discolse Source]. This work should disclose its source code.
+{ # FromMixwork
+    ?pt a :PublishTask .
+    ?w :hasPublishTask ?pt . # The work has Pubulih Task
+    ?w :hasRestrictionFromMixwork ?tr . # check from mixwork
+    ?tr :triggeredBy ?pt .
+    ?tr :triggeredBy ?rl .
+    ?rl a mg:Ruling .
+    ?tr mg:hasRestriction ?rest . # Retrieve its restrictions
+    ?rest log:equalTo mg:disclose_self_restriction .
+    ?w!mg:hasWorkForm!mg:broader log:notEqualTo mg:raw-form . # The form of this work is no raw (e.g., code)
+
+    ?rl mg:targetWork ?inw .
+    ?w mg:workName ?wname .
+    ?inw mg:workName ?inwname .
+    ?inw!mg:hasLicense mg:licenseId ?lid .
+    ?rest mg:reportType ?rtype .
+    ("** Warning ** [" ?rtype "] " ?wname " should disclose its source code according to " ?lid " license of " ?inwname ) string:concatenation ?report_content .
+} => {
+    _:warning a mg:Warning ;
+        mg:reportedBy ?w ;
+        mg:reportType ?rtype ;
+        mg:content ?report_content .
+} .
+{ # FromSubwork
+    ?pt a :PublishTask .
+    ?w :hasPublishTask ?pt . # The work has Pubulih Task
+    ?w :hasRestrictionFromSubwork ?tr . # check from subwork
+    ?tr :triggeredBy ?pt .
+    ?tr :triggeredBy ?rl .
+    ?rl a mg:Ruling .
+    ?tr mg:hasRestriction ?rest . # Retrieve its restrictions
+    ?rest log:equalTo mg:disclose_self_restriction .
+    ?rl mg:targetWork ?inw . # This subwork
+    ?inw!mg:hasWorkForm!mg:broader log:notEqualTo mg:raw-form . # The form of this work is no raw (e.g., code)
+
+    ?inw mg:workName ?inwname .
+    ?inw!mg:hasLicense mg:licenseId ?lid .
+    ?rest mg:reportType ?rtype .
+    ("** Warning ** [" ?rtype "] " ?inwname " should disclose its source code according to its" ?lid " license") string:concatenation ?report_content .
+} => {
+    _:warning a mg:Warning ;
+        mg:reportedBy ?inw ;
+        mg:reportType ?rtype ;
+        mg:content ?report_content .
+} .
+
+# Warning W6 [Discolse Unmodified Source]. The unmodified source code of a work should be disclosed.
+{   
+    ?pt a :PublishTask .
+    ?tr :triggeredBy ?pt .
+    ?tr :triggeredBy ?rl .
+    ?rl a mg:Ruling .
+    ?tr mg:hasRestriction ?rest . # Retrieve its restrictions
+    ?rl mg:targetWork ?inw . # The work that require disclose source
+    ?rest log:equalTo mg:disclose_unmodified_source_restriction .
+    ?inw!mg:hasWorkForm!mg:broader log:notEqualTo mg:raw-form . # The form of this work is no raw (e.g., code)
+
+    ?pt!mg:targetWork mg:workName ?wname .
+    ?inw mg:workName ?inwname .
+    ?inw!mg:hasLicense mg:licenseId ?lid .
+    ?rest mg:reportType ?rtype .
+    ("** Warning ** [" ?rtype "] To publish " ?wname ", the unmodified source code of " ?wname " should be disclosed according to " ?lid " license") string:concatenation ?report_content .
+} => {
+    _:warning a mg:Warning ;
+        mg:reportedBy ?inw ;
+        mg:reportType ?rtype ;
+        mg:content ?report_content .
+} .
+
+# Warning W7 [Use Behavior]. The use of this work must comply with the usage behavior restrictions of license.
+{ # FromMixwork
+    ?pt a :PublishTask .
+    ?w :hasPublishTask ?pt . # The work has Pubulih Task
+    ?w :hasRestrictionFromMixwork ?tr . # check from mixwork
+    ?tr :triggeredBy ?pt .
+    ?tr :triggeredBy ?rl .
+    ?rl a mg:Ruling .
+    ?tr mg:hasRestriction ?rest . # Retrieve its restrictions
+    ?rest log:equalTo mg:use_behavior_restriction .
+
+    ?rl mg:targetWork ?inw .
+    ?w mg:workName ?wname .
+    ?inw mg:workName ?inwname .
+    ?inw!mg:hasLicense mg:licenseId ?lid .
+    ?rest mg:reportType ?rtype .
+    ("** Warning ** [" ?rtype "] The use of " ?wname " must comply with the usage behavior restrictions of " ?inwname " according to its license " ?lid) string:concatenation ?report_content .
+} => {
+    _:warning a mg:Warning ;
+        mg:reportedBy ?w ;
+        mg:reportType ?rtype ;
+        mg:content ?report_content .
+} .
+{ # FromSubwork
+    ?pt a :PublishTask .
+    ?w :hasPublishTask ?pt . # The work has Pubulih Task
+    ?w :hasRestrictionFromSubwork ?tr . # check from subwork
+    ?tr :triggeredBy ?pt .
+    ?tr :triggeredBy ?rl .
+    ?rl a mg:Ruling .
+    ?tr mg:hasRestriction ?rest . # Retrieve its restrictions
+    ?rest log:equalTo mg:use_behavior_restriction .
+    ?rl mg:targetWork ?inw . # This subwork
+
+    ?inw mg:workName ?inwname .
+    ?inw!mg:hasLicense mg:licenseId ?lid .
+    ?rest mg:reportType ?rtype .
+    ("** Warning ** [" ?rtype "] The use of " ?inwname " must comply with the usage behavior restrictions according its license" ?lid) string:concatenation ?report_content .
+} => {
+    _:warning a mg:Warning ;
+        mg:reportedBy ?inw ;
+        mg:reportType ?rtype ;
+        mg:content ?report_content .
+} .
+
+# Warning W8 [Runtime Control]. There is a runtime restriction clause in work (e.g., forced updates).
+{   
+    ?pt a :PublishTask .
+    ?tr :triggeredBy ?pt .
+    ?tr :triggeredBy ?rl .
+    ?rl a mg:Ruling .
+    ?tr mg:hasRestriction ?rest . # Retrieve its restrictions
+    ?rl mg:targetWork ?inw . # The work that require disclose source
+    ?rest log:equalTo mg:runtime_restriction .
+
+    #?pt!mg:targetWork mg:workName ?wname .
+    ?inw mg:workName ?inwname .
+    ?inw!mg:hasLicense mg:licenseId ?lid .
+    ?rest mg:reportType ?rtype .
+    ("** Warning ** [" ?rtype "] There is a runtime restriction in " ?inwname " according to its license " ?lid) string:concatenation ?report_content .
+} => {
+    _:warning a mg:Warning ;
+        mg:reportedBy ?inw ;
+        mg:reportType ?rtype ;
         mg:content ?report_content .
 } .

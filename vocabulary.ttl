@@ -537,7 +537,7 @@ mg:hasOutputDef a rdfs:Property ;
     rdfs:range mg:OutputDef .
 
 mg:duplication a mg:OutputDef .
-mg:modification a mg:OutputDef .
+#mg:modification a mg:OutputDef .
 mg:independent a mg:OutputDef .
 mg:derivative a mg:OutputDef .
 mg:nodefinition a mg:OutputDef .

@@ -75,6 +75,16 @@ mg:license_source_ruling_relicense_fail a mg:LicenseSource . # There have multip
 mg:license_source_ruling_copyleft_pass a mg:LicenseSource . # There have multiple licenses that require a compatible assignment and a solution can be found by ruling.
 mg:license_source_ruling_copyleft_fail a mg:LicenseSource . # There have multiple licenses that require a compatible assignment and NO solution can be found by ruling.
 
+{ # CASE-0: If the expected license provided, use this license for output work (may invalid)
+    ?outw a mg:Work .
+    _:x log:notIncludes { ?outw mg:hasLicense ?li } . # This work does not have a license yet
+    ?outw mg:hasExpectedLicense ?li .
+} => {
+    # Use expected license
+    ?outw mg:hasLicense ?li ;
+        mg:hasLicenseSource mg:license_source_user_expect .
+} .
+
 { # CASE-1: All rulings allow relicense output work. (any, any) -> Unlicense
     ?outw a mg:Work .
     _:x log:notIncludes { ?outw mg:hasLicense ?li } . # This work does not have a license yet
@@ -83,11 +93,12 @@ mg:license_source_ruling_copyleft_fail a mg:LicenseSource . # There have multipl
     
     # If relicense is any-license for all requests
     ({?outw!mg:hasRuling!mg:hasRule mg:relicense ?reli } {?reli log:equalTo mg:any-license}) log:forAllIn _:t .
+    _:t log:notIncludes { ?outw mg:hasExpectedLicense ?li } .
 } => {
     # Use default: Unlicense
     ?outw mg:hasLicense mg:Unlicense ;
         mg:hasLicenseSource mg:license_source_ruling_relicense_pass .
-}.
+} .
 
 { # CASE-2: One of ruling NOT allows relicense output work. (none, any/compat) -> none
     ?outw a mg:Work .
@@ -134,13 +145,13 @@ mg:license_source_ruling_copyleft_fail a mg:LicenseSource . # There have multipl
     ?li_1st mg:hasCompatibleLicense ?compat_list_1st .
     
     # Check wether exist a compatible license from 1st that also in all other (include self) compatible lists
-     _:x log:includes # Return true if there is a license included in all compatible list.
+    _:x log:includes # Return true if there is a license included in all compatible list.
         {   
             ?cli list:in ?compat_list_1st .
             ( {?li_list!list:member mg:hasCompatibleLicense ?compat_list_other} {?cli list:in ?compat_list_other} ) log:forAllIn _:t .
         } .
 } => {
-    ?outw mg:hasLicense ?li_1st ;
+    ?outw mg:hasLicense ?cli ;
         mg:hasLicenseSource mg:license_source_ruling_copyleft_pass .
 } .
 
@@ -174,6 +185,6 @@ mg:license_source_ruling_copyleft_fail a mg:LicenseSource . # There have multipl
             ( {?li_list!list:member mg:hasCompatibleLicense ?compat_list_other} {?cli list:in ?compat_list_other} ) log:forAllIn _:t .
         } .
 } => {
-    ?outw mg:hasLicense ?li_1st ;
+    ?outw mg:hasLicense ?cli ;
         mg:hasLicenseSource mg:license_source_ruling_copyleft_fail .
 } .

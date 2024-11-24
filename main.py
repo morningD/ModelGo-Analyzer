@@ -96,10 +96,16 @@ result = subprocess.run(["eye", "--quiet", "--nope", "--pass",
 Graph().parse(data=result.stdout, format="n3").serialize(destination="out_WF_ruling_request.ttl", format="turtle")
 
 """  Analysis Results (report notice, warnining, error)  """
+# Preparation before analyze
+result = subprocess.run(["eye", "--quiet", "--nope", "--pass", 
+                         "vocabulary.ttl", "MGLicenseInfo.ttl", "MGLicenseRule.ttl", "out_WF_ruling_request.ttl",
+                         "rules_analysis_init.n3"], 
+                         stdout=subprocess.PIPE, check=True)
+Graph().parse(data=result.stdout, format="n3").serialize(destination="out_WF_analysis_init.ttl", format="turtle")
 
 # Analysis of base
 analysis_result = subprocess.run(["eye", "--quiet", "--nope", "--pass-only-new", 
-                         "vocabulary.ttl", "MGLicenseInfo.ttl", "MGLicenseRule.ttl", "out_WF_ruling_request.ttl",
+                         "vocabulary.ttl", "MGLicenseInfo.ttl", "MGLicenseRule.ttl", "out_WF_analysis_init.ttl",
                          "rules_analysis_base.n3"], 
                          stdout=subprocess.PIPE, check=True)
 
@@ -107,7 +113,7 @@ Graph().parse(data=analysis_result.stdout, format="n3").serialize(destination="o
 
 # Analysis of request
 analysis_result = subprocess.run(["eye", "--quiet", "--nope", "--pass-only-new", 
-                         "vocabulary.ttl", "MGLicenseInfo.ttl", "MGLicenseRule.ttl", "out_WF_ruling_request.ttl",
+                         "vocabulary.ttl", "MGLicenseInfo.ttl", "MGLicenseRule.ttl", "out_WF_analysis_init.ttl",
                          "rules_analysis_granting.n3"], 
                          stdout=subprocess.PIPE, check=True)
 

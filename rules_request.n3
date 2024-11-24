@@ -106,7 +106,7 @@
 # [Publish-sell] Ask 'redistribute', 'sublicense', 'commercial_use' from target (final) work 
 {
     ?action a mg:Publish .
-    ?action!mg:hasOutput mg:hasPublishPolicy ?policy .
+    ?action!mg:hasOutput!mg:targetWork mg:hasPublishPolicy ?policy .
     ?policy log:equalTo mg:sell . # sell
     ?action!mg:hasInput mg:targetWork ?inw .
     ?action!mg:hasOutput mg:targetWork ?outw .
@@ -125,7 +125,7 @@
 # [Publish-share] Ask 'redistribute', 'sublicense' from target (final) work 
 {
     ?action a mg:Publish .
-    ?action!mg:hasOutput mg:hasPublishPolicy ?policy .
+    ?action!mg:hasOutput!mg:targetWork mg:hasPublishPolicy ?policy .
     ?policy log:equalTo mg:share . # share
     ?action!mg:hasInput mg:targetWork ?inw .
     ?action!mg:hasOutput mg:targetWork ?outw .

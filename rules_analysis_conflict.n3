@@ -9,135 +9,146 @@
 @prefix : <http://example.org/ns#>.
 
 
-# {
-#     ?rule a mg:Rule .
-#     ?rule mg:hasPublishRestriction ?pub_rest .
-# } => {
-#     ?pub_rest mg:isPublishRestriction true .
-# } .
-
-
 ####    Generate license analysis report rules  ####
-# # Restrictions 
-# {   # Use Restriction
-#     ?outw a mg:Work .
-#     ?outw mg:hasRuling ?ruling . # Gather all rulings related to this work
-#     ?ruling mg:hasRule ?rule .
-#     ?ruling mg:targetWork ?inw . # Ruling source work
-#     ?ruling mg:hasLicense ?li .
-#     ?ruling mg:targetAction ?a .
-#     ?rule mg:hasUseRestriction ?rest .
-#     ?rest mg:equalTo mg:include_notice_restriction .
-#     (?a ?inw ?outw mg:include_notice_restriction) log:skolem ?geniri . # Keep unique
-#     ("** Restriction ** [Include License Restriction] " ?outw " must retain the original " ?li " license file from " ?inw ) string:concatenation ?report_content .
-# } => {
-#     _:rest a mg:Restriction ;
-#         mg:reportBy ?work ;
-#         mg:reportType "Include License Restriction" ;
-#         mg:content ?report_content .
-# } .
-{   # Use Restriction
-    ?outw a mg:Work .
-    ?outw mg:workName ?wn .
-    ?outw mg:hasRuling ?ruling . # Gather all rulings related to this work
-    ?ruling mg:hasRule ?rule .
-    ?ruling mg:targetWork ?inw . # Ruling source work
-    ?ruling mg:hasLicense ?li .
-    ?ruling mg:targetAction ?a .
-    ?rule mg:hasUseRestriction ?rest .
-    #(?a ?inw ?outw mg:include_notice_restriction) log:skolem ?geniri . # Keep unique
-    #("** Restriction ** [XXX] " ?outw " has restriction " ?li " license file from " ?inw ) string:concatenation ?report_content .
+
+# Error E6 [Cannot Be Relicensed]. The license of a work is invalid because a work cannot be relicensed, or relicensing is invalid (e.g., incompatible).
+{ # CASE-1: (none1, none2) -> none1
+    ?work a mg:Work .
+    ?work!mg:hasLicenseSource log:equalTo mg:license_source_ruling_relicense_fail .
+    ?work mg:hasLicense ?li1 .
+
+    # Collect all none-relicensable license
+    ?work!mg:hasRuling!mg:hasRule!mg:relicense log:equalTo mg:none-license .
+    ?work!mg:hasRuling mg:targetWork ?inw .
+    ?inw mg:hasLicense ?li2 .
+    ?li1 log:notEqualTo ?li2 . # There has a license canot be relicensed to the new license
+
+    ?work mg:workName ?wname .
+    ?li1 mg:licenseId ?lid1 .
+    ?inw mg:workName ?inwname .
+    ?inw!mg:hasLicense mg:licenseId ?lid2 .
+    ("** Error ** [Cannot Be Relicensed]  The license of " ?wname " (" ?lid1 ") is invalid because " ?inwname " (" ?lid2 ") cannot be relicensed to it") string:concatenation ?report_content .
 } => {
-    # _:rest a mg:Restrction ;
-    #     mg:reportBy ?work ;
-    #     mg:reportType "Include License Restriction" ;
-    #     mg:content ?report_content .
-    ?outw :thisWorkHasUseRestriction (?rest ?wn ?rule ?li) .
+    _:error a mg:Error ;
+        mg:reportedBy ?inw ;
+        mg:reportType "Cannot Be Relicensed" ;
+        mg:content ?report_content .
+} .
+{ # CASE-2: (none1/incompat1, incompt2) -> none1/incompat1
+    ?work a mg:Work .
+    ?work!mg:hasLicenseSource list:in (mg:license_source_ruling_relicense_fail mg:license_source_ruling_copyleft_fail) .
+    ?work mg:hasLicense ?li1 .
+
+    # Collect all compat-relicensable license
+    ?work!mg:hasRuling!mg:hasRule!mg:relicense log:equalTo mg:compatible-license .
+    ?work!mg:hasRuling mg:targetWork ?inw .
+    ?inw mg:hasLicense ?li2 .
+    ?li2 mg:hasCompatibleLicense ?compat_list .
+    _:x log:notIncludes {?li1 list:in ?compat_list} . # none1/incompat1 is not in the compatible list of license2
+
+    ?work mg:workName ?wname .
+    ?li1 mg:licenseId ?lid1 .
+    ?inw mg:workName ?inwname .
+    ?inw!mg:hasLicense mg:licenseId ?lid2 .
+    ("** Error ** [Cannot Be Relicensed]  The license of " ?wname " (" ?lid1 ") is invalid because " ?inwname " (" ?lid2 ") cannot be relicensed to it") string:concatenation ?report_content .
+} => {
+    _:error a mg:Error ;
+        mg:reportedBy ?inw ;
+        mg:reportType "Cannot Be Relicensed" ;
+        mg:content ?report_content .
 } .
 
+# Error E7 [GNU Freedom Conflict]. The additional terms applied in this work may violate the GNU freedom clauses.
+{
+    ?work a mg:Work .
+    _:t log:notIncludes { ?work!mg:hasLicense!mg:LicenseName string:contains "GNU" } . # Skip GNU licenses
+    ?work :hasRestrictionFromMixwork ?tr .
+    ?tr :triggeredBy ?rl .
+    ?rl a mg:Ruling .
+    _:t log:includes { ?tr!mg:hasRestriction log:equalTo mg:gnu_freedom_restriction } .
+    _:t log:includes 
+        { 
+            _:x log:includes { ?tr!mg:hasRestriction log:equalTo mg:use_behavior_restriction } .
+            _:x log:includes { ?tr!mg:hasRestriction log:equalTo mg:non_commericial_restriction } .
+            _:x log:includes { ?tr!mg:hasRestriction log:equalTo mg:runtime_restriction } .
+        } .
 
-{   # Publish Restrction
-    ?outw a mg:Work .
-    ?outw mg:workName ?wn .
-    ?outw!mg:hasPublishPolicy list:in (mg:sell mg:share) . # This work will be redistributed.
-    #(?w {?outw mg:hasMixwork ?w} ?mixw) log:collectAllIn _:x .
-    #( (?outw) ?mixw ) list:append ?w_list .
-    #?w_list list:member ?outw .
-    ?outw mg:hasRuling ?ruling . # Gather all rulings related to this work
-    ?ruling mg:hasRule ?rule .
-    ?ruling mg:targetWork ?inw . # Ruling source work
-    ?inw mg:workName ?inwn .
-    ?ruling mg:hasLicense ?li .
-    ?ruling mg:targetAction ?a .
-    ?rule mg:hasPublishRestriction ?rest .
-    #?rest log:equalTo mg:include_notice_restriction .
-    #(?a ?inw ?outw mg:include_notice_restriction) log:skolem ?geniri . # Keep unique
-    #("** Restriction ** [Include License Restriction] " ?outw " must retain the original " ?li " license file from " ?inw ) string:concatenation ?report_content .
+    ?work mg:workName ?wname .
+    ?rl!mg:targetWork mg:workName ?inwname .
+    ("** Error ** [GNU Freedom Conflict] The additional terms applied in" ?wname " may violate the GNU freedom clauses in " ?inwname) string:concatenation ?report_content .
 } => {
-    ?outw :thisWorkHasPublishRestriction (?rest "This" ?inwn ?rule ?li) .
-    ?outw :nameis ?wn
+    _:error a mg:Error ;
+        mg:reportedBy ?work ;
+        mg:reportType "GNU Freedom Conflict" ;
+        mg:content ?report_content .
 } .
 
-{   # Publish Restrction of mixworks
-    ?outw a mg:Work .
-    ?outw mg:workName ?wn .
-    ?outw!mg:hasPublishPolicy list:in (mg:sell mg:share) . # This work will be redistributed.
-    ?outw mg:hasMixwork ?mixw .
-    ?mixw mg:workName ?mixwn .
-    ?mixw mg:hasRuling ?ruling . # Gather all rulings related to this work and its mixworks
-    ?ruling mg:hasRule ?rule .
-    ?ruling mg:targetWork ?inw . # Ruling source work
-    ?ruling mg:hasLicense ?li .
-    ?ruling mg:targetAction ?a .
-    ?rule mg:hasPublishRestriction ?rest .
-    #?rest log:equalTo mg:include_notice_restriction .
-    #(?a ?inw ?outw mg:include_notice_restriction) log:skolem ?geniri . # Keep unique
-    #("** Restriction ** [Include License Restriction] " ?outw " must retain the original " ?li " license file from " ?inw ) string:concatenation ?report_content .
+# Error E8 [CC Freedom Conflict]. The additional terms applied in this work may violate the CC freedom clauses.
+{
+    ?work a mg:Work .
+    _:t log:notIncludes { ?work!mg:hasLicense!mg:LicenseName string:containsIgnoringCase "Creative Commons" } . # Skip CCs
+    ?work :hasRestrictionFromMixwork ?tr .
+    ?tr :triggeredBy ?rl .
+    ?rl a mg:Ruling .
+    _:t log:includes { ?tr!mg:hasRestriction log:equalTo mg:cc_freedom_restriction } .
+    _:t log:includes 
+        { 
+            _:x log:includes { ?tr!mg:hasRestriction log:equalTo mg:use_behavior_restriction } .
+            _:x log:includes { ?tr!mg:hasRestriction log:equalTo mg:non_commericial_restriction } .
+            _:x log:includes { ?tr!mg:hasRestriction log:equalTo mg:runtime_restriction } .
+        } .
+
+    ?work mg:workName ?wname .
+    ?rl!mg:targetWork mg:workName ?inwname .
+    ("** Error ** [CC Freedom Conflict] The additional terms applied in" ?wname " may violate the CC freedom clauses in " ?inwname) string:concatenation ?report_content .
 } => {
-    ?outw :thisWorkHasPublishRestriction (?rest "Mix" ?mixwn ?rule ?li) .
-    ?outw :nameis ?wn
+    _:error a mg:Error ;
+        mg:reportedBy ?work ;
+        mg:reportType "CC Freedom Conflict" ;
+        mg:content ?report_content .
 } .
 
-{   # Publish Restrction of subworks
-    ?outw a mg:Work .
-    ?outw mg:workName ?wn .
-    ?outw!mg:hasPublishPolicy list:in (mg:sell mg:share) . # This work will be redistributed.
-    ?outw mg:hasSubwork ?subw .
-    ?subw mg:workName ?subwn .
+# Error E9 [Llama 2/3 Exclusive]. Using Llama 2/3’s output in non-Llama 2/3 derivatives is prohibited.
+{
+    ?work a mg:Work .
+    ?work!:hasRestrictionFromMixwork mg:hasRestriction ?rest .
+    # ?tr :triggeredBy ?rl .
+    # ?rl a mg:Ruling .
+    ?rest log:equalTo mg:llama2_exclusive_use_restriction .
+
+    ?work mg:workName ?wname .
+    ?rl!mg:targetWork mg:workName ?inwname .
+    ("** Error ** [Llama 2/3 Exclusive] The additional terms applied in" ?wname " may violate the CC freedom clauses in " ?inwname) string:concatenation ?report_content .
 } => {
-    ?outw :thisWorkHasPublishSubwork (?rest ?subwn ?subw) .
-    ?outw :nameis ?wn .
+    _:error a mg:Error ;
+        mg:reportedBy ?work ;
+        mg:reportType "Llama 2/3 Exclusive" ;
+        mg:content ?report_content .
 } .
 
-{   # Check allowSharing 
-    ?w a mg:Work .
-    ?w :hasRule ?rule .
-    ?rule!mg:allowSharing log:equalTo false .
-    # ?ruling mg:hasRule ?rule .
-    # ?ruling mg:targetWork ?inw . # Ruling source work
-    # ?ruling mg:hasLicense ?li .
-    # ?ruling mg:targetAction ?a .
-    # _:t log:notIncludes {?rule mg:allowSharing true} .
-    #?rest log:equalTo mg:include_notice_restriction .
-    #(?a ?inw ?outw mg:include_notice_restriction) log:skolem ?geniri . # Keep unique
-    #("** Restriction ** [Include License Restriction] " ?outw " must retain the original " ?li " license file from " ?inw ) string:concatenation ?report_content .
-} => {
-    ?w :hasShareIssue ?rule .
-} .
+# Error E10 [Exclusive License]. The additional terms applied in this work are prohibited by the license of work.
+{
+    ?work a mg:Work .
+    ?work :hasRestrictionFromMixwork ?tr .
+    ?tr :triggeredBy ?rl .
+    ?rl a mg:Ruling .
+    _:t log:includes { ?tr!mg:hasRestriction log:equalTo mg:no_other_conditions_restriction } .
+    _:t log:includes 
+        {   
+            _:x log:includes { ?tr!mg:hasRestriction log:equalTo mg:gnu_freedom_restriction } .
+            _:x log:includes { ?tr!mg:hasRestriction log:equalTo mg:cc_freedom_restriction } .
+            _:x log:includes { ?tr!mg:hasRestriction log:equalTo mg:use_behavior_restriction } .
+            _:x log:includes { ?tr!mg:hasRestriction log:equalTo mg:non_commericial_restriction } .
+            _:x log:includes { ?tr!mg:hasRestriction log:equalTo mg:runtime_restriction } .
+        } .
 
-{   # DEBUG: Gather all rules related to this work
-    ?outw a mg:Work .
-    ?outw mg:workName ?wn .
-    ?outw mg:hasRuling ?ruling . # Gather all rulings related to this work
-    #?outw!mg:hasPublishPolicy list:in (mg:sell mg:share) . # This work will be redistributed.
-    ?ruling mg:hasRule ?rule .
+    ?work mg:workName ?wname .
+    ?rl!mg:targetWork mg:workName ?inwname .
+    ?rl!mg:targetWork!mg:hasLicense mg:licenseId ?lid .
+    ("** Error ** [Exclusive License] The additional terms applied in" ?wname " are prohibited by the license " ?lid " of " ?inwname) string:concatenation ?report_content .
 } => {
-    ?outw :hasRule ?rule .
-} .
-
-{   # DEBUG: Gather all rules related to this work's mixworks
-    ?outw a mg:Work .
-    ?outw!mg:hasMixwork :hasRule ?rule .
-} => {
-    ?outw :hasRule ?rule .
+    _:error a mg:Error ;
+        mg:reportedBy ?work ;
+        mg:reportType "Exclusive License" ;
+        mg:content ?report_content .
 } .

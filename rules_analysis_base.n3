@@ -8,179 +8,6 @@
 @prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
 @prefix : <http://example.org/ns#>.
 
-
-# Each work intended for publication has a unique PublishTask associated with each Publish action
-:PublishTask a rdfs:Class ;
-    rdfs:comment "This class represents the publishing information and associated triggered restrictions of a work." .
-
-:hasPublishTask a rdfs:Property ;
-    rdfs:domain mg:Work ;
-    rdfs:range :PublishTask .
-
-####    Create PublishTask  ####
-{ # Create PublishTask from the final work
-    ?action a mg:Publish .
-    ?action!mg:hasOutput mg:targetWork ?work .
-    ?work mg:hasPublishPolicy ?policy .
-    (?action ?work "PublishTask") log:skolem ?geniri .
-} => {
-    ?geniri a :PublishTask ;
-        mg:targetAction ?action ;
-        mg:targetWork ?work ;
-        mg:hasPublishPolicy ?policy .
-    ?work :hasPublishTask ?geniri .
-} .
-{ # Proliferate Publish Task to mixwork and subwork
-    ?pt a :PublishTask .
-    ?work :hasPublishTask ?pt .
-    ?has list:in (mg:hasMixwork mg:hasSubwork) .
-    ?work ?has ?mwsw .
-    ?pt mg:targetAction ?action .
-    ?pt mg:targetWork ?pubw .
-    (?action ?pubw "PublishTask") log:skolem ?geniri .
-} => {
-    ?mwsw :hasPublishTask ?geniri .
-} .
-
-####    Create Ruling for Publishing Subwork  ####
-# Note: Since the rulings of a subwork have no effect on license determination, we create the rulings in this analysis procedure
-{ # The ruling for publishing subwork self
-    ?subw a mg:Work .
-    ?subw :hasPublishTask ?pt .
-    ?work mg:hasSubwork ?subw . 
-    ?pt mg:targetAction ?action .
-    ?subw mg:hasLicense ?linfo .
-    ?linfo mg:hasRule ?rule .
-    ?subw mg:hasWorkForm ?subwf .
-    ?rule mg:targetActionType mg:Publish . # Rule for Publish
-    ?rule mg:targetInputWorkForm ?subwf . # Matching input work form
-    ?rule mg:targetOutputWorkForm ?subwf . # Subwork intended be published under original work form
-    ?rule mg:hasOutputDef ?outputDef . # Find the matching output definition (no use)
-    (?action ?subw ?work "ruling") log:skolem ?geniri . # Ensure that only one ruling is created for each (Publish, subwork, publication) tuple
-} => {
-    ?geniri a mg:Ruling ;
-        mg:targetWork ?subw ;
-        mg:targetAction ?action ;
-        mg:hasLicense ?linfo ;
-        mg:hasRule ?rule . # Rule is binded
-        #mg:hasOutputDef ?outputDef . # OutputDef is out of context
-    ?work mg:hasRuling ?geniri . # Add the ruling that publishing subwork to its following work
-} .
-{ # The ruling for publishing mixwork contained in the subwork
-    ?subw a mg:Work .
-    ?subw :hasPublishTask ?pt .
-    ?work mg:hasSubwork ?subw .
-    ?subw mg:hasMixwork ?submixw .
-    ?pt mg:targetAction ?action .
-    ?submixw mg:hasLicense ?linfo .
-    ?linfo mg:hasRule ?rule .
-    ?subw mg:hasWorkForm ?subwf .
-    ?submixw mg:hasWorkForm ?submixwf .
-    ?rule mg:targetActionType mg:Publish . # Rule for Publish
-    ?rule mg:targetInputWorkForm ?submixwf . # Matching input work form
-    ?rule mg:targetOutputWorkForm ?subwf . # Mixwork intended be published under Subwork work form
-    ?rule mg:hasOutputDef ?outputDef . # Find the matching output definition (no use)
-    (?action ?submixw ?subwork "ruling") log:skolem ?geniri . # Ensure that only one ruling is created for each (Publish, subwork, publication) tuple
-} => {
-    ?geniri a mg:Ruling ;
-        mg:targetWork ?submixw ;
-        mg:targetAction ?action ;
-        mg:hasLicense ?linfo ;
-        mg:hasRule ?rule . # Rule is binded
-        #mg:hasOutputDef ?outputDef . # OutputDef is out of context
-    ?subw mg:hasRuling ?geniri . # Add the ruling that publishing subwork to its following work
-}.
-
-
-####    Gather Restrictions  ####
-# We consider that all publish tasks need to be accomplished, not distinguishing between the restrictions they trigger
-
-:TriggeredRestriction a rdfs:Class .
-:triggeredBy a rdfs:Property .
-:hasRestrictionFromMixwork a rdfs:Property .
-:hasRestrictionFromSubwork a rdfs:Property .
-
-
-{ # Restrictions from mixwork
-    ?pt a :PublishTask .
-    ?work :hasPublishTask ?pt .
-    ?work mg:hasRuling ?rl .
-    ?rl mg:targetWork ?mw .
-    ?work mg:hasMixwork ?mw . # According to ruling from mixwork
-    ?mw :hasPublishTask ?pt .
-    (?pt ?rl "TriggeredRestriction") log:skolem ?geniri .
-} => {
-    ?geniri a :TriggeredRestriction ;
-        :triggeredBy ?pt ;
-        :triggeredBy ?rl .
-    ?work :hasRestrictionFromMixwork ?geniri .
-} .
-{ # Restrictions from subwork
-    ?pt a :PublishTask .
-    ?work :hasPublishTask ?pt .
-    ?work mg:hasRuling ?rl .
-    ?rl mg:targetWork ?sw .
-    ?work mg:hasSubwork ?sw . # According to ruling from mixwork
-    ?sw :hasPublishTask ?pt .
-    (?pt ?rl "TriggeredRestriction") log:skolem ?geniri .
-} => {
-    ?geniri a :TriggeredRestriction ;
-        :triggeredBy ?pt ;
-        :triggeredBy ?rl .
-    ?work :hasRestrictionFromSubwork ?geniri .
-} .
-
-{  # CASE: Internal Use
-    ?tr a :TriggeredRestriction .
-    ?tr :triggeredBy ?pt .
-    ?pt a :PublishTask .
-    ?tr :triggeredBy ?rl .
-    ?rl a mg:Ruling .
-    ?work mg:hasRuling ?rl .
-    ?pt!mg:hasPublishPolicy log:equalTo mg:internal . # Only internal use, not public publish
-    ?rl!mg:hasRule mg:hasUseRestriction ?rest . # Use restrictions are triggered
-    (?pt ?rl "TriggeredRestriction") log:skolem ?geniri .
-} => {
-    ?geniri mg:hasRestriction ?rest .
-} .
-{  # CASE: Share or Sell
-    ?tr a :TriggeredRestriction .
-    ?tr :triggeredBy ?pt .
-    ?pt a :PublishTask .
-    ?tr :triggeredBy ?rl .
-    ?rl a mg:Ruling .
-    ?work mg:hasRuling ?rl .
-    ?pt!mg:hasPublishPolicy list:in (mg:share mg:sell) . # Share or Sell, public publish
-    ?rl!mg:hasRule mg:hasRestriction ?rest . # Both Use and Publish restrictions are triggered
-    (?pt ?rl "TriggeredRestriction") log:skolem ?geniri .
-} => {
-    ?geniri mg:hasRestriction ?rest .
-} .
-
-{ # Proliferate Restrictions
-    ?work a mg:Work .
-    ?work mg:hasMixwork ?mw .
-    ?mw :hasRestrictionFromMixwork ?rest .
-} => {
-    ?work :hasRestrictionFromMixwork ?rest .
-} .
-{
-    ?work a mg:Work .
-    ?work mg:hasMixwork ?mw .
-    ?mw :hasRestrictionFromSubwork ?rest .
-} => {
-    ?work :hasRestrictionFromSubwork ?rest .
-} .
-{ 
-    ?work a mg:Work .
-    ?work mg:hasSubwork ?sw .
-    ?has list:in (:hasRestrictionFromMixwork :hasRestrictionFromSubwork) .
-    ?sw ?has ?rest .
-} => {
-    ?work :hasRestrictionFromSubwork :rest .
-} .
-
-
 ####    Generate license analysis report rules  ####
 # Warning W1 [License Type Mismatch]. Report a warning if the license's target work type does not match the actual work type
 
@@ -259,7 +86,7 @@
 {   
     ?pt a :PublishTask .
     ?pt mg:targetWork ?w .
-    ?has list:in (:hasRestrictionFromMixwork :hasRestrictionFromSubwork) . # Both check from mixwork and subwork
+    ?has list:in (:hasRestrictionFromMixwork :hasRestrictionFromSubwork) . # Check restrictions both from mixwork and subwork
     ?w ?has ?tr .
     ?tr :triggeredBy ?pt .
     ?tr :triggeredBy ?rl .
@@ -463,7 +290,7 @@
     ?inw mg:workName ?inwname .
     ?inw!mg:hasLicense mg:licenseId ?lid .
     ?rest mg:reportType ?rtype .
-    ("** Warning ** [" ?rtype "] The use of " ?inwname " must comply with the usage behavior restrictions according its license" ?lid) string:concatenation ?report_content .
+    ("** Warning ** [" ?rtype "] The use of " ?inwname " must comply with the usage behavior restrictions according its license " ?lid) string:concatenation ?report_content .
 } => {
     _:warning a mg:Warning ;
         mg:reportedBy ?inw ;
@@ -490,5 +317,90 @@
     _:warning a mg:Warning ;
         mg:reportedBy ?inw ;
         mg:reportType ?rtype ;
+        mg:content ?report_content .
+} .
+
+# Error E3 [Not Allowed to Share]. Redistribution of a work is prohibited.
+{ # FromMixwork
+    ?pt a :PublishTask .
+    ?w :hasPublishTask ?pt . # The work has Pubulih Task
+    ?w :hasRestrictionFromMixwork ?tr . # check from mixwork
+    ?tr :triggeredBy ?pt .
+    ?tr :triggeredBy ?rl .
+    ?rl a mg:Ruling .
+    ?rl!mg:hasRule!mg:allowSharing log:equalTo false . # No allow sharing
+
+    ?rl mg:targetWork ?inw .
+    ?w mg:workName ?wname .
+    ?inw mg:workName ?inwname .
+    ?inw!mg:hasLicense mg:licenseId ?lid .
+    ("** Error ** [Not Allowed to Share] Redistribution of " ?wname " is prohibited according to license " ?lid " of " ?inwname) string:concatenation ?report_content .
+} => {
+    _:error a mg:Error ;
+        mg:reportedBy ?w ;
+        mg:reportType "Not Allowed to Share" ;
+        mg:content ?report_content .
+} .
+{ # FromSubwork
+    ?pt a :PublishTask .
+    ?w :hasPublishTask ?pt . # The work has Pubulih Task
+    ?w :hasRestrictionFromSubwork ?tr . # check from subwork
+    ?tr :triggeredBy ?pt .
+    ?tr :triggeredBy ?rl .
+    ?rl a mg:Ruling .
+    ?tr mg:hasRestriction ?rest . # Retrieve its restrictions
+    ?rl!mg:hasRule!mg:allowSharing log:equalTo false . # No allow sharing
+    ?rl mg:targetWork ?inw . # This subwork
+
+    ?inw mg:workName ?inwname .
+    ?inw!mg:hasLicense mg:licenseId ?lid .
+    ("** Error ** [Not Allowed to Share] Redistribution of " ?inwname " is prohibited according to license " ?lid " of " ?inwname) string:concatenation ?report_content .
+} => {
+    _:error a mg:Error ;
+        mg:reportedBy ?inw ;
+        mg:reportType "Not Allowed to Share" ;
+        mg:content ?report_content .
+} .
+
+# Error E4 [Not Allowed to Sublicense]. Sublicensing of a work is prohibited.
+{   
+    ?pt a :PublishTask .
+    ?tr :triggeredBy ?pt .
+    ?tr :triggeredBy ?rl .
+    ?rl a mg:Ruling .
+    ?rl mg:targetWork ?inw .
+    ?inw mg:hasLicense ?li .
+    _:t log:notIncludes { ?li!mg:grant!mg:hasRightPrefix log:equalTo mg:sublicensable } .
+    _:t log:notIncludes { ?li!mg:grant!mg:hasUsage log:equalTo mg:auto-license } .
+
+    #?pt!mg:targetWork mg:workName ?wname .
+    ?inw mg:workName ?inwname .
+    ?inw!mg:hasLicense mg:licenseId ?lid .
+    ("** Error ** [Not Allowed to Sublicense] Sublicensing of " ?inwname " is prohibited according to its license " ?lid) string:concatenation ?report_content .
+} => {
+    _:error a mg:Error ;
+        mg:reportedBy ?inw ;
+        mg:reportType "Not Allowed to Sublicense" ;
+        mg:content ?report_content .
+} .
+
+# Error E5 [Non-Commercial Use]. Commercial use of work is prohibited.
+{   
+    ?pt a :PublishTask .
+    ?tr :triggeredBy ?pt .
+    ?tr :triggeredBy ?rl .
+    ?rl a mg:Ruling .
+    ?tr mg:hasRestriction ?rest . # Retrieve its restrictions
+    ?rest log:equalTo mg:non_commericial_restriction . # No allow commercial use
+    ?rl mg:targetWork ?inw .
+    ?pt!mg:hasPublishPolicy log:equalTo mg:sell .
+
+    ?inw mg:workName ?inwname .
+    ?inw!mg:hasLicense mg:licenseId ?lid .
+    ("** Error ** [Non-Commercial Use] Commercial use of " ?inwname " is prohibited according to its license " ?lid) string:concatenation ?report_content .
+} => {
+    _:error a mg:Error ;
+        mg:reportedBy ?inw ;
+        mg:reportType "Non-Commercial Use" ;
         mg:content ?report_content .
 } .

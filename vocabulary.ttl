@@ -440,7 +440,12 @@ mg:hasLicenseSource a rdfs:Property ;
     rdfs:domain mg:Work ;
     rdfs:range mg:LicenseSource .
 
+mg:hasExpectedLicense a rdfs:Property ;
+    rdfs:domain mg:Work ;
+    rdfs:range mg:LicenseInfo .  
+
 mg:license_source_register a mg:LicenseSource . # License is assgined by a register action
+mg:license_source_user_expect a mg:LicenseSource . # License is expected to adhere user input (may invalid)
 
 mg:Restriction a rdfs:Class ;
     rdfs:comment "This class is used to describe the restritions according to license terms." .

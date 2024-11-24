@@ -95,7 +95,7 @@ def register_license(target_work: Work, target_license: str='Unlicense', action_
     return flow
 
 # Action to republish a work, allowing assignment of a new work form and publication policy
-def publish(target_flow: Workflow, action_label: str='publish', form: Optional[str] = None, policy: str='share', aux_flows: Optional[Iterable[Workflow]]=None, sub_flows: Optional[Iterable[Workflow]]=None) -> Workflow:  # support policy: internal, share, sell
+def publish(target_flow: Workflow, action_label: str='publish', form: Optional[str] = None, policy: str='share', aux_flows: Optional[Iterable[Workflow]]=None, sub_flows: Optional[Iterable[Workflow]]=None, license: Optional[str]=None) -> Workflow:  # support policy: internal, share, sell
     g = target_flow.graph
 
     # Add the Publish Action in this graph
@@ -119,6 +119,8 @@ def publish(target_flow: Workflow, action_label: str='publish', form: Optional[s
 
     if form: # If target form is provided
         g.add((input_bn, MG.targetWorkForm, MG[form]))
+    if license: # Expected license for output work of this action
+        g.add((input_bn, MG.targetLicense, MG[license]))
     g.add((airi, MG.hasOutput, BNode())) # Add this blank node as placeholder for output
     g.add((EX[target_flow.latest_action_id], MG.yieldAsInputWork, airi))
     target_flow.update_action_id(action_id)
@@ -126,7 +128,7 @@ def publish(target_flow: Workflow, action_label: str='publish', form: Optional[s
     return target_flow
 
 # Base reusable action
-def base_action(target_flows: Union[Iterable['Workflow'], 'Workflow'], action_type:str, action_label:str, aux_flows: Optional[Iterable[Workflow]]=None, sub_flows: Optional[Iterable[Workflow]]=None, form: Optional[str]=None, type: Optional[str]=None) -> Workflow:
+def base_action(target_flows: Union[Iterable['Workflow'], 'Workflow'], action_type:str, action_label:str, aux_flows: Optional[Iterable[Workflow]]=None, sub_flows: Optional[Iterable[Workflow]]=None, form: Optional[str]=None, type: Optional[str]=None, license: Optional[str]=None) -> Workflow:
     # Generate id for this action
     action_id = action_label + str(anum())
     airi = EX[action_id]
@@ -164,6 +166,8 @@ def base_action(target_flows: Union[Iterable['Workflow'], 'Workflow'], action_ty
         g.add((input_bn, MG.targetWorkForm, MG[form]))
     if type: # If there provied a expected work type for output
         g.add((input_bn, MG.targetWorkType, MG[type]))
+    if license: # Expected license for output work of this action
+        g.add((input_bn, MG.targetLicense, MG[license]))
 
     flow.update_action_id(action_id) # Update the new workflow's latest action id
 

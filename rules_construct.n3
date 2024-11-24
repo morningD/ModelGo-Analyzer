@@ -87,6 +87,16 @@
     ?outwork mg:workName ?new_name .
 } .
 
+{ # Add expected license to the output work
+    ?actionType rdfs:subClassOf mg:Action . 
+    ?actionType log:notEqualTo mg:RegisterLicense . # Skip RegisterLicense
+    ?action a ?actionType . # For each action
+    ?action!mg:hasInput mg:targetLicense ?li .
+    ?action!mg:hasOutput mg:targetWork ?outw .
+} => {
+    ?outw mg:hasExpectedLicense ?li .
+} .
+
 
 ####   Action Reasoning rules  ####
 

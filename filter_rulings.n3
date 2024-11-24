@@ -16,7 +16,7 @@
     ?outw mg:hasRuling ?ru .
     ?ru mg:hasRule ?rule .
     ?ru mg:hasOutputDef ?def .
-    ?ru mg:hasLicense ?lic .
+    ?ru mg:hasLicense ?li .
     # Ruling target action info
     ?ru mg:targetAction ?act .
     ?act a ?actType .
@@ -31,7 +31,7 @@
     ?outw mg:hasRuling ?ru .
     ?ru mg:hasRule ?rule .
     ?ru mg:hasOutputDef ?def .
-    ?ru mg:hasLicense ?lic .
+    ?ru mg:hasLicense ?li .
     # Ruling target action info
     ?ru mg:targetAction ?act .
     ?act a ?actType .

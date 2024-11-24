@@ -1,0 +1,233 @@
+@prefix math: <http://www.w3.org/2000/10/swap/math#> .
+@prefix list: <http://www.w3.org/2000/10/swap/list#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix string: <http://www.w3.org/2000/10/swap/string#> .
+@prefix log: <http://www.w3.org/2000/10/swap/log#> .
+@prefix mg: <http://www.modelgo.li/rdf/terms#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix : <http://example.org/ns#>.
+
+
+####    Rules for Preparation before Analyze  ####
+
+# Each work intended for publication has a unique PublishTask associated with each Publish action
+:PublishTask a rdfs:Class ;
+    rdfs:comment "This class represents the publishing information and associated triggered restrictions of a work." .
+
+:hasPublishTask a rdfs:Property ;
+    rdfs:domain mg:Work ;
+    rdfs:range :PublishTask .
+
+####    Create PublishTask  ####
+{ # Create PublishTask from the final work
+    ?action a mg:Publish .
+    ?action!mg:hasOutput mg:targetWork ?work .
+    ?work mg:hasPublishPolicy ?policy .
+    (?action ?work "PublishTask") log:skolem ?geniri .
+} => {
+    ?geniri a :PublishTask ;
+        mg:targetAction ?action ;
+        mg:targetWork ?work ;
+        mg:hasPublishPolicy ?policy .
+    ?work :hasPublishTask ?geniri .
+} .
+{ # Proliferate Publish Task to mixwork and subwork
+    ?pt a :PublishTask .
+    ?work :hasPublishTask ?pt .
+    ?has list:in (mg:hasMixwork mg:hasSubwork) .
+    ?work ?has ?mwsw .
+    ?pt mg:targetAction ?action .
+    ?pt mg:targetWork ?pubw .
+    (?action ?pubw "PublishTask") log:skolem ?geniri .
+} => {
+    ?mwsw :hasPublishTask ?geniri .
+} .
+
+{ # Create (Internal Use) Publish Task to Trigger Use Restrictions
+    ?work a mg:Work .
+    ?work :hasPublishTask ?pt .
+    ?pt!mg:hasPublishPolicy log:notEqualTo mg:internal .
+    ?pt mg:targetAction ?action .
+    ?pt mg:targetWork ?pubw .
+    (?work "PublishTask" "Internal") log:skolem ?geniri .
+} => {
+    ?geniri a :PublishTask ;
+        mg:targetAction ?action ;
+        mg:targetWork ?pubw ;
+        mg:hasPublishPolicy mg:internal .
+    ?work :hasPublishTask ?geniri .
+} .
+{ # Proliferate (Internal Use) Publish Task to relied work
+    ?work a mg:Work .
+    (?work "PublishTask" "Internal") log:skolem ?pt .
+    ?work :hasPublishTask ?pt .
+    ?work mg:hasReliedwork ?rw .
+    _:t log:notIncludes { ?rw!:hasPublishTask!mg:hasPublishPolicy log:equalTo mg:internal } .
+    ?pt mg:targetAction ?action .
+    ?pt mg:targetWork ?pubw .
+    (?rw "PublishTask" "Internal") log:skolem ?geniri .
+} => {
+    ?geniri a :PublishTask ;
+        mg:targetAction ?action ;
+        mg:targetWork ?pubw ;
+        mg:hasPublishPolicy mg:internal .
+    ?work :hasPublishTask ?geniri .
+}.
+
+####    Create Ruling for Publishing Subwork  ####
+# Note: Since the rulings of a subwork have no effect on license determination, we create the rulings in this analysis procedure
+{ # The ruling for publishing subwork self
+    ?subw a mg:Work .
+    ?subw :hasPublishTask ?pt .
+    ?work mg:hasSubwork ?subw . 
+    ?pt mg:targetAction ?action .
+    ?subw mg:hasLicense ?linfo .
+    ?linfo mg:hasRule ?rule .
+    ?subw mg:hasWorkForm ?subwf .
+    ?rule mg:targetActionType mg:Publish . # Rule for Publish
+    ?rule mg:targetInputWorkForm ?subwf . # Matching input work form
+    ?rule mg:targetOutputWorkForm ?subwf . # Subwork intended be published under original work form
+    ?rule mg:hasOutputDef ?outputDef . # Find the matching output definition (no use)
+    (?action ?subw ?work "ruling") log:skolem ?geniri . # Ensure that only one ruling is created for each (Publish, subwork, publication) tuple
+} => {
+    ?geniri a mg:Ruling ;
+        mg:targetWork ?subw ;
+        mg:targetAction ?action ;
+        mg:hasLicense ?linfo ;
+        mg:hasRule ?rule . # Rule is binded
+        #mg:hasOutputDef ?outputDef . # OutputDef is out of context
+    ?work mg:hasRuling ?geniri . # Add the ruling that publishing subwork to its following work
+} .
+{ # The ruling for publishing mixwork contained in the subwork
+    ?subw a mg:Work .
+    ?subw :hasPublishTask ?pt .
+    ?work mg:hasSubwork ?subw .
+    ?subw mg:hasMixwork ?submixw .
+    ?pt mg:targetAction ?action .
+    ?submixw mg:hasLicense ?linfo .
+    ?linfo mg:hasRule ?rule .
+    ?subw mg:hasWorkForm ?subwf .
+    ?submixw mg:hasWorkForm ?submixwf .
+    ?rule mg:targetActionType mg:Publish . # Rule for Publish
+    ?rule mg:targetInputWorkForm ?submixwf . # Matching input work form
+    ?rule mg:targetOutputWorkForm ?subwf . # Mixwork intended be published under Subwork work form
+    ?rule mg:hasOutputDef ?outputDef . # Find the matching output definition (no use)
+    (?action ?submixw ?subwork "ruling") log:skolem ?geniri . # Ensure that only one ruling is created for each (Publish, subwork, publication) tuple
+} => {
+    ?geniri a mg:Ruling ;
+        mg:targetWork ?submixw ;
+        mg:targetAction ?action ;
+        mg:hasLicense ?linfo ;
+        mg:hasRule ?rule . # Rule is binded
+        #mg:hasOutputDef ?outputDef . # OutputDef is out of context
+    ?subw mg:hasRuling ?geniri . # Add the ruling that publishing subwork to its following work
+}.
+
+
+####    Gather Restrictions  ####
+# We consider that all publish tasks need to be accomplished, not distinguishing between the restrictions they trigger
+
+:TriggeredRestriction a rdfs:Class .
+:triggeredBy a rdfs:Property .
+:hasRestrictionFromMixwork a rdfs:Property . # Publish related restrictions
+:hasRestrictionFromSubwork a rdfs:Property .
+:hasUseRestriction a rdfs:Property .
+
+{ # Restrictions from mixwork
+    ?pt a :PublishTask .
+    ?work :hasPublishTask ?pt .
+    ?work mg:hasRuling ?rl .
+    ?rl mg:targetWork ?mw .
+    ?work mg:hasMixwork ?mw . # According to ruling from mixwork
+    ?mw :hasPublishTask ?pt .
+    (?pt ?rl "TriggeredRestriction") log:skolem ?geniri .
+} => {
+    ?geniri a :TriggeredRestriction ;
+        :triggeredBy ?pt ;
+        :triggeredBy ?rl .
+    ?work :hasRestrictionFromMixwork ?geniri .
+} .
+{ # Restrictions from subwork
+    ?pt a :PublishTask .
+    ?work :hasPublishTask ?pt .
+    ?work mg:hasRuling ?rl .
+    ?rl mg:targetWork ?sw .
+    ?work mg:hasSubwork ?sw . # According to ruling from mixwork
+    ?sw :hasPublishTask ?pt .
+    (?pt ?rl "TriggeredRestriction") log:skolem ?geniri .
+} => {
+    ?geniri a :TriggeredRestriction ;
+        :triggeredBy ?pt ;
+        :triggeredBy ?rl .
+    ?work :hasRestrictionFromSubwork ?geniri .
+} .
+# { # Use Restrictions from relied work
+#     ?work mg:hasRuling ?rl .
+#     ?rl mg:targetWork ?inw .
+#     ?rl!mg:hasRule mg:hasUseRestriction ?rest . # Use restrictions are triggered
+#     (?work ?rl "TriggeredRestriction") log:skolem ?geniri .
+# } => {
+#     ?geniri a :TriggeredRestriction ;
+#         :triggeredBy ?rl ; # No publish task
+#         mg:hasRestriction ?rest .
+#     ?work :hasUseRestriction ?geniri .
+# } .
+
+{  # CASE: Internal Use
+    ?tr a :TriggeredRestriction .
+    ?tr :triggeredBy ?pt .
+    ?pt a :PublishTask . # Restrictions from mixworks and subworks
+    ?tr :triggeredBy ?rl .
+    ?rl a mg:Ruling .
+    ?work mg:hasRuling ?rl .
+    ?pt!mg:hasPublishPolicy log:equalTo mg:internal . # Only internal use, not public publish
+    ?rl!mg:hasRule mg:hasUseRestriction ?rest . # Use restrictions are triggered
+    (?pt ?rl "TriggeredRestriction") log:skolem ?geniri .
+} => {
+    ?geniri mg:hasRestriction ?rest .
+} .
+{  # CASE: Share or Sell
+    ?tr a :TriggeredRestriction .
+    ?tr :triggeredBy ?pt .
+    ?pt a :PublishTask .
+    ?tr :triggeredBy ?rl .
+    ?rl a mg:Ruling .
+    ?work mg:hasRuling ?rl .
+    ?pt!mg:hasPublishPolicy list:in (mg:share mg:sell) . # Share or Sell, public publish
+    ?rl!mg:hasRule mg:hasPublishRestriction ?rest . # Publish restrictions are triggered
+    (?pt ?rl "TriggeredRestriction") log:skolem ?geniri .
+} => {
+    ?geniri mg:hasRestriction ?rest .
+} .
+
+{ # Proliferate Restrictions
+    ?work a mg:Work .
+    ?work mg:hasMixwork ?mw .
+    ?mw :hasRestrictionFromMixwork ?rest .
+} => {
+    ?work :hasRestrictionFromMixwork ?rest .
+} .
+{
+    ?work a mg:Work .
+    ?work mg:hasMixwork ?mw .
+    ?mw :hasRestrictionFromSubwork ?rest .
+} => {
+    ?work :hasRestrictionFromSubwork ?rest .
+} .
+{ 
+    ?work a mg:Work .
+    ?work mg:hasSubwork ?sw .
+    ?has list:in (:hasRestrictionFromMixwork :hasRestrictionFromSubwork) .
+    ?sw ?has ?rest .
+} => {
+    ?work :hasRestrictionFromSubwork :rest .
+} .
+
+# { # Proliferate (Use triggered) Restrictions
+#     ?mw a mg:Work .
+#     ?mw :hasUseRestriction ?rest .
+#     ?work mg:hasMixwork ?mw .
+# } => {
+#     ?work :hasUseRestriction ?rest .
+# } .

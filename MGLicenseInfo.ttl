@@ -1189,7 +1189,7 @@ mg:MG-BY-ND a mg:LicenseInfo ;
         a mg:Right ;
         mg:isPatent true ;
         mg:isCopyright true ;
-        mg:hasRightPrefix mg:worldwide, mg:non-exclusive, mg:non-transferable, mg:sublicensable, mg:revocable, mg:royalty-free ;
+        mg:hasRightPrefix mg:worldwide, mg:non-exclusive, mg:non-transferable, mg:non-sublicensable, mg:revocable, mg:royalty-free ;
         mg:hasUsage mg:use, mg:modify, mg:merge, mg:redistribute, mg:auto-license, mg:commercial_use
     ] ;
     mg:reserve [
@@ -1219,7 +1219,7 @@ mg:MG-BY-NC-ND a mg:LicenseInfo ;
         a mg:Right ;
         mg:isPatent true ;
         mg:isCopyright true ;
-        mg:hasRightPrefix mg:worldwide, mg:non-exclusive, mg:non-transferable, mg:sublicensable, mg:revocable, mg:royalty-free ;
+        mg:hasRightPrefix mg:worldwide, mg:non-exclusive, mg:non-transferable, mg:non-sublicensable, mg:revocable, mg:royalty-free ;
         mg:hasUsage mg:use, mg:modify, mg:merge, mg:redistribute, mg:auto-license
     ] ;
     mg:reserve [

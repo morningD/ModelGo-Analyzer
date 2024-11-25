@@ -31,9 +31,10 @@
     ?actionType rdfs:subClassOf mg:Action . 
     ?ruling a mg:Ruling .
     ?ruling mg:targetAction ?action .   
-    # Copy will not proliferate to the mixworks due to the output def no longer being duplication,
+    # Copy/Publish will not proliferate to the mixworks due to the output def no longer being duplication/republication,
     # but we still check the right granting of them by proliferating their request to the mixworks.
     ?actionType log:notEqualTo mg:Copy .
+    ?actionType log:notEqualTo mg:Publish . # Proliferating the Publish action to a mixed work will result in the output definition from the mixed work being 'republication,' which is incorrect
     ?action a ?actionType .
     ?work mg:hasRuling ?ruling .
     ?work mg:hasMixwork ?mixwork .

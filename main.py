@@ -120,10 +120,10 @@ analysis_result = subprocess.run(["eye", "--quiet", "--nope", "--pass-only-new",
 Graph().parse(data=analysis_result.stdout, format="n3").serialize(destination="out_analysis_granting.ttl", format="turtle")
 
 # # Analysis of conflicts and reprot restrictions thought rulings.
-# analysis_result = subprocess.run(["eye", "--quiet", "--nope", "--pass-only-new", 
-#                          "vocabulary.ttl", "MGLicenseInfo.ttl", "MGLicenseRule.ttl", "out_WF_ruling_request.ttl",
-#                          "rules_analysis_conflict.n3"], 
-#                          stdout=subprocess.PIPE, check=True)
+analysis_result = subprocess.run(["eye", "--quiet", "--nope", "--pass-only-new", 
+                         "vocabulary.ttl", "MGLicenseInfo.ttl", "MGLicenseRule.ttl", "out_WF_analysis_init.ttl",
+                         "rules_analysis_conflict.n3"], 
+                         stdout=subprocess.PIPE, check=True)
 
 Graph().parse(data=analysis_result.stdout, format="n3").serialize(destination="out_analysis_conflict.ttl", format="turtle")
 

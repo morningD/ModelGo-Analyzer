@@ -86,7 +86,7 @@
 {   
     ?pt a :PublishTask .
     ?pt mg:targetWork ?w .
-    ?has list:in (:hasRestrictionFromMixwork :hasRestrictionFromSubwork) . # Check restrictions both from mixwork and subwork
+    ?has list:in (:hasRestrictionFromMixwork :hasRestrictionFromSubwork :hasRestrictionFromAuxwork) . # Check restrictions from mixwork, subwork, auxwork
     ?w ?has ?tr .
     ?tr :triggeredBy ?pt .
     ?tr :triggeredBy ?rl .
@@ -111,7 +111,7 @@
 {   
     ?pt a :PublishTask .
     ?pt mg:targetWork ?w .
-    ?has list:in (:hasRestrictionFromMixwork :hasRestrictionFromSubwork) . # Both check from mixwork and subwork
+    ?has list:in (:hasRestrictionFromMixwork :hasRestrictionFromSubwork :hasRestrictionFromAuxwork) . # Check restrictions from mixwork, subwork, auxwork
     ?w ?has ?tr .
     ?tr :triggeredBy ?pt .
     ?tr :triggeredBy ?rl .
@@ -136,7 +136,7 @@
 {   
     ?pt a :PublishTask .
     ?pt mg:targetWork ?w .
-    ?has list:in (:hasRestrictionFromMixwork :hasRestrictionFromSubwork) . # Both check from mixwork and subwork
+    ?has list:in (:hasRestrictionFromMixwork :hasRestrictionFromSubwork :hasRestrictionFromAuxwork) . # Check restrictions from mixwork, subwork, auxwork
     ?w ?has ?tr .
     ?tr :triggeredBy ?pt .
     ?tr :triggeredBy ?rl .
@@ -162,7 +162,7 @@
 {   
     ?pt a :PublishTask .
     ?pt mg:targetWork ?w .
-    ?has list:in (:hasRestrictionFromMixwork :hasRestrictionFromSubwork) . # Both check from mixwork and subwork
+    ?has list:in (:hasRestrictionFromMixwork :hasRestrictionFromSubwork :hasRestrictionFromAuxwork) . # Check restrictions from mixwork, subwork, auxwork
     ?w ?has ?tr .
     ?tr :triggeredBy ?pt .
     ?tr :triggeredBy ?rl .
@@ -184,10 +184,11 @@
 } .
 
 # Warning W5 [Discolse Source]. This work should disclose its source code.
-{ # FromMixwork
+{ # FromMixwork, FromAuxwork
     ?pt a :PublishTask .
     ?w :hasPublishTask ?pt . # The work has Pubulih Task
-    ?w :hasRestrictionFromMixwork ?tr . # check from mixwork
+    ?has list:in (:hasRestrictionFromMixwork :hasRestrictionFromAuxwork) .
+    ?w ?has ?tr . # check from mixwork and auxwork
     ?tr :triggeredBy ?pt .
     ?tr :triggeredBy ?rl .
     ?rl a mg:Ruling .
@@ -254,10 +255,11 @@
 } .
 
 # Warning W7 [Use Behavior]. The use of this work must comply with the usage behavior restrictions of license.
-{ # FromMixwork
+{ # FromMixwork, FromAuxwork
     ?pt a :PublishTask .
     ?w :hasPublishTask ?pt . # The work has Pubulih Task
-    ?w :hasRestrictionFromMixwork ?tr . # check from mixwork
+    ?has list:in (:hasRestrictionFromMixwork :hasRestrictionFromAuxwork) .
+    ?w ?has ?tr . # check from mixwork and auxwork
     ?tr :triggeredBy ?pt .
     ?tr :triggeredBy ?rl .
     ?rl a mg:Ruling .

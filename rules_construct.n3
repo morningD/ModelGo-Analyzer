@@ -281,7 +281,7 @@
 } .
 
 ##   Embed
-# [Embed] Reasoning rules for embed data (or something unknown), which adds the 'hasSubwork' property to targetWork,
+# [Embed] Reasoning rules for embed data (or something unknown), which adds the 'hasAuxwork' property to targetWork,
 # and the output work has same type and form as the input target work.
 {
     ?action a mg:Embed . # Key difference
@@ -295,10 +295,10 @@
     ?geniri a mg:Work ;
         mg:hasWorkType ?wt ;
         mg:hasWorkForm ?wf ;
-        mg:hasSubwork ?inw . # Key difference
+        mg:hasAuxwork ?inw . # Key difference
 } .
 
-##   Distill
+##   Distill (Same as Embed)
 # [Distill] Reasoning rules for distill knowledge from a model to another, which adds the 'hasAubwork' property to targetWork,
 # and the output work has same type and form as the input target work.
 {

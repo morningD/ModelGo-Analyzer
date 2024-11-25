@@ -14,12 +14,14 @@
 # Error E6 [Cannot Be Relicensed]. The license of a work is invalid because a work cannot be relicensed, or relicensing is invalid (e.g., incompatible).
 { # CASE-1: (none1, none2) -> none1
     ?work a mg:Work .
-    ?work!mg:hasLicenseSource log:equalTo mg:license_source_ruling_relicense_fail .
+    ?work :hasPublishTask ?pt . # The work is in the dependency tree
     ?work mg:hasLicense ?li1 .
 
     # Collect all none-relicensable license
-    ?work!mg:hasRuling!mg:hasRule!mg:relicense log:equalTo mg:none-license .
-    ?work!mg:hasRuling mg:targetWork ?inw .
+    ?work mg:hasRuling ?rl .
+    ?rl!mg:hasRule!mg:relicense log:equalTo mg:none-license .
+    ?rl mg:hasOutputDef ?def . # Exclude the publishing ruling created in analysis init
+    ?rl mg:targetWork ?inw .
     ?inw mg:hasLicense ?li2 .
     ?li1 log:notEqualTo ?li2 . # There has a license canot be relicensed to the new license
 
@@ -36,12 +38,14 @@
 } .
 { # CASE-2: (none1/incompat1, incompt2) -> none1/incompat1
     ?work a mg:Work .
-    ?work!mg:hasLicenseSource list:in (mg:license_source_ruling_relicense_fail mg:license_source_ruling_copyleft_fail) .
+    ?work :hasPublishTask ?pt . # The work is in the dependency tree
     ?work mg:hasLicense ?li1 .
 
-    # Collect all compat-relicensable license
-    ?work!mg:hasRuling!mg:hasRule!mg:relicense log:equalTo mg:compatible-license .
-    ?work!mg:hasRuling mg:targetWork ?inw .
+    # Collect all compatible-relicense license
+    ?work mg:hasRuling ?rl .
+    ?rl!mg:hasRule!mg:relicense log:equalTo mg:compatible-license .
+    ?rl mg:hasOutputDef ?def . # Exclude the publishing ruling created in analysis init
+    ?rl mg:targetWork ?inw .
     ?inw mg:hasLicense ?li2 .
     ?li2 mg:hasCompatibleLicense ?compat_list .
     _:x log:notIncludes {?li1 list:in ?compat_list} . # none1/incompat1 is not in the compatible list of license2
@@ -66,16 +70,11 @@
     ?tr :triggeredBy ?rl .
     ?rl a mg:Ruling .
     _:t log:includes { ?tr!mg:hasRestriction log:equalTo mg:gnu_freedom_restriction } .
-    _:t log:includes 
-        { 
-            _:x log:includes { ?tr!mg:hasRestriction log:equalTo mg:use_behavior_restriction } .
-            _:x log:includes { ?tr!mg:hasRestriction log:equalTo mg:non_commericial_restriction } .
-            _:x log:includes { ?tr!mg:hasRestriction log:equalTo mg:runtime_restriction } .
-        } .
+    _:t log:includes { ?tr!mg:hasRestriction list:in (mg:use_behavior_restriction mg:non_commericial_restriction mg:runtime_restriction) } .
 
     ?work mg:workName ?wname .
     ?rl!mg:targetWork mg:workName ?inwname .
-    ("** Error ** [GNU Freedom Conflict] The additional terms applied in" ?wname " may violate the GNU freedom clauses in " ?inwname) string:concatenation ?report_content .
+    ("** Error ** [GNU Freedom Conflict] The additional terms applied in " ?wname " may violate the GNU freedom clauses in " ?inwname) string:concatenation ?report_content .
 } => {
     _:error a mg:Error ;
         mg:reportedBy ?work ;
@@ -91,16 +90,11 @@
     ?tr :triggeredBy ?rl .
     ?rl a mg:Ruling .
     _:t log:includes { ?tr!mg:hasRestriction log:equalTo mg:cc_freedom_restriction } .
-    _:t log:includes 
-        { 
-            _:x log:includes { ?tr!mg:hasRestriction log:equalTo mg:use_behavior_restriction } .
-            _:x log:includes { ?tr!mg:hasRestriction log:equalTo mg:non_commericial_restriction } .
-            _:x log:includes { ?tr!mg:hasRestriction log:equalTo mg:runtime_restriction } .
-        } .
+    _:t log:includes { ?tr!mg:hasRestriction list:in (mg:use_behavior_restriction mg:non_commericial_restriction mg:runtime_restriction) } .
 
     ?work mg:workName ?wname .
     ?rl!mg:targetWork mg:workName ?inwname .
-    ("** Error ** [CC Freedom Conflict] The additional terms applied in" ?wname " may violate the CC freedom clauses in " ?inwname) string:concatenation ?report_content .
+    ("** Error ** [CC Freedom Conflict] The additional terms applied in " ?wname " may violate the CC freedom clauses in " ?inwname) string:concatenation ?report_content .
 } => {
     _:error a mg:Error ;
         mg:reportedBy ?work ;
@@ -109,16 +103,52 @@
 } .
 
 # Error E9 [Llama 2/3 Exclusive]. Using Llama 2/3’s output in non-Llama 2/3 derivatives is prohibited.
-{
-    ?work a mg:Work .
-    ?work!:hasRestrictionFromMixwork mg:hasRestriction ?rest .
-    # ?tr :triggeredBy ?rl .
-    # ?rl a mg:Ruling .
-    ?rest log:equalTo mg:llama2_exclusive_use_restriction .
+{ # Llama2
+    ?action a mg:Action .
+    ?action mg:hasInput ?input .
+    ( ?inw
+        {   
+            ?hasWork list:in (mg:targetWork mg:targetSubwork mg:targetAuxwork) .
+            ?input ?hasWork ?inw .
+            _:t log:notIncludes { # Negative's Negative, means it is llama2 or it has llama2 restriction
+                _:t log:notIncludes { ?inw!mg:hasProvenance!mg:workName string:containsIgnoringCase "Llama2" . } .
+                _:t log:notIncludes { ?inw!:hasRestrictionFromMixwork!mg:hasRestriction log:equalTo mg:llama2_exclusive_use_restriction . } .
+                _:t log:notIncludes { ?inw!:hasRestrictionFromAuxwork!mg:hasRestriction log:equalTo mg:llama2_exclusive_use_restriction . } .
+            } .
+        } 
+    ?llama_list ) log:collectAllIn _:x . # Input work that is llama2 or has llama2 restriction    
+    ?hasWork list:in (mg:targetWork mg:targetSubwork mg:targetAuxwork) .
+    ?input ?hasWork ?work .
+    _:t log:includes { ?work list:in ?llama_list } .
 
     ?work mg:workName ?wname .
-    ?rl!mg:targetWork mg:workName ?inwname .
-    ("** Error ** [Llama 2/3 Exclusive] The additional terms applied in" ?wname " may violate the CC freedom clauses in " ?inwname) string:concatenation ?report_content .
+    ("** Error ** [Llama 2/3 Exclusive] The action " ?action " applied in " ?wname " violate the Llama2 exclusive clauses in " ?llama_list) string:concatenation ?report_content .
+} => {
+    _:error a mg:Error ;
+        mg:reportedBy ?work ;
+        mg:reportType "Llama 2/3 Exclusive" ;
+        mg:content ?report_content .
+} .
+{ # Llama3
+    ?action a mg:Action .
+    ?action mg:hasInput ?input .
+    ( ?inw
+        {   
+            ?hasWork list:in (mg:targetWork mg:targetSubwork mg:targetAuxwork) .
+            ?input ?hasWork ?inw .
+            _:t log:notIncludes {
+                _:t log:notIncludes { ?inw!mg:hasProvenance!mg:workName string:containsIgnoringCase "Llama3" . } .
+                _:t log:notIncludes { ?inw!:hasRestrictionFromMixwork!mg:hasRestriction log:equalTo mg:llama3_exclusive_use_restriction . } .
+                _:t log:notIncludes { ?inw!:hasRestrictionFromAuxwork!mg:hasRestriction log:equalTo mg:llama3_exclusive_use_restriction . } .
+            } .
+        } 
+    ?llama_list ) log:collectAllIn _:x . # Input work that is llama3 or has llama3 restriction    
+    ?hasWork list:in (mg:targetWork mg:targetSubwork mg:targetAuxwork) .
+    ?input ?hasWork ?work .
+    _:t log:includes { ?work list:in ?llama_list } .
+
+    ?work mg:workName ?wname .
+    ("** Error ** [Llama 2/3 Exclusive] The action " ?action " applied in " ?wname " violate the Llama3 exclusive clauses in " ?llama_list) string:concatenation ?report_content .
 } => {
     _:error a mg:Error ;
         mg:reportedBy ?work ;
@@ -133,19 +163,12 @@
     ?tr :triggeredBy ?rl .
     ?rl a mg:Ruling .
     _:t log:includes { ?tr!mg:hasRestriction log:equalTo mg:no_other_conditions_restriction } .
-    _:t log:includes 
-        {   
-            _:x log:includes { ?tr!mg:hasRestriction log:equalTo mg:gnu_freedom_restriction } .
-            _:x log:includes { ?tr!mg:hasRestriction log:equalTo mg:cc_freedom_restriction } .
-            _:x log:includes { ?tr!mg:hasRestriction log:equalTo mg:use_behavior_restriction } .
-            _:x log:includes { ?tr!mg:hasRestriction log:equalTo mg:non_commericial_restriction } .
-            _:x log:includes { ?tr!mg:hasRestriction log:equalTo mg:runtime_restriction } .
-        } .
+    _:t log:includes { ?tr!mg:hasRestriction list:in ( mg:gnu_freedom_restriction mg:cc_freedom_restriction mg:use_behavior_restriction mg:non_commericial_restriction mg:runtime_restriction ) } .
 
     ?work mg:workName ?wname .
     ?rl!mg:targetWork mg:workName ?inwname .
     ?rl!mg:targetWork!mg:hasLicense mg:licenseId ?lid .
-    ("** Error ** [Exclusive License] The additional terms applied in" ?wname " are prohibited by the license " ?lid " of " ?inwname) string:concatenation ?report_content .
+    ("** Error ** [Exclusive License] The additional terms applied in " ?wname " are prohibited by the license " ?lid " of " ?inwname) string:concatenation ?report_content .
 } => {
     _:error a mg:Error ;
         mg:reportedBy ?work ;

@@ -106,9 +106,6 @@
     ?subw :hasPublishTask ?pt .
     ?pt!mg:hasPublishPolicy log:notEqualTo mg:internal .
     ?work mg:hasSubwork ?subw .
-    ?work mg:hasSubwork ?subw .
-    ?subw mg:hasMixwork ?submixw .
-    ?work mg:hasSubwork ?subw . 
     ?subw mg:hasMixwork ?submixw .
     ?pt mg:targetAction ?action .
     ?subw mg:hasLicense ?linfo .
@@ -180,18 +177,6 @@
         :triggeredBy ?rl .
     ?work :hasRestrictionFromAuxwork ?geniri .
 } .
-
-# { # Use Restrictions from relied work
-#     ?work mg:hasRuling ?rl .
-#     ?rl mg:targetWork ?inw .
-#     ?rl!mg:hasRule mg:hasUseRestriction ?rest . # Use restrictions are triggered
-#     (?work ?rl "TriggeredRestriction") log:skolem ?geniri .
-# } => {
-#     ?geniri a :TriggeredRestriction ;
-#         :triggeredBy ?rl ;
-#         mg:hasRestriction ?rest .
-#     ?work :hasUseRestriction ?geniri .
-# } .
 
 {  # CASE: Internal Use
     ?tr a :TriggeredRestriction .

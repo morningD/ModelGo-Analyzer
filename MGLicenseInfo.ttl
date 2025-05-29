@@ -5,7 +5,7 @@
 mg:Apache-2.0 a mg:LicenseInfo ;
     mg:licenseId "Apache-2.0" ;
     mg:licenseName "Apache License 2.0" ;
-    mg:targetWorkType mg:dataset ;
+    mg:targetWorkType mg:software ;
     mg:licenseVersion "2.0"^^xsd:float ;
     mg:isFsfLibre true ;
     mg:isOsiApproved true ;
@@ -910,7 +910,7 @@ mg:Llama3 a mg:LicenseInfo ;
 
 ###################    Llama3.1    ###################
 mg:Llama3.1 a mg:LicenseInfo ;
-    mg:licenseId "Llama3.1" ; # There is no fundamental difference between this license and <Llama3.2>.
+    mg:licenseId "Llama3.1" ; # There is no fundamental difference between this license and <Llama3.2> <Llama3.3>.
     mg:licenseName "Llama 3.1 Community License Agreement" ;
     mg:targetWorkType mg:model ;
     mg:licenseVersion "2024-07-23"^^xsd:date ; # July 23 2024 Version

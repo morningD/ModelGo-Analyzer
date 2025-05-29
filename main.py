@@ -7,7 +7,7 @@ import subprocess
 """  Create Work Cases (assign work name, form, type, and register license)  """
 # wiki_text = register_license(Work('Wikipedia', 'dataset', 'literary'), target_license='CC-BY-SA-4.0') # Corpus, https://en.wikipedia.org/wiki/Wikipedia:Copyrights
 #stack_exchange_text = register_license(Work('StackExchange', 'dataset', 'literary'), target_license='CC-BY-SA-4.0') # Corpus, https://stackexchange.com/
-free_law_text = register_license(Work('FreeLaw', 'dataset', 'literary'), target_license='CC-BY-ND-4.0') # Corpus, https://free.law/
+# free_law_text = register_license(Work('FreeLaw', 'dataset', 'literary'), target_license='CC-BY-ND-4.0') # Corpus, https://free.law/
 #arxiv_text = register_license(Work('arXiv', 'dataset', 'literary'), target_license='CC-BY-NC-SA-4.0') # Corpus, https://info.arxiv.org/help/license/index.html
 # pubmed_text = register_license(Work('PubMed', 'dataset', 'literary'), target_license='CC-BY-NC-ND-4.0') # Corpus, https://www.ncbi.nlm.nih.gov/pmc/tools/textmining/
 #deep_sequoia_text = register_license(Work('Deep-sequoia', 'dataset', 'literary'), target_license='LGPLLR') # Corpus, http://deep-sequoia.inria.fr/
@@ -34,14 +34,14 @@ free_law_text = register_license(Work('FreeLaw', 'dataset', 'literary'), target_
 #bigtranslate_model = register_license(Work('BigTranslate', 'model', 'weights'), target_license='GPL-3.0') # Text Translation, https://huggingface.co/James-WYang/BigTranslate
 # bert_model = register_license(Work('BERT', 'model', 'weights'), target_license='Apache-2.0') # Text, https://huggingface.co/bert-base-uncased
 # bloom_model = register_license(Work('BLOOM', 'model', 'weights'), target_license='OpenRAIL-M') # Text Generation, https://huggingface.co/bigscience/bloom
-llama2_model = register_license(Work('Llama2', 'model', 'weights'), target_license='Llama2') # Text Generation, https://huggingface.co/meta-llama/Llama-2-7b
-ckip_model = register_license(Work('CKIP-Transformers', 'model', 'weights'), target_license='GPL-3.0') # Text Generation, https://github.com/ckiplab/ckip-transformers
-phobert_model = register_license(Work('PhoBERT', 'model', 'weights'), target_license='AGPL-3.0') # Text Generation, https://huggingface.co/vinai/phobert-base-v2
-mptchart_model = register_license(Work('MPT-Chat', 'model', 'weights'), target_license='CC-BY-NC-SA-4.0') # Text Generation, https://huggingface.co/mosaicml/mpt-7b-chat
-#commandr_model = register_license(Work('C4AI-Command-R+', 'model', 'weights'), target_license='CC-BY-NC-4.0') # Text Generation, https://huggingface.co/CohereForAI/c4ai-command-r-plus-08-2024
+# llama2_model = register_license(Work('Llama2', 'model', 'weights'), target_license='Llama2') # Text Generation, https://huggingface.co/meta-llama/Llama-2-7b
+# ckip_model = register_license(Work('CKIP-Transformers', 'model', 'weights'), target_license='GPL-3.0') # Text Generation, https://github.com/ckiplab/ckip-transformers
+# phobert_model = register_license(Work('PhoBERT', 'model', 'weights'), target_license='AGPL-3.0') # Text Generation, https://huggingface.co/vinai/phobert-base-v2
+# mptchart_model = register_license(Work('MPT-Chat', 'model', 'weights'), target_license='CC-BY-NC-SA-4.0') # Text Generation, https://huggingface.co/mosaicml/mpt-7b-chat
+# commandr_model = register_license(Work('C4AI-Command-R+', 'model', 'weights'), target_license='CC-BY-NC-4.0') # Text Generation, https://huggingface.co/CohereForAI/c4ai-command-r-plus-08-2024
 
-#mgbyos_model = register_license(Work('MGBYOS', 'model', 'weights'), target_license='MG-BY-OS')
-#mgbync_model = register_license(Work('MGBYNC', 'model', 'weights'), target_license='MG-BY-NC') # MG Licenses
+# mgbyos_model = register_license(Work('MGBYOS', 'model', 'weights'), target_license='MG-BY-OS')
+# mgbync_model = register_license(Work('MGBYNC', 'model', 'weights'), target_license='MG-BY-NC') # MG Licenses
 
 
 """  Construct Workflows (use func defined in actions.py)  """
@@ -49,22 +49,60 @@ mptchart_model = register_license(Work('MPT-Chat', 'model', 'weights'), target_l
 #flow = combine([embed(arxiv_text, aux_flows=[bigtranslate_model]), embed(stack_exchange_text, aux_flows=[bigtranslate_model]), deep_sequoia_text, free_law_text])
 
 # Case-1
-#flow = combine([ckip_model, phobert_model])
-#flow = combine([mptchart_model, commandr_model])
-flow = combine([combine([ckip_model, phobert_model]), llama2_model])
+ckip_model = register_license(Work('CKIP-Transformers', 'model', 'weights'), target_license='GPL-3.0') # Text Generation, https://github.com/ckiplab/ckip-transformers
+phobert_model = register_license(Work('PhoBERT', 'model', 'weights'), target_license='AGPL-3.0') # Text Generation, https://huggingface.co/vinai/phobert-base-v2
 
-#flow = generate(combine([ckip_model, phobert_model]), aux_flows=[free_law_text])
-#flow = generate(combine([mptchart_model, commandr_model]), aux_flows=[free_law_text])
+free_law_text = register_license(Work('FreeLaw', 'dataset', 'literary'), target_license='CC-BY-ND-4.0') # Corpus, https://free.law/
 
-#flow = phobert_model
-#flow = generate(mgbync_model, aux_flows=[free_law_text])
-#flow = generate(phobert_model, aux_flows=[free_law_text])
-#flow = mgbyos_model
-#flow = mgbync_model
-#flow = phobert_model
+flow = combine([ckip_model, phobert_model])
+flow = publish(flow, form='service-form', policy = 'sell')
 
-flow = publish(flow, form='weights', policy = 'sell', sub_flows=[mptchart_model]) # literary/service-form
-#flow = publish(flow, form='service-form', policy = 'sell') # literary/service-form
+# flow = generate(combine([ckip_model, phobert_model]), aux_flows=[free_law_text])
+# flow = publish(flow, form='literary', policy = 'sell')
+
+# mptchart_model = register_license(Work('MPT-Chat', 'model', 'weights'), target_license='CC-BY-NC-SA-4.0') # Text Generation, https://huggingface.co/mosaicml/mpt-7b-chat
+# commandr_model = register_license(Work('C4AI-Command-R+', 'model', 'weights'), target_license='CC-BY-NC-4.0') # Text Generation, https://huggingface.co/CohereForAI/c4ai-command-r-plus-08-2024
+# flow = combine([mptchart_model, commandr_model])
+# flow = publish(flow, form='service-form', policy = 'sell')
+# flow = generate(combine([mptchart_model, commandr_model]), aux_flows=[free_law_text])
+# flow = publish(flow, form='literary', policy = 'sell')
+
+# mgbyos_model = register_license(Work('MGBYOS', 'model', 'weights'), target_license='MG-BY-OS')
+# flow = mgbyos_model
+# flow = publish(flow, form='service-form', policy = 'sell')
+# flow = generate(mgbyos_model, aux_flows=[free_law_text])
+# flow = publish(flow, form='literary', policy = 'sell')
+
+# mgbync_model = register_license(Work('MGBYNC', 'model', 'weights'), target_license='MG-BY-NC')
+# flow = mgbync_model
+# flow = publish(flow, form='service-form', policy = 'sell')
+# flow = generate(mgbync_model, aux_flows=[free_law_text])
+# flow = publish(flow, form='literary', policy = 'sell')
+
+# Case-2
+
+# mixtral_model = register_license(Work('Mixtral-8x7B', 'model', 'weights'), target_license='Apache-2.0') # https://huggingface.co/mistralai/Mixtral-8x7B-Instruct-v0.1
+# #cosmopedia_text = register_license(Work('CosmopediaV2', 'dataset', 'literary'), target_license='Apache-2.0') # https://huggingface.co/datasets/HuggingFaceTB/cosmopedia
+# stack_text = register_license(Work('TheStackv2', 'dataset', 'literary'), target_license='Unlicense') # Crowdsourced https://huggingface.co/datasets/bigcode/the-stack-v2-train-full-ids
+# #smollm_corpus_text = register_license(Work('SmolLM-Corpus', 'dataset', 'literary'), target_license='ODC-By-1.0') # https://huggingface.co/datasets/HuggingFaceTB/smollm-corpus
+# smollm_360m_model = register_license(Work('SmolLM', 'model', 'weights'), target_license='Apache-2.0') # https://huggingface.co/HuggingFaceTB/SmolLM-360M
+# smollm_360m_instruct_model = register_license(Work('SmolLM_Instruct', 'model', 'weights'), target_license='Apache-2.0') # https://huggingface.co/HuggingFaceTB/SmolLM-360M-Instruct
+
+# # smollm_360m_instruct_qlora_model = register_license(Work('SmolLM_Instruct_QLoRA', 'model', 'weights'), target_license='CC-BY-NC-4.0') # https://huggingface.co/dmariko/SmolLM-360M-Instruct_qlora_nf4_merged
+
+# Llama31_70b_model = register_license(Work('Llama-3.1-70B-Instruct', 'model', 'weights'), target_license='Llama3.1') # https://huggingface.co/meta-llama/Llama-3.1-70B-Instruct
+
+# #prompt = register_license(Work('prompt', 'dataset', 'literary'), target_license='Unlicense') # dummy input
+# init_model = register_license(Work('init_model', 'model', 'weights'), target_license='Unlicense') # init model for training
+
+# flow = generate(mixtral_model, form="literary", license="Apache-2.0")
+# flow = combine([flow, stack_text], license="ODC-By-1.0")
+# flow = train([init_model], aux_flows=[flow], license="Apache-2.0")
+# flow = modify(flow, aux_flows=[generate(Llama31_70b_model, form="literary", license="Apache-2.0")], license="Apache-2.0")
+# flow = modify(flow, license="CC-BY-NC-4.0")
+# flow = publish(flow, form='raw-form', policy = 'share', license="CC-BY-NC-4.0")
+
+
 # Save the gen graph to a new Turtle file
 flow.graph.serialize(destination="gen.ttl", format="ttl")
 

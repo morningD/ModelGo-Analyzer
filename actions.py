@@ -180,24 +180,24 @@ def base_action(target_flows: Union[Iterable['Workflow'], 'Workflow'], action_ty
 def copy(target_flow: Workflow) -> Workflow:
     return base_action(target_flow, 'Copy', 'copy')
 
-def modify(target_flow: Workflow) -> Workflow:
-    return base_action(target_flow, 'Modify', 'modify')
+def modify(target_flow: Workflow, aux_flows: Optional[Iterable[Workflow]]=None, sub_flows: Optional[Iterable[Workflow]]=None, license: Optional[str] = None) -> Workflow:
+    return base_action(target_flow, 'Modify', 'modify', aux_flows, sub_flows, license=license)
 
-def combine(target_flows: Iterable[Workflow]) -> Workflow:
-    return base_action(target_flows, 'Combine', 'combine')
+def combine(target_flows: Iterable[Workflow], license: Optional[str] = None) -> Workflow:
+    return base_action(target_flows, 'Combine', 'combine', license=license)
 
-def amalgamate(target_flows: Iterable[Workflow]) -> Workflow:
-    return base_action(target_flows, 'Amalgamate', 'amalg')
+def amalgamate(target_flows: Iterable[Workflow], license: Optional[str] = None) -> Workflow:
+    return base_action(target_flows, 'Amalgamate', 'amalg', license=license)
 
-def train(target_flows: Iterable[Workflow], aux_flows: Optional[Iterable[Workflow]]=None, sub_flows: Optional[Iterable[Workflow]]=None) -> Workflow:
-    return base_action(target_flows, 'Train', 'train', aux_flows, sub_flows)
+def train(target_flows: Iterable[Workflow], aux_flows: Optional[Iterable[Workflow]]=None, sub_flows: Optional[Iterable[Workflow]]=None, license: Optional[str] = None) -> Workflow:
+    return base_action(target_flows, 'Train', 'train', aux_flows, sub_flows, license=license)
 
-def embed(target_flow: Workflow, aux_flows: Optional[Iterable[Workflow]]=None, sub_flows: Optional[Iterable[Workflow]]=None) -> Workflow:
-    return base_action(target_flow, 'Embed', 'embed', aux_flows, sub_flows)
+def embed(target_flow: Workflow, aux_flows: Optional[Iterable[Workflow]]=None, sub_flows: Optional[Iterable[Workflow]]=None, license: Optional[str] = None) -> Workflow:
+    return base_action(target_flow, 'Embed', 'embed', aux_flows, sub_flows, license=license)
 
-def distill(target_flow: Workflow, aux_flows: Optional[Iterable[Workflow]]=None, sub_flows: Optional[Iterable[Workflow]]=None) -> Workflow:
-    return base_action(target_flow, 'Distill', 'distill', aux_flows, sub_flows)
+def distill(target_flow: Workflow, aux_flows: Optional[Iterable[Workflow]]=None, sub_flows: Optional[Iterable[Workflow]]=None, license: Optional[str] = None) -> Workflow:
+    return base_action(target_flow, 'Distill', 'distill', aux_flows, sub_flows, license=license)
 
 # Allowing assignment of a new work form and work type
-def generate(target_flow: Workflow, aux_flows: Optional[Iterable[Workflow]]=None, sub_flows: Optional[Iterable[Workflow]]=None, form='raw-form', type='dataset') -> Workflow:
-    return base_action(target_flow, 'Generate', 'gen', aux_flows, sub_flows, form, type)
+def generate(target_flow: Workflow, aux_flows: Optional[Iterable[Workflow]]=None, sub_flows: Optional[Iterable[Workflow]]=None, form='raw-form', type='dataset', license: Optional[str] = None) -> Workflow:
+    return base_action(target_flow, 'Generate', 'gen', aux_flows, sub_flows, form, type, license=license)

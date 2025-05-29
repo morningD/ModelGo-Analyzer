@@ -60,19 +60,20 @@
 } .
 { # Proliferate (Internal Use) Publish Task to relied work
     ?work a mg:Work .
-    (?work "PublishTask" "Internal") log:skolem ?pt .
+    #(?work "PublishTask" "Internal") log:skolem ?pt .
     ?work :hasPublishTask ?pt .
     ?work mg:hasReliedwork ?rw .
-    _:t log:notIncludes { ?rw!:hasPublishTask!mg:hasPublishPolicy log:equalTo mg:internal } .
-    ?pt mg:targetAction ?action .
-    ?pt mg:targetWork ?pubw .
-    (?rw "PublishTask" "Internal") log:skolem ?geniri .
+    # _:t log:notIncludes { ?rw!:hasPublishTask!mg:hasPublishPolicy log:equalTo mg:internal } .
+    # ?pt mg:targetAction ?action .
+    # ?pt mg:targetWork ?pubw .
+    # (?rw "PublishTask" "Internal") log:skolem ?geniri .
 } => {
-    ?geniri a :PublishTask ;
-        mg:targetAction ?action ;
-        mg:targetWork ?pubw ;
-        mg:hasPublishPolicy mg:internal .
-    ?work :hasPublishTask ?geniri .
+    # ?geniri a :PublishTask ;
+    #     mg:targetAction ?action ;
+    #     mg:targetWork ?pubw ;
+    #     mg:hasPublishPolicy mg:internal .
+    # ?rw :hasPublishTask ?geniri .
+    ?rw :hasPublishTask ?pt .
 }.
 
 ####    Create Ruling for Publishing Work  ####
@@ -219,5 +220,13 @@
     ?hasRest list:in (:hasRestrictionFromMixwork :hasRestrictionFromSubwork :hasRestrictionFromAuxwork) .
     ?sw ?hasRest ?rest .
 } => {
-    ?work :hasRestrictionFromSubwork :rest .
+    ?work :hasRestrictionFromSubwork ?rest .
 } .
+# { 
+#     ?work a mg:Work .
+#     ?work mg:hasAuxwork ?aw .
+#     ?hasRest list:in (:hasRestrictionFromMixwork :hasRestrictionFromAuxwork) . # Auxwork will not realeased with final work, so no need to proliferate to its subwork
+#     ?aw ?hasRest ?rest .
+# } => {
+#     ?work :hasRestrictionFromAuxwork ?rest .
+# } .

@@ -373,6 +373,7 @@
     ?rl mg:targetWork ?inw .
     ?inw mg:hasLicense ?li .
     _:t log:notIncludes { ?li!mg:grant!mg:hasRightPrefix log:equalTo mg:sublicensable } .
+    _:t log:notIncludes { ?li!mg:grant!mg:hasUsage log:equalTo mg:sublicense } .
     _:t log:notIncludes { ?li!mg:grant!mg:hasUsage log:equalTo mg:auto-license } .
 
     #?pt!mg:targetWork mg:workName ?wname .

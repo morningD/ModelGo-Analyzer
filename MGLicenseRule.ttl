@@ -44,6 +44,15 @@ mg:Apache-2.0-derivative-rule a mg:Rule ;
     mg:hasPublishRestriction mg:state_changes_restriction ; # You should state changes if you modify the original work.
     mg:allowSharing true .
 
+mg:Apache-2.0-derivative-fuzz-rule a mg:Rule ;
+    mg:hasOutputDef mg:derivative ;
+    mg:targetActionType mg:Amalgamate, mg:Modify ;
+    mg:targetInputWorkForm mg:literary, mg:vision, mg:acoustics, mg:weights, mg:raw-form, mg:binary-form, mg:mixed-form ;
+    mg:targetOutputWorkForm mg:literary, mg:vision, mg:acoustics, mg:weights, mg:raw-form, mg:binary-form, mg:mixed-form ;
+    mg:relicense mg:any-license ; 
+    mg:hasPublishRestriction mg:state_changes_restriction ;
+    mg:allowSharing true .
+
 mg:Apache-2.0-nodefinition-rule a mg:Rule ;
     mg:hasOutputDef mg:nodefinition ;
     mg:targetActionType mg:Train, mg:Distill, mg:Generate, mg:Embed ;
@@ -81,7 +90,7 @@ mg:Apache-2.0-republication-fuzz-rule-1 a mg:Rule ;
 mg:Apache-2.0-republication-rule-2 a mg:Rule ;
     mg:hasOutputDef mg:republication ;
     mg:targetActionType mg:Publish ;
-    mg:targetInputWorkForm mg:literary, mg:vision, mg:acoustics, mg:weights, mg:raw-form, mg:exe, mg:binary-form, mg:saas, mg:service-form, mg:mixed-form ; 
+    mg:targetInputWorkForm mg:code, mg:literary, mg:vision, mg:acoustics, mg:weights, mg:raw-form, mg:exe, mg:binary-form, mg:saas, mg:service-form, mg:mixed-form ; 
     mg:targetOutputWorkForm mg:saas, mg:service-form ; # You can deploy it as a service to bypass this license's restriction.
     mg:relicense mg:any-license ;
     mg:allowSharing true .

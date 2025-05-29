@@ -44,6 +44,18 @@
     ?subwork mg:workName ?sname .
 } .
 
+# { # Reliedwork
+#     ?work a mg:Work .
+#     ?work mg:workName ?wname .
+#     ?work mg:hasReliedwork ?rework .
+#     ?subwork mg:workName ?sname .
+# } log:query {
+#     ?work a mg:Work .
+#     ?work mg:workName ?wname .
+#     ?work mg:hasReliedwork ?rework .
+#     ?subwork mg:workName ?sname .
+# } .
+
 { # Provenance
     ?work a mg:Work .
     ?work mg:workName ?wname .

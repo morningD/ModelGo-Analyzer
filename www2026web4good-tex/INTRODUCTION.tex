@@ -1,0 +1,51 @@
+\section{Introduction}
+\label{sec:intro}
+In recent years, the compelling generalization capabilities provided by billion-parameter models~\cite{wei2023inverse}, along with the high computational and data costs associated with their training~\cite{maslej2024aiindex}, have motivated ML developers to collaborate incrementally rather than train models from scratch.
+A common approach is to download a Pre-Trained Model (PTM)~\cite{jiang2023empirical} and fine-tune it for downstream task~\cite{hu2022lora}.
+However, these paradigms may face potential legal risks if the use and redistribution practices violate the governing licenses of the reused components, akin to GPL violation in the field of Open Source Software (OSS)~\cite{mathur2012empirical}.
+Failure to comply with license terms can result in termination and legal action\footnote{See CoKinetic Systems, Corp. \textit{v}. Panasonic Avionics Corporation, 1:17-cv-01527.}.
+%\footnote{See case 1:17-cv-01527, 1:14-cv-00221.}.
+Another risk arises from the choice of license used to republish the work. Some developers adhere to traditional software publishing practices and select OSS licenses for their models~\cite{devlin2019bert,ni2022expanding}, which often lack clear definitions and conditions regarding ML activities and do not effectively prevent undesirable use.
+For example, a licensee can close-source your published models, even if they are licensed under GPL, without violating any terms.
+
+There are three possible ways to mitigate above risks.
+First, developers could avoid using any third-party materials. However, this is extremely difficult for individual developers, as training PTMs is expensive and requires vast amounts of data. For instance, the training dataset for GPT-2~\cite{radford2019language} was collected from 45 million web pages, governed by various licenses and terms of use.
+Second, a new publishing standard for ML projects could be developed, which might include drafting specific licenses for models and datasets~\cite{benjamin2019towards,contractor2022behavioral}, along with a compatibility table to guide their reuse policies. 
+However, this approach does little to address existing conflicts in ML projects that already rely on assets released under traditional licenses. 
+Furthermore, it is impractical to expect all publishers to relicense their previous works.
+Third, we can scan the reused assets in ML projects and analyze existing license noncompliance to eliminate them. 
+This is a common solution applied to OSS projects~\cite{jaeger2017fossology} but it cannot be directly extended to ML projects, as they can involve complex coupling mechanisms and different licensing frameworks that are interwoven within an ML development workflow.
+
+Take MixLoRA~\cite{li2024mixlora} as an example: it is licensed under Apache-2.0 (an OSS license) and is fine-tuned on Llama 2 model~\cite{touvron2023llama} (governed by Llama 2 Community License~\cite{meta2024llama2}, a model license) using the Cleaned Alpaca Dataset~\cite{taori2023alpaca}, which is licensed under CC BY-NC-4.0 (a free-content license from Creative Commons, a.k.a CC~\cite{creative2024list}).
+Previous OSS license analysis tools~\cite{mathur2012empirical,ombredanne2020free} that only consider package reference dependencies and focus on software licenses will fall short in such ML scenarios.
+%which involve implicit nested dependencies and various licensing frameworks.
+Therefore, to provide license analysis for ML projects, the key is to develop a specific ontology that describes the ML workflow and provides a corresponding interpretative solution for licenses, covering all licensing frameworks and disambiguating their mapping rules related to ML activities.
+Moreover, the lack of consensus in standard model publishing practices and the inflexibility of existing publicly available model licenses have led many developers to publish their models under OSS licenses or even free-content licenses~\cite{groeneveld2024olmo,cohereforai2024c4ai}, further complicating the design of license analysis methods.
+
+In this paper, we propose a two-pronged approach to address these challenges. 
+First, to resolve existing noncompliance in ML projects, we introduce \textit{MG Analyzer}, a tool that constructs ML workflows as Resource Description Framework (RDF)~\cite{pan2009resource} graphs and assesses potential license compliance issues, improper license selection, granting of rights, restrictions, and obligations related to ML asset reuse. 
+Second, we propose \textit{MG Licenses}, a new set of model-specific licenses with CC-style licensing options, to promote standardized model publishing.
+To present potential risks of using OSS, model, and free-content licenses in model publishing scenarios, we evaluate them with the \emph{MG Analyzer} on a typical workflow.
+We also demonstrate the flexibility of \textit{MG Licenses} in encompassing nearly all licensing conditions provided by other model licenses through comparisons.
+The main contributions of our paper are:
+
+\begin{itemize}
+    \item We identified the challenges of license compliance and model licensing in ML workflow management.
+    %and conduct a comprehensive analysis of the deficiencies in current model publishing practices.
+    
+    \item We developed MG Analyzer using semantic technologies to automate license analysis in ML projects.
+    It includes a vocabulary for describing ML workflows with dependencies and license rules.
+    We also provide an interface to convert user-input workflow descriptions into RDF graphs following this vocabulary. 
+    Users can convert workflow descriptions into RDF graphs, enabling the tool to construct dependencies, reason, and detect license conflicts.
+    \item We drafted a set of model licenses called MG Licenses to promote more standardized model publishing. These licenses are well-defined and cover a complete spectrum of model publishing scenarios. Furthermore, we have integrated support for MG Licenses within MG Analyzer.
+\end{itemize}
+
+% To the best of our knowledge, MG Analyzer and Licenses represent the first attempt at standardizing model publishing. \textbf{The proposed code and license drafts are available at} \url{https://anonymous.4open.science/r/MG-Analyzer-2933}.
+
+% The rest of the paper is organized as follows.
+% Section~\ref{sec:related} presents background and related studies.
+% Section~\ref{sec:analyzer} introduces our proposed vocabulary for workflow descriptions and the license analysis tool.
+% Section~\ref{sec:license} offers a comprehensive comparison of commonly used licenses and briefly outlines the advantages of the new model licenses we propose.
+% Section~\ref{sec:case} presents license analysis results to demonstrate the risks associated with non-standard licensing, while Section~\ref{sec:conclusion} concludes the paper.
+% %Supplementary codes, results and limitations, disclamers are provided in the Appendix.
+% Supplementary codes, results, limitations, and our disclaimers are available in the Appendix.

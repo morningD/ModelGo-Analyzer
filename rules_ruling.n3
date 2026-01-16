@@ -122,16 +122,16 @@ mg:license_source_ruling_copyleft_fail a mg:LicenseSource . # There have multipl
         mg:hasLicenseSource mg:license_source_ruling_relicense_fail .
 } .
 
-{ # CASE-3: There have multiple rulings require the output work's license should be compatible, and these ruling has a same (compatible) license. (compat1, compat2) -> compat
+{ # CASE-3: There have been multiple rulings requiring the output work's license to be compatible, and these rulings have the same (compatible) license. (compat1, compat2) -> compat
     ?outw a mg:Work .
     _:x log:notIncludes { ?outw mg:hasLicense ?li } . # This work does not have a license yet
-    # If all relied wroks have a license, we can determind the license of this work
+    # If all relied works have a license, we can determine the license of this work
     ( { ?outw mg:hasReliedwork ?relw } { ?relw mg:hasLicense ?li } ) log:forAllIn _:t . 
 
-    # There is no ruling that NOT allow relicesnse (For exclude CASE-2)
+    # There is no ruling that does NOT allow relicensing (to exclude CASE-2)
     ( {?outw!mg:hasRuling!mg:hasRule mg:relicense ?reli } {?reli log:notEqualTo mg:none-license} ) log:forAllIn _:t .
 
-    # Collect all compatible-relicensable license to a list
+    # Collect all compatible relicensable licenses into a list
     ( ?li
         { 
             ?outw mg:hasRuling ?rling .
@@ -145,7 +145,7 @@ mg:license_source_ruling_copyleft_fail a mg:LicenseSource . # There have multipl
     ?li_list list:first ?li_1st .
     ?li_1st mg:hasCompatibleLicense ?compat_list_1st .
     
-    # Check wether exist a compatible license from 1st that also in all other (include self) compatible lists
+    # Check whether there exists a compatible license from the first list that also appears in all other (including itself) compatible lists
     _:x log:includes # Return true if there is a license included in all compatible list.
         {   
             ?cli list:in ?compat_list_1st .

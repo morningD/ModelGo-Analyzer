@@ -1,0 +1,315 @@
+%%
+%% This is file `sample-sigconf.tex',
+%% generated with the docstrip utility.
+%%
+%% The original source files were:
+%%
+%% samples.dtx  (with options: `all,proceedings,bibtex,sigconf')
+%% 
+%% IMPORTANT NOTICE:
+%% 
+%% For the copyright see the source file.
+%% 
+%% Any modified versions of this file must be renamed
+%% with new filenames distinct from sample-sigconf.tex.
+%% 
+%% For distribution of the original source see the terms
+%% for copying and modification in the file samples.dtx.
+%% 
+%% This generated file may be distributed as long as the
+%% original source files, as listed above, are part of the
+%% same distribution. (The sources need not necessarily be
+%% in the same archive or directory.)
+%%
+%%
+%% Commands for TeXCount
+%TC:macro \cite [option:text,text]
+%TC:macro \citep [option:text,text]
+%TC:macro \citet [option:text,text]
+%TC:envir table 0 1
+%TC:envir table* 0 1
+%TC:envir tabular [ignore] word
+%TC:envir displaymath 0 word
+%TC:envir math 0 word
+%TC:envir comment 0 0
+%%
+%%
+%% The first command in your LaTeX source must be the \documentclass
+%% command.
+%%
+%% For submission and review of your manuscript please change the
+%% command to \documentclass[manuscript, screen, review]{acmart}.
+%%
+%% When submitting camera ready or to TAPS, please change the command
+%% to \documentclass[sigconf]{acmart} or whichever template is required
+%% for your publication.
+%%
+%%
+\documentclass[sigconf]{acmart}
+
+
+\copyrightyear{2026}
+\acmYear{2026}
+\setcopyright{cc}
+\setcctype{by}
+\acmConference[WWW '26] {Proceedings of the ACM Web Conference 2026}{April 13--17, 2026}{Dubai, United Arab Emirates.}
+\acmBooktitle{Proceedings of the ACM Web Conference 2026 (WWW '26), April 13--17, 2026, Dubai, United Arab Emirates}
+\acmISBN{979-8-4007-2307-0/2026/04}
+\acmDOI{10.1145/XXXXXX.XXXXXX}
+\settopmatter{printacmref=true}
+
+
+%%
+%% Submission ID.
+%% Use this when submitting an article to a sponsored event. You'll
+%% receive a unique submission ID from the organizers
+%% of the event, and this ID should be used as the parameter to this command.
+%%\acmSubmissionID{123-A56-BU3}
+
+%%
+%% For managing citations, it is recommended to use bibliography
+%% files in BibTeX format.
+%%
+%% You can then either use BibTeX with the ACM-Reference-Format style,
+%% or BibLaTeX with the acmnumeric or acmauthoryear sytles, that include
+%% support for advanced citation of software artefact from the
+%% biblatex-software package, also separately available on CTAN.
+%%
+%% Look at the sample-*-biblatex.tex files for templates showcasing
+%% the biblatex styles.
+%%
+
+%%
+%% The majority of ACM publications use numbered citations and
+%% references.  The command \citestyle{authoryear} switches to the
+%% "author year" style.
+%%
+%% If you are preparing content for an event
+%% sponsored by ACM SIGGRAPH, you must use the "author year" style of
+%% citations and references.
+%% Uncommenting
+%% the next command will enable that style.
+%%\citestyle{acmauthoryear}
+\usepackage{comment}
+\usepackage{multirow}
+\usepackage{amsmath,pifont}
+\usepackage{booktabs}
+\usepackage{rotating}
+\usepackage{array}
+%\usepackage[para]{footmisc}
+%\usepackage{tablefootnote}
+\usepackage{xcolor}
+\usepackage{colortbl}
+\usepackage{longtable}
+\usepackage{circledsteps}
+\usepackage{romannum}
+\usepackage{tcolorbox}
+\usepackage{enumitem} % no indent [leftmargin=*]
+\usepackage{balance}
+\usepackage{bm}
+\usepackage{listings}
+
+\definecolor{Ruling}{HTML}{18AFCC}
+\definecolor{Request}{HTML}{5F9099}
+\definecolor{Construct}{HTML}{CC1865}
+
+\definecolor{Yes}{HTML}{64FFA0}
+\definecolor{Part}{HTML}{FF9963}
+\definecolor{No}{HTML}{FF6B63}
+
+\newcommand{\cmark}{\cellcolor{Yes}\textcolor{black}{\ding{51}}}
+\newcommand{\pmark}{\cellcolor{Part}\textcolor{gray}{$\bm{\approx}$}}
+\newcommand{\xmark}{\cellcolor{No}\textcolor{white}{\ding{55}}}
+\newcommand{\namark}{\cellcolor{white}\textcolor{black}{n/a}}
+
+
+\lstdefinelanguage{Turtle}{
+  keywords={a, rdf, rdfs, owl, foaf, xsd, base, prefix, mg, log, list},
+  sensitive=true,
+  morecomment=[l]{\#}, % Line comments
+  morestring=[b]",
+  morestring=[b]',
+  alsoletter={\@}, % Allow the @ character in identifiers
+  commentstyle=\color{gray},
+  keywordstyle=\color{blue},
+  stringstyle=\color{red},
+}
+
+\hyphenation{OpenAI Model-Go HuggingFace} 
+
+%%
+%% end of the preamble, start of the body of the document source.
+\begin{document}
+
+%%
+%% The "title" command has an optional parameter,
+%% allowing the author to define a "short title" to be used in page headers.
+\title{"They've Stolen My GPL-Licensed Model!": Toward Standardized and Transparent Model Licensing}
+
+%%
+%% The "author" command and its associated commands are used to define
+%% the authors and their affiliations.
+%% Of note is the shared affiliation of the first two authors, and the
+%% "authornote" and "authornotemark" commands
+%% used to denote shared contribution to the research.
+\author{Moming Duan}
+\orcid{0000-0001-5402-6634}
+\affiliation{%
+  \institution{East China Normal University}
+  \city{Shanghai}
+  \country{China}}
+\email{mmduan@dase.ecnu.edu.cn}
+% https://orcid.org/0000-0001-5402-6634
+
+\author{Rui Zhao}
+\orcid{0000-0003-2993-2023}
+\affiliation{%
+  \institution{University of Oxford}
+  \city{Oxford}
+  \country{UK}}
+\email{rui.zhao@cs.ox.ac.uk}
+%0000-0003-2993-2023
+
+\author{Linshan Jiang}
+\orcid{0000-0001-8501-9488}
+\affiliation{%
+  \institution{National University of Singapore}
+  \city{Singapore}
+  \country{Singapore}}
+\email{linshan@nus.edu.sg}
+%0000-0001-8501-9488
+
+\author{Nigel Shadbolt}
+\orcid{0000-0002-5085-9724}
+\affiliation{%
+  \institution{University of Oxford}
+  \city{Oxford}
+  \country{UK}}
+\email{nigel.shadbolt@cs.ox.ac.uk}
+%0000-0002-5085-9724
+
+\author{Bingsheng He}
+\orcid{0000-0001-8618-4581}
+\affiliation{%
+  \institution{National University of Singapore}
+  \city{Singapore}
+  \country{Singapore}}
+\email{hebs@comp.nus.edu.sg}
+%0000-0001-8618-4581
+
+%%
+%% By default, the full list of authors will be used in the page
+%% headers. Often, this list is too long, and will overlap
+%% other information printed in the page headers. This command allows
+%% the author to define a more concise list
+%% of authors' names for this purpose.
+%\renewcommand{\shortauthors}{Trovato et al.}
+
+%%
+%% The abstract is a short summary of the work to be presented in the
+%% article.
+\begin{abstract}
+As model parameter sizes scale into the billions and training consumes zettaFLOPs of computation, the reuse of Machine Learning (ML) assets and collaborative development have become increasingly prevalent in the ML community.
+These ML assets, including models, datasets, and software, may originate from various sources and be published under different licenses, which govern the use and distribution of licensed works and their derivatives.
+However, commonly chosen licenses, such as GPL and Apache, are software-specific and are not clearly defined or bounded in the context of model publishing.
+Meanwhile, the reused assets may also be under free-content licenses and model licenses, which pose a potential risk of license noncompliance and rights infringement within the model production workflow.
+In this paper, we address these challenges along two lines:
+1) For ML workflow compliance, we propose a new vocabulary for ML workflow management and encoded license rules to enable ontological reasoning for analyzing rights granting and compliance issues.
+2) For standardized model publishing, we introduce a set of model licenses that provide flexible options to meet the diverse needs of the ML community.
+Our analysis tool is built on Turtle language and Notation3 reasoning engine, envisioned as a first step toward Linked Open Data for ML workflow management.
+We have also encoded our proposed model licenses into rules and demonstrated the effects of GPL and other commonly used licenses in model publishing, along with the flexibility advantages of our licenses, through comparisons and experiments. 
+\textbf{Code is available at} \url{https://anonymous.4open.science/r/MG-Analyzer-2933}.
+
+\end{abstract}
+
+% revise: However, the common choosed licenses, such as GPL and Apache, are software-specific and may not enforce in the machine learning context like publisher expect, expose a risk of 
+%. This can expose licensed models to risks that are beyond the publisher's desired control
+
+
+%%
+%% The code below is generated by the tool at http://dl.acm.org/ccs.cfm.
+%% Please copy and paste the code instead of the example below.
+%%
+
+\begin{CCSXML}
+  <ccs2012>
+     <concept>
+         <concept_id>10003456.10003457.10003580.10003585</concept_id>
+         <concept_desc>Social and professional topics~Testing, certification and licensing</concept_desc>
+         <concept_significance>500</concept_significance>
+         </concept>
+     <concept>
+         <concept_id>10011007.10011074.10011134.10003559</concept_id>
+         <concept_desc>Software and its engineering~Open source model</concept_desc>
+         <concept_significance>300</concept_significance>
+         </concept>
+     <concept>
+         <concept_id>10003752.10003790.10003794</concept_id>
+         <concept_desc>Theory of computation~Automated reasoning</concept_desc>
+         <concept_significance>300</concept_significance>
+         </concept>
+   </ccs2012>
+\end{CCSXML}
+  
+\ccsdesc[500]{Social and professional topics~Testing, certification and licensing}
+\ccsdesc[300]{Software and its engineering~Open source model}
+\ccsdesc[300]{Theory of computation~Automated reasoning}
+
+%%
+%% Keywords. The author(s) should pick words that accurately describe
+%% the work being presented. Separate the keywords with commas.
+\keywords{AI Licensing, Semantic Web, Open Source, Responsible AI}
+
+% \received{20 February 2007}
+% \received[revised]{12 March 2009}
+% \received[accepted]{5 June 2009}
+
+%%
+%% This command processes the author and affiliation and title
+%% information and builds the first part of the formatted document.
+\maketitle
+
+\input{INTRODUCTION}
+
+\input{BACKGROUND}
+
+\input{METHOD}
+
+\input{MGLICENSE}
+
+\input{CASE}
+
+\section{Conclusion}
+\label{sec:conclusion}
+Non-standard licensing is prevalent in ML projects, and the underlying risks are often neglected. 
+To reveal these risks, we propose formal ontologies for describing ML workflows and develop the MG Analyzer to detect compliance issues based on it. 
+To promote more standardized licensing in the future, we have drafted MG Licenses to provide flexible licensing solutions for model publishing. 
+Our experiments show that commonly used OSS and CC licenses are unsuitable for model publishing, while MG Licenses provide a viable alternative.
+
+%%
+%% The acknowledgments section is defined using the "acks" environment
+%% (and NOT an unnumbered section). This ensures the proper
+%% identification of the section in the article metadata, and the
+%% consistent spelling of the heading.
+\begin{acks}
+This research is sponsored by Shanghai Pujiang Programme (25PJA029).
+\end{acks}
+
+%%
+%% The next two lines define the bibliography style to be used, and
+%% the bibliography file.
+\bibliographystyle{ACM-Reference-Format}
+\balance
+\bibliography{REF}
+
+
+%%
+%% If your work has an appendix, this is the place to put it.
+\appendix
+\input{APPENDIX}
+
+\end{document}
+\endinput
+%%
+%% End of file `sample-sigconf.tex'.
+ 

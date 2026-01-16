@@ -32,14 +32,14 @@
         mg:content ?report_content .
 } .
 
-# Error [Right Reserved]. Report a error if the license reserves you the right to do your action
+# Error [Right Reserved]. Report an error if the license reserves the right for your action
 {
     ?req a mg:Request .
-    ?req!mg:grant mg:hasUsage ?req_usage . # There may be multiple mg:Usage inside a mg:Right
+    ?req!mg:grant mg:hasUsage ?req_usage . # There may be multiple mg:Usage
     ?req mg:targetAction ?a .
     ?req mg:targetWork ?outw .
     ?req <- mg:hasRequest ?inw .
-    ?inw mg:hasLicense ?li . # The checking target work must have a license, otherwise this checking will be skipped
+    ?inw mg:hasLicense ?li . # The target work being checked must have a license; otherwise this check will be skipped
     ( ?r { ?li!mg:reserve mg:hasUsage ?r . } ?reserved_list ) log:collectAllIn _:x . # Collect all reserved rights according to the license
     ?req_usage list:in ?reserved_list . # Check if the required usage is in the reserved list
 

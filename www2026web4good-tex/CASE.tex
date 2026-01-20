@@ -1,7 +1,7 @@
 \section{Preliminary License Analysis Results}
 \label{sec:case}
 This section seeks to answer a key question: \emph{Should I continue using traditional OSS and free-content licenses to publish my model, and what are the associated risks?}
-To explore this question, we evaluate commonly adopted licenses in the context of model publishing by MG Analyzer to assess whether they are still effective as intended.
+We evaluate commonly adopted licenses using MG Analyzer to assess their effectiveness in this context.
 The example workflow involves combining two models and publishing them as a service, as shown in Figure~\ref{fig:case1}.
 Here, we consider two scenarios: 1) publishing the combined model as a service; 2) publishing the data generated from the combined model.
 Models A and B are non-binding works that correspond to the settings in Table~\ref{tab:result}, with their respective analysis results also presented in the table.
@@ -11,17 +11,18 @@ To be more convincing, we use real-world models and their respective licenses fo
 
 \begin{figure}[t]
     \centering
-    \includegraphics[]{fig/case1.pdf}
+    \includegraphics[width=.95\linewidth]{fig/case1.pdf}
+    %\vspace{-2mm}
     \caption{Example Workflow: Combine Models, Then Publish.}
     \Description{}
     \label{fig:case1}
-    \vspace{-3mm}
+    %\vspace{-3mm}
 \end{figure}
 
-\begin{table}[]
+\begin{table}[tbp]
     \caption{Settings and Corresponding Analysis Results from MG Analyzer with Fuzz Form Matching Enabled.}
-    \footnotesize
-    \vspace{-2mm}
+    \scriptsize
+    %\vspace{-2mm}
     \begin{tabular}{|ll|}
     \hline \rowcolor[gray]{.8}
     \multicolumn{1}{|l|}{\textbf{Work: License}} & \textbf{Work: Report code} \\ \hline
@@ -42,11 +43,10 @@ To be more convincing, we use real-world models and their respective licenses fo
     } \\ \hline
     \end{tabular}
     \label{tab:result}
-    \vspace{-3mm}
 \end{table}
 
 First, we evaluate two OSS licenses: AGPL-3.0 and GPL-3.0, which are considered enforceable open-source licenses with copyleft clauses.
-In setting (i), Work E triggers two \emph{Disclose Source Code} warnings (code W5, refer to Table~\ref{tab:report} for code definitions), and AGPL-3.0 successfully proliferates\footnote{While two copyleft conditions are simultaneously triggered here, they can be resolved because GPL-3.0 is compatible with AGPL-3.0. Appendix~\ref{apdx:grapher} visualizes this workflow.} to Work C.
+In setting (i), Work E triggers two \emph{Disclose Source Code} warnings (code W5, refer to Table~\ref{tab:report} for code definitions), and AGPL-3.0 successfully proliferates\footnote{Although two copyleft conditions are triggered simultaneously, they can be resolved since GPL-3.0 is compatible with AGPL-3.0. Appendix~\ref{apdx:grapher} visualizes this workflow.} to Work C.
 However, with a small adjustment, we can circumvent these clauses by republishing the generated content rather than providing the model as a service. 
 As demonstrated by Work D, there is no W5 warning, and the content is licensed under the Unlicense.
 Furthermore, the condition in AGPL-3.0 that triggers the disclose code clauses related to remote access is \emph{you modify the Program}, which means you can directly republish copies as a service to circumvent this clause.
@@ -60,7 +60,7 @@ Third, we evaluate MG Licenses: MG-BY-OS and MG-BY-NC, which contain open sourci
 In setting (iii), our MG-BY-OS license successfully triggers the W5 warning, indicating that Work E must disclose its source code.
 In setting (iv), the non-commercial use error E5 is reported by the generated Work F.
 As a model license, we do not enforce licensing on generated content, allowing Work D to be licensed under the Unlicense, albeit with certain restrictions.
-A summary of the rights granted and restrictions imposed by these licenses can be found in their \emph{Model Sheet} provided in Appendix~\ref{apdx:model_sheet}.
+A summary of the rights granted and restrictions imposed by these licenses can be found in their \emph{Model Sheet}, as previously mentioned.
 
 It is worth mentioning that all results were obtained with \emph{fuzzy form matching} enabled, maximizing the detection of potential risks.
 If these \emph{fuzz rules} were disabled, fewer issues would be reported. 

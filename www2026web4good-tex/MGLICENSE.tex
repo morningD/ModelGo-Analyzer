@@ -2,7 +2,7 @@
 \label{sec:license}
 
 \begin{table*}[tp]
-    \caption{List of MG Analyzer-Supported Licenses \& Agreements (including \textcolor{Construct}{MG Licenses V1.0}) with Their Comparisons in Clarity and Freedom. Grouped by OSS, Free-Content (\&Dataset), Model and sorted first by clarity score, then by freedom score.}
+    \caption{List of MG Analyzer-Supported Licenses \& Agreements (including \href{https://github.com/morningD/ModelGo-Analyzer/tree/main/MGLicense}{\textcolor{Construct}{MG Licenses V1.0}}) with Their Comparisons in Clarity and Freedom. Grouped by OSS, Free-Content (\&Dataset), Model and sorted first by clarity score, then by freedom score.}
     \tiny
     %\vspace{-3mm}
     \label{tab:licenses}
@@ -142,7 +142,7 @@ The statistical results of a previous study~\cite{duan2024modelgo} support part 
 
 To reveal the underlying dilemmas in model licensing, we provide comprehensive comparisons of these licenses in Table~\ref{tab:licenses}.
 Based on the terms of these licenses, we evaluated each license's clarity score and freedom score, each encompassing sub-items as defined in the table.
-A higher clarity score indicates that the license is more clearly defined in model publishing scenarios, while a higher freedom\footnote{~Our freedom score reflects only the amount of restrictions stipulated in a license and should not be confused with the definitions of "Freedom" in free software~\cite{perens1999open}.} score signifies fewer restrictions on republished copies and derivatives.
+A higher clarity score indicates that the license is more clearly defined in model publishing scenarios, while a higher freedom\footnote{Our freedom score reflects only the amount of restrictions stipulated in a license and should not be confused with the definitions of "Freedom" in free software~\cite{perens1999open}.} score signifies fewer restrictions on republished copies and derivatives.
 The significant findings are summarized below:
 
 \ding{172} \textbf{For OSS licenses}, most are not well defined in the context of model publishing, primarily due to the absence of clauses addressing ML activities (Rules) and the lack of coverage for publishing as a service (Remote).
@@ -151,7 +151,7 @@ Additionally, commercial use and behavioral restrictions are not stipulated in m
 
 \ding{173} \textbf{For free-content and dataset licenses}, their average clarity score is only slightly better than that of OSS licenses, and they also lack coverage for publishing as a service.
 However, some CC licenses, such as CC-BY-NC-4.0, offer additional options that prohibit the commercial use of the work, unlike OSS licenses. 
-This may explain why many models are published under these licenses\footnote{~There are 9,730 models on HuggingFace licensed under CC-BY-NC-4.0 (more than Llama 2), and 770 of them have garnered 1k+ downloads (Accessed on May 29. 2025).}, despite the fact that they were not originally drafted for models. 
+This may explain why many models are published under these licenses\footnote{There are 9,730 models on HuggingFace licensed under CC-BY-NC-4.0 (more than Llama 2), and 770 of them have garnered 1k+ downloads (Accessed on May 29. 2025).}, despite the fact that they were not originally drafted for models. 
 % please ref to Appendix~\ref{apdx:count}.
 
 \ding{174} \textbf{For model licenses}, aside from the proposed MG licenses, most model licenses are not intended for general publishing purposes. 
@@ -160,18 +160,20 @@ Additionally, since the purpose of these licenses is often to protect the IP rig
 Although a set of well-defined licenses known as OpenRAIL-M~\cite{contractor2022behavioral} exists, their nearly identical rules make it difficult to accommodate the diverse needs in model publishing.
 
 Based on the above findings, we conclude that it is necessary to draft new standardized and flexible licenses for general model publishing.
-To address this, we collaborated with a law firm to draft a set of model licenses, tentatively referred to as MG Licenses\footnote{~See MG License text at \href{https://anonymous.4open.science/r/MG-Analyzer-2933/MG\%20License/MG0.txt}{this link}.}. 
+To address this, we collaborated with a law firm to draft a set of model licenses, tentatively referred to as MG Licenses. 
 As reflecting in Table~\ref{tab:licenses}, our licenses include specific definitions and terms related to ML concepts, offering greater clarity compared to OSS and free-content licenses. 
 Most importantly, following the philosophy of CC licenses, MG Licenses are designed to be flexible and easy to use, offering five options to accommodate various publishing scenarios.
-The options include: BY (Attribution), NC (Non-Commercial), ND (No Derivatives), RAI (Responsible Use of AI), and OS (Open Source)\footnote{~At the time of writing, the Open Source Initiative has only released a draft v. 0.0.9 version of the Open Source AI definition, and our MG licenses with the OS option are not OSI-approved at present.}.
+The options include: BY (Attribution), NC (Non-Commercial), ND (No Derivatives), RAI (Responsible Use of AI), and OS (Open Source).
 We drafted nine preset licenses using these options, including MG0, which does not apply any options.
-The flexibility of our licenses is reflected in Table~\ref{tab:licenses}, where their freedom scores are evenly distributed between 3.5 and 8.5, indicating that they form a superset of all other model licenses\footnote{~AI2-ImpACT-MR and AI2-ImpACT-HR prohibit sharing copies, we do not consider such restrictions to be common in model publishing, so we have excluded them. For details on how to substitute other licenses with MG licenses, refer to Appendix~\ref{apdx:model_sheet}.}.
+The flexibility of our licenses is reflected in Table~\ref{tab:licenses}, where their freedom scores are evenly distributed between 3.5 and 8.5, indicating that they form a superset of all other model licenses\footnote{AI2-ImpACT-MR and AI2-ImpACT-HR prohibit sharing copies, we do not consider such restrictions to be common in model publishing, so we have excluded them. For details on how to substitute other licenses with MG licenses, refer to Appendix~\ref{apdx:model_sheet}.}.
 To promote transparency, we introduced a \emph{Model Sheet} as an attachment to each MG License, inspired by MDL~\cite{benjamin2019towards}. 
-This sheet assists model users in understanding the rights and restrictions granted by the license terms and helps model developers identify the most suitable license for their needs (ref Appendix~\ref{apdx:model_sheet}).
+This sheet assists model users in understanding the rights and restrictions granted by the license terms and helps model developers identify the most suitable license for their needs (see Attachment A of \href{https://github.com/morningD/ModelGo-Analyzer/blob/main/MGLicense/MG0.txt}{MG0-1.0}).
 
-In the next section, we explore which licenses can protect your model from misuse beyond your intended purposes. 
-For example, a licensee may close source your GPL-licensed model without violating your license, even if it contains code disclosure clauses. 
-To do this, we evaluate some of the popular licenses for model publishing, as well as the MG Licenses, using MG Analyzer.
+In the next section, we examine which licenses protect models from misuse beyond their intended purposes (e.g., allowing closed-sourcing under GPL). We evaluate popular model licenses and the MG Licenses using MG Analyzer.
+
+% In the next section, we explore which licenses can protect your model from misuse beyond your intended purposes. 
+% For example, a licensee may close source your GPL-licensed model without violating your license, even if it contains code disclosure clauses. 
+% To do this, we evaluate some of the popular licenses for model publishing, as well as the MG Licenses, using MG Analyzer.
 
 %we drafted a new set of model licenses to 
 

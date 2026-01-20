@@ -3,13 +3,14 @@
 
 \begin{figure*}[t]
     \centering
-    \includegraphics[width=0.9\linewidth]{fig/framework.pdf}
-    \caption{Overview of MG Analyzer. ("mg" is the prefix for our proposed vocabulary.)}
+    \includegraphics[width=0.95\linewidth]{fig/framework.pdf}
+    \caption{Overview of MG Analyzer ("mg" is the prefix for our proposed vocabulary).}
     \Description{}
     \label{fig:framework}
 \end{figure*}
 
-This section aims to introduce the specific design of MG Analyzer by exploring three questions: \emph{(i) How should we represent the workflows of ML projects to facilitate license-related noncompliance analysis? (ii) How do we establish a mapping from license text to reasonable rules? (iii) What types of license compliance issues can arise in ML projects, and how can we detect them?}
+This section aims to introduce the specific design of MG Analyzer by exploring three questions: 
+\emph{(i) How should we represent the workflows of ML projects to facilitate license-related noncompliance analysis? (ii) How do we establish a mapping from license text to reasonable rules? (iii) What types of license compliance issues can arise in ML projects, and how can we detect them?}
 Before delving into the detailed design that answers these questions, we first provide an overview that serves as a roadmap for this section.
 As illustrated in Figure~\ref{fig:framework}, the process of MG Analyzer is divided into three main parts: Construction, Reasoning, and Analysis.
 
@@ -70,7 +71,7 @@ We use mixed-form to represent the cases involving collections of works.
 \textbf{LicenseInfo}: This contains the essential license information derived from conditions, including the license name, ID, intended types of works, whether it is copyleft or permissive, as well as granted and reserved rights, etc.
 While the license name is sufficient to describe the base workflow, to enable reasoning, LicenseInfo should bind rules, which we will discuss in the next section.
 
-At this stage, we can describe a base ML workflow, as illustrated\footnote{~The "mg" prefix is omitted and some properties are merged or filtered for presentation.} schematically in Figure~\ref{fig:wf} (The RDF graph can be referred to in \emph{gen.ttl} in Figure~\ref{fig:framework}).
+At this stage, we can describe a base ML workflow, as illustrated\footnote{For clarity, the “mg” prefix is omitted, and certain properties are merged or filtered.} schematically in Figure~\ref{fig:wf} (The RDF graph can be referred to in \emph{gen.ttl} in Figure~\ref{fig:framework}).
 In this base workflow, the derived input and output of each Action can be represented as blank nodes, serving as placeholders. 
 These placeholders will be populated by reasoning the output yielded by the previous action and the input for the current action, respectively.
 
@@ -96,7 +97,7 @@ The corresponding implementation in the MG Analyzer is illustrated in the \emph{
 New instance nodes called \emph{Ruling} are created to track the definition dependencies and triggered rules for each work, determining their applicable licenses in an alternating manner.
 
 The \emph{rights-using dependencies} describe the rights that must be granted for actions performed on works. 
-For example, when executing a Train action on a model, it requires the rights to \emph{use} and \emph{modify} (termed as \emph{Usage} in MG Vocabulary) from the model's license\footnote{~An example of such rights granting can be found in the Llama 2 Community License, which states, \emph{"You are granted a ... to use, reproduce, distribute, copy, create derivative works of, and make modifications to the Llama Materials."}.}.
+For example, when executing a Train action on a model, it requires the rights to \emph{use} and \emph{modify} (termed as \emph{Usage} in MG Vocabulary) from the model's license\footnote{An example of such rights granting can be found in the Llama 2 Community License, which states, \emph{"You are granted a ... to use, reproduce, distribute, copy, create derivative works of, and make modifications to the Llama Materials."}.}.
 Similarly, the rights-using dependencies should proliferate according to compositional dependencies.
 For instance, the requirement to \emph{modify} a model extends to all its submodels.
 In the MG Analyzer, we create new nodes called \emph{Request} to represent this dependency.
@@ -112,7 +113,7 @@ To facilitate automated reasoning for these dependencies, the next step is to de
 
 \begin{figure}[t]
     \centering
-    \includegraphics[width=0.9\linewidth]{fig/wf.pdf}
+    \includegraphics[width=\linewidth]{fig/wf.pdf}
     \caption{A Typical ML Workflow Represented by MG Analyzer. Dashed arrows with different colors indicate properties related to three types of dependencies: \textcolor{Construct}{compositional}, \textcolor{Ruling}{definition}, and \textcolor{Request}{rights-using} dependencies.}
     \Description{}
     \label{fig:wf}
@@ -120,35 +121,6 @@ To facilitate automated reasoning for these dependencies, the next step is to de
 
 \subsection{License Rule Encoding and Reasoning}
 \label{sec:rule}
-
-\begin{table}[t]
-    \caption{Supported Actions in MG Analyzer Following Rule Alignment. The symbols $=$ and $\approx$ indicate that the Type/Form of output work and input work are the same and may differ, respectively. The corresponding \textcolor{Construct}{OSS}, \textcolor{Ruling}{Free-content}, and \textcolor{Request}{Model} license terms for each action are listed. }
-    \tiny
-    \label{tab:action}
-    \begin{tabular}{|p{0.8cm}|c|c|p{3.6cm}|p{1.5cm}|}
-    \hline
-    \rowcolor[gray]{.8}
-    Action & Type & Form & Composition & Terms \\ \hline
-
-    Copy & $=$ & $=$ & Output and input are exactly \textbf{same}. & Copy Duplicate \\ \hline
-
-    Combine & $\approx$ & $\approx$ & \textbf{Entire} input included in output. & \textcolor{Construct}{Link} \textcolor{Construct}{Aggregate} \textcolor{Request}{MoE} \textcolor{Ruling}{Arrange} \textcolor{Ruling}{Collect} \\ \hline
-
-    Modify & $=$ & $=$ & Output includes a \textbf{significant} portion of input and \textbf{can be reverted}. & Modify \textcolor{Request}{Fine-tune}   \\ \hline
-
-    Amalgamate & $=$ & $=$ & Output includes portions of input but \textbf{cannot be reverted}. & Modify \textcolor{Ruling}{Remix} \textcolor{Request}{Fusion} \\ \hline
-
-    Train & $=$ & $=$ & Output has the \textbf{same structure} as input and may contain a \textbf{negligible} portion of it. & \textcolor{Ruling}{Alter Adapt} \textcolor{Request}{Train} \\ \hline
-
-    Generate & $\approx$ & $\approx$ & Output does not contain any portion of input and may \textbf{perform differently} from it. & Output \textcolor{Request}{Generate} \newline \textcolor{Request}{Synthetic} \\ \hline
-
-    Distill & $=$ & $=$ & Output does not contain any portion of input but \textbf{performs similarly} to it. & \textcolor{Request}{Distill Transfer} \newline \textcolor{Ruling}{Extract} \\ \hline
-
-    Embed & $=$ & $=$ & Output does not contain any portion of input, but there has a \textbf{mapping} that converts input to output. & \textcolor{Ruling}{Translate Transform} \\ \hline
-
-    Publish & $=$ & $\approx$ & Output is the \textbf{same} as the input but may have a \textbf{different form}.  & \textcolor{Construct}{Redistribute} \textcolor{Ruling}{Perform Display Disseminate} \\ \hline
-    \end{tabular}
-\end{table} 
 
 Typically, licenses are designed to govern the use and distribution of specific types of works. 
 For example, GPL-3.0 is tailored for source code and object code, while CC licenses focus on literary, musical, and artistic works. 
@@ -172,13 +144,42 @@ For instance, the action \emph{Combine} signifies that the input work has been e
 This action corresponds to terms such as "Link" and "Aggregate" in software licenses, "Collection" in CC licenses, and "MoE" in model licenses.
 In the case of \emph{Model Aggregation}, which produces an output that contains parts of the input and is difficult to separate, it is not considered a \emph{Combine}. Consequently, according to our rule alignment, it will not activate the "Aggregate" clause in GPL-3.0.
 
+% \begin{table}[t]
+%     \caption{Supported Actions in MG Analyzer Following Rule Alignment. The symbols $=$ and $\approx$ indicate that the Type/Form of output work and input work are the same and may differ, respectively. The corresponding \textcolor{Construct}{OSS}, \textcolor{Ruling}{Free-content}, and \textcolor{Request}{Model} license terms for each action are listed. }
+%     \tiny
+%     \label{tab:action}
+%     \begin{tabular}{|p{0.8cm}|c|c|p{3.6cm}|p{1.5cm}|}
+%     \hline
+%     \rowcolor[gray]{.8}
+%     Action & Type & Form & Composition & Terms \\ \hline
+
+%     Copy & $=$ & $=$ & Output and input are exactly \textbf{same}. & Copy Duplicate \\ \hline
+
+%     Combine & $\approx$ & $\approx$ & \textbf{Entire} input included in output. & \textcolor{Construct}{Link} \textcolor{Construct}{Aggregate} \textcolor{Request}{MoE} \textcolor{Ruling}{Arrange} \textcolor{Ruling}{Collect} \\ \hline
+
+%     Modify & $=$ & $=$ & Output includes a \textbf{significant} portion of input and \textbf{can be reverted}. & Modify \textcolor{Request}{Fine-tune}   \\ \hline
+
+%     Amalgamate & $=$ & $=$ & Output includes portions of input but \textbf{cannot be reverted}. & Modify \textcolor{Ruling}{Remix} \textcolor{Request}{Fusion} \\ \hline
+
+%     Train & $=$ & $=$ & Output has the \textbf{same structure} as input and may contain a \textbf{negligible} portion of it. & \textcolor{Ruling}{Alter Adapt} \textcolor{Request}{Train} \\ \hline
+
+%     Generate & $\approx$ & $\approx$ & Output does not contain any portion of input and may \textbf{perform differently} from it. & Output \textcolor{Request}{Generate} \newline \textcolor{Request}{Synthetic} \\ \hline
+
+%     Distill & $=$ & $=$ & Output does not contain any portion of input but \textbf{performs similarly} to it. & \textcolor{Request}{Distill Transfer} \newline \textcolor{Ruling}{Extract} \\ \hline
+
+%     Embed & $=$ & $=$ & Output does not contain any portion of input, but there has a \textbf{mapping} that converts input to output. & \textcolor{Ruling}{Translate Transform} \\ \hline
+
+%     Publish & $=$ & $\approx$ & Output is the \textbf{same} as the input but may have a \textbf{different form}.  & \textcolor{Construct}{Redistribute} \textcolor{Ruling}{Perform Display Disseminate} \\ \hline
+%     \end{tabular}
+% \end{table} 
+
 The complete rule alignment method utilized in the MG Analyzer can be found in Table~\ref{tab:action}.
 It is worth mentioning that the meanings of these actions have been broadened and may differ from their original definitions. 
 In some cases, multiple actions may align with the same license terms. 
 For instance, the license term "Modify" can align with both the actions \emph{Modify} and \emph{Amalgamate}, as such licenses do not distinguish the extent of changes made or whether those changes can be reverted.
 
 The final aspect is \emph{applicable term generalization}, where we encode the triggering conditions of a license term into the following properties: range of input work forms, range of output work forms, and types of actions.
-Figure~\ref{fig:mgrule} illustrates an example of the GPL-3.0 derivatives rule\footnote{~The original GPL-3.0 license text reads: \emph{"You may convey a work based on the Program ... in the form of source code ... provided that you also meet all of these conditions: ... stating that you modified it ... it is released under this License ... keep intact all notices ... license the entire work, as a whole, under this License ..."} .}, which represents the Combine action applied to input works in code format, resulting in a code output.
+Figure~\ref{fig:mgrule} illustrates an example of the GPL-3.0 derivatives rule\footnote{The original GPL-3.0 license text reads: \emph{"You may convey a work based on the Program ... in the form of source code ... provided that you also meet all of these conditions: ... stating that you modified it ... it is released under this License ... keep intact all notices ... license the entire work, as a whole, under this License ..."} .}, which represents the Combine action applied to input works in code format, resulting in a code output.
 This action triggers the "derivative" clause in GPL-3.0, indicating that the license of the output work must be compatible with GPL-3.0 (e.g., AGPL-3.0). Additionally, five restrictions must apply to the output work if it is to be republished, as dictated by this \emph{definition dependency}.
 This rule does not include any \emph{Use Restrictions}, which apply to output works regardless of whether they are republished. 
 We found this subtle distinction to be crucial in ML license analysis, as most OSS license terms are triggered by distribution, and their definitions of "distribution" typically exclude publishing as a service. 
@@ -188,11 +189,11 @@ Furthermore, multiple rules may lead to the same output definition, and we provi
 It is worth mentioning that the reasoning results behind the restrictions derived from these rules require further analysis for validation.
 Taking the rule in Figure~\ref{fig:mgrule} as an example,  the presence of additional discrimination terms in the final work that violate GNU freedom~\cite{greenbaum2016the} dictates whether errors related to GNU freedom conflicts should be reported.
 We present snippets of our encoded rules written in Turtle format in Appendix~\ref{apdx:rules}.
-The list of supported licenses, whose terms have been encoded in MG Analyzer, is shown in Table~\ref{tab:licenses}, covering nearly all top-ranking licenses for published models on HuggingFace\footnote{~\url{https://huggingface.co/models}}, a popular model publishing platform.
+The list of supported licenses, whose terms have been encoded in MG Analyzer, is shown in Table~\ref{tab:licenses}, covering nearly all top-ranking licenses for published models on HuggingFace\footnote{\url{https://huggingface.co/models}}, a popular model publishing platform.
 
 \begin{figure}[t]
     \centering
-    \includegraphics[]{fig/mgrule.pdf}
+    \includegraphics[width=0.85\linewidth]{fig/mgrule.pdf}
     \caption{The Example of a Generalized GPL-3.0 Derivatives Rule in MG Analyzer.}
     \Description{}
     \label{fig:mgrule}
@@ -214,10 +215,9 @@ In such cases, the MG Analyzer will select one of these copyleft licenses and re
 
 \begin{table}[tp]
     \caption{List of \textcolor{Ruling}{Notices}, \textcolor{Construct}{Warnings}, and \textcolor{Request}{Errors} Reported by MG Analyzer. The triggered work is denoted as \emph{?work}. }
-    \scriptsize
-    \vspace{-3mm}
+    \tiny
     \label{tab:report}
-    \begin{tabular}{|c|p{2.25cm}|p{4.6cm}|}
+    \begin{tabular}{|c|p{1.9cm}|p{5cm}|}
     \hline
     \rowcolor[gray]{.8}
     Code & Report Type & Report Content \\ \hline

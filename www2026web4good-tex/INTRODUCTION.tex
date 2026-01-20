@@ -2,10 +2,10 @@
 \label{sec:intro}
 In recent years, the compelling generalization capabilities provided by billion-parameter models~\cite{wei2023inverse}, along with the high computational and data costs associated with their training~\cite{maslej2024aiindex}, have motivated ML developers to collaborate incrementally rather than train models from scratch.
 A common approach is to download a Pre-Trained Model (PTM)~\cite{jiang2023empirical} and fine-tune it for downstream task~\cite{hu2022lora}.
-However, these paradigms may face potential legal risks if the use and redistribution practices violate the governing licenses of the reused components, akin to GPL violation in the field of Open Source Software (OSS)~\cite{mathur2012empirical}.
+However, these practices can pose legal risks if the use or redistribution of reused components violates their licenses, akin to GPL violations in Open Source Software (OSS)~\cite{mathur2012empirical}.
 Failure to comply with license terms can result in termination and legal action\footnote{See CoKinetic Systems, Corp. \textit{v}. Panasonic Avionics Corporation, 1:17-cv-01527.}.
-%\footnote{See case 1:17-cv-01527, 1:14-cv-00221.}.
-Another risk arises from the choice of license used to republish the work. Some developers adhere to traditional software publishing practices and select OSS licenses for their models~\cite{devlin2019bert,ni2022expanding}, which often lack clear definitions and conditions regarding ML activities and do not effectively prevent undesirable use.
+Another concern is the license chosen for republishing the work.
+Some developers adhere to traditional software publishing practices and select OSS licenses for their models~\cite{devlin2019bert,ni2022expanding, duan2025position}, which often lack clear definitions and conditions regarding ML activities and do not effectively prevent undesirable use.
 For example, a licensee can close-source your published models, even if they are licensed under GPL, without violating any terms.
 
 There are three possible ways to mitigate above risks.
@@ -33,10 +33,7 @@ The main contributions of our paper are:
     \item We identified the challenges of license compliance and model licensing in ML workflow management.
     %and conduct a comprehensive analysis of the deficiencies in current model publishing practices.
     
-    \item We developed MG Analyzer using semantic technologies to automate license analysis in ML projects.
-    It includes a vocabulary for describing ML workflows with dependencies and license rules.
-    We also provide an interface to convert user-input workflow descriptions into RDF graphs following this vocabulary. 
-    Users can convert workflow descriptions into RDF graphs, enabling the tool to construct dependencies, reason, and detect license conflicts.
+    \item We developed MG Analyzer to automate license analysis in ML projects. It includes a vocabulary for describing ML workflows with dependencies and license rules, and provides an interface to convert user-input workflow descriptions into RDF graphs. These graphs enable the tool to construct dependencies, reason, and detect license conflicts.
     \item We drafted a set of model licenses called MG Licenses to promote more standardized model publishing. These licenses are well-defined and cover a complete spectrum of model publishing scenarios. Furthermore, we have integrated support for MG Licenses within MG Analyzer.
 \end{itemize}
 

@@ -1,4 +1,3 @@
-
 \section{Limitations}
 \label{apdx:disclamers}
 The main limitation of MG Analyzer is that it is relied on accurate description of ML workflow production.
@@ -171,7 +170,7 @@ Although earlier versions (2.0, 3.0, etc.) of CC licenses are marked as not supp
 
 \section{Encoded Rules and Reasoning Logic}
 \label{apdx:rules}
-In this section, we present the encoded "derivative" rules for the GPL-3.0 and Llama 2 licenses in Turtle format, followed by a snippet of the reasoning logic employed for license determination and rights granting analysis in Notation3.
+In this section, we present the one encoded "derivative" rule for the GPL-3.0 license in Turtle format, followed by a snippet of the reasoning logic employed for license determination and rights granting analysis in Notation3.
 
 \begin{tcolorbox}[title=MGLicenseRule.ttl > GPL-3.0-derivative-rule-1, colback=white, colframe=gray, boxrule=0.2mm, boxsep=1mm, left=0mm, right=0mm, top=0.1mm, bottom=0.1mm] %  width=\textwidth
   \begin{lstlisting}[language=Turtle, breaklines=false, columns=fullflexible, basicstyle=\footnotesize]
@@ -189,22 +188,22 @@ mg:GPL-3.0-derivative-rule-1 a mg:Rule ;
   \end{lstlisting}
 \end{tcolorbox}
 
-\begin{tcolorbox}[title=MGLicenseRule.ttl > Llama2-derivative-rule, colback=white, colframe=gray, boxrule=0.2mm, boxsep=1mm, left=0mm, right=0mm, top=0.1mm, bottom=0.1mm] %  width=\textwidth
-  \begin{lstlisting}[language=Turtle, breaklines=false, columns=fullflexible, basicstyle=\footnotesize]
-@prefix mg: <http://~/rdf/terms#> .
-mg:Llama2-derivative-rule a mg:Rule ;
-    mg:hasOutputDef mg:derivative ;
-    mg:targetActionType mg:Amalgamate, mg:Combine, 
-      mg:Modify, mg:Train, mg:Embed, mg:Distill ;
-    mg:targetInputWorkForm mg:weights, mg:exe ;
-    mg:targetOutputWorkForm mg:weights, mg:exe ;
-    mg:relicense mg:any-license ;
-    mg:hasPublishRestriction mg:include_license_restriction ;
-    mg:hasUseRestriction mg:llama2_exclusive_use_restriction, 
-        mg:use_behavior_restriction ;
-    mg:allowSharing true .
-  \end{lstlisting}
-\end{tcolorbox}
+% \begin{tcolorbox}[title=MGLicenseRule.ttl > Llama2-derivative-rule, colback=white, colframe=gray, boxrule=0.2mm, boxsep=1mm, left=0mm, right=0mm, top=0.1mm, bottom=0.1mm] %  width=\textwidth
+%   \begin{lstlisting}[language=Turtle, breaklines=false, columns=fullflexible, basicstyle=\footnotesize]
+% @prefix mg: <http://~/rdf/terms#> .
+% mg:Llama2-derivative-rule a mg:Rule ;
+%     mg:hasOutputDef mg:derivative ;
+%     mg:targetActionType mg:Amalgamate, mg:Combine, 
+%       mg:Modify, mg:Train, mg:Embed, mg:Distill ;
+%     mg:targetInputWorkForm mg:weights, mg:exe ;
+%     mg:targetOutputWorkForm mg:weights, mg:exe ;
+%     mg:relicense mg:any-license ;
+%     mg:hasPublishRestriction mg:include_license_restriction ;
+%     mg:hasUseRestriction mg:llama2_exclusive_use_restriction, 
+%         mg:use_behavior_restriction ;
+%     mg:allowSharing true .
+%   \end{lstlisting}
+% \end{tcolorbox}
 
 
 % \begin{tcolorbox}[title=rules\_ruling.n3 > License Determination Logic (snippet), colback=white, colframe=gray, boxrule=0.2mm, boxsep=1mm, left=0mm, right=0mm, top=0.1mm, bottom=0.1mm] %  width=\textwidth
@@ -265,10 +264,8 @@ mg:Llama2-derivative-rule a mg:Rule ;
             ?li mg:hasCompatibleLicense ?clist .
         }
     ?li_list ) log:collectAllIn _:t . # (CASE-1 will yield a empty list here).
-
     ?li_list list:first ?li_1st .
     ?li_1st mg:hasCompatibleLicense ?compat_list_1st .
-    
     # Check whether there exists a compatible license from the first list 
     # that also appears in all other (including itself) compatible lists.
     # Return true if there is a license included in all compatible list.
@@ -278,10 +275,7 @@ mg:Llama2-derivative-rule a mg:Rule ;
             ( {?li_list!list:member mg:hasCompatibleLicense ?compat_list_other} 
              {?cli list:in ?compat_list_other} ) log:forAllIn _:t .
         } .
-} => {
-    ?outw mg:hasLicense ?cli ;
-        mg:hasLicenseSource mg:license_source_ruling_copyleft_pass .
-} .
+} => { ?outw mg:hasLicense ?cli } .
   \end{lstlisting}
 \end{tcolorbox}
 
@@ -310,89 +304,117 @@ mg:Llama2-derivative-rule a mg:Rule ;
   \end{lstlisting}
 \end{tcolorbox}
 
+\begin{table}[h]
+    \caption{Supported Actions in MG Analyzer Following Rule Alignment. The symbols $=$ and $\approx$ indicate that the Type/Form of output work and input work are the same and may differ, respectively. The corresponding \textcolor{Construct}{OSS}, \textcolor{Ruling}{Free-content}, and \textcolor{Request}{Model} license terms for each action are listed. }
+    \tiny
+    \label{tab:action}
+    \begin{tabular}{|l|c|c|p{3.4cm}|p{1.5cm}|}
+    \hline
+    \rowcolor[gray]{.8}
+    Action & Type & Form & Composition & Terms \\ \hline
+
+    Copy & $=$ & $=$ & Output and input are exactly \textbf{same}. & Copy Duplicate \\ \hline
+
+    Combine & $\approx$ & $\approx$ & \textbf{Entire} input included in output. & \textcolor{Construct}{Link} \textcolor{Construct}{Aggregate} \textcolor{Request}{MoE} \textcolor{Ruling}{Arrange} \textcolor{Ruling}{Collect} \\ \hline
+
+    Modify & $=$ & $=$ & Output includes a \textbf{significant} portion of input and \textbf{can be reverted}. & Modify \textcolor{Request}{Fine-tune}   \\ \hline
+
+    Amalgamate & $=$ & $=$ & Output includes portions of input but \textbf{cannot be reverted}. & Modify \textcolor{Ruling}{Remix} \textcolor{Request}{Fusion} \\ \hline
+
+    Train & $=$ & $=$ & Output has the \textbf{same structure} as input and may contain a \textbf{negligible} portion of it. & \textcolor{Ruling}{Alter Adapt} \textcolor{Request}{Train} \\ \hline
+
+    Generate & $\approx$ & $\approx$ & Output does not contain any portion of input and may \textbf{perform differently} from it. & Output \textcolor{Request}{Generate} \newline \textcolor{Request}{Synthetic} \\ \hline
+
+    Distill & $=$ & $=$ & Output does not contain any portion of input but \textbf{performs similarly} to it. & \textcolor{Request}{Distill Transfer} \newline \textcolor{Ruling}{Extract} \\ \hline
+
+    Embed & $=$ & $=$ & The output contains no portion of the input, but a \textbf{mapping} converts input to output. & \textcolor{Ruling}{Translate Transform} \\ \hline
+
+    Publish & $=$ & $\approx$ & Output is the \textbf{same} as the input but may have a \textbf{different form}.  & \textcolor{Construct}{Redistribute} \textcolor{Ruling}{Perform Display Disseminate} \\ \hline
+    \end{tabular}
+\end{table} 
 
 \section{Supplementary of MG Licenses}
 \label{apdx:model_sheet}
-Table~\ref{tab:model_sheet1} and Table~\ref{tab:model_sheet2} present the \emph{Model Sheet} included in the Attachment of our proposed MG Licenses. 
-For instance, the \emph{Model Sheet} for MG-BY-NC indicates that this license is revocable, prohibits commercial use of the model, its output, associated code, documentation, and derivatives, and does not require disclosure of source weights or impose responsible AI restrictions. 
-In comparison, MG-BY-OS has fewer restrictions, with its primary requirement being the disclosure of model weights.
+% Table~\ref{tab:model_sheet1} and Table~\ref{tab:model_sheet2} present the \emph{Model Sheet} included in the Attachment of our proposed MG Licenses. 
+% For instance, the \emph{Model Sheet} for MG-BY-NC indicates that this license is revocable, prohibits commercial use of the model, its output, associated code, documentation, and derivatives, and does not require disclosure of source weights or impose responsible AI restrictions. 
+% In comparison, MG-BY-OS has fewer restrictions, with its primary requirement being the disclosure of model weights.
 
-\begin{table}[h]
-  \centering
-  \caption{Model Sheet of MG-BY-NC.}
-  \footnotesize
-  \begin{tabular}{|l|c|l|c|}
-    \hline
-    Use \& Modify & \ding{51} & Sublicensing & \ding{55} \\ 
-    \hline
-    Create Derivatives          & \ding{51} & Irrevocable                   & \ding{55} \\ 
-    \hline
-    Share Verbatim Copy         & \ding{51} & Trademark Use                 & \ding{55} \\ 
-    \hline
-    Share Derivatives           & \ding{51} & Commercial Use of Model       & \ding{55} \\ 
-    \hline
-    Share Output                & \ding{51} & Commercial Use of Output      & \ding{55} \\ 
-    \hline
-    Patent Use                  & \ding{51} & Commercial Use of Derivatives & \ding{55} \\ 
-    \hline
-    Copyright Use               & \ding{51} & Commercial Use of Code \& Docs & \ding{55} \\ 
-    \hline
-    Retain Original Attribution  & \ding{51} & Disclose Source               & \ding{55} \\ 
-    \hline
-    Retain Original License      & \ding{51} & Responsible AI Restrictions    & \ding{55} \\ 
-    \hline
-    Retain All Notices          & \ding{51} &                               &   \\ 
-    \hline
-    Disclaimer of Warranty      & \ding{51} &                               &   \\ 
-    \hline
-    Limitation of Liability     & \ding{51} &                               &   \\ 
-    \hline
-  \end{tabular}
-  \label{tab:model_sheet1}
-\end{table}
+% \begin{table}[h]
+%   \centering
+%   \caption{Model Sheet of MG-BY-NC.}
+%   \footnotesize
+%   \begin{tabular}{|l|c|l|c|}
+%     \hline
+%     Use \& Modify & \ding{51} & Sublicensing & \ding{55} \\ 
+%     \hline
+%     Create Derivatives          & \ding{51} & Irrevocable                   & \ding{55} \\ 
+%     \hline
+%     Share Verbatim Copy         & \ding{51} & Trademark Use                 & \ding{55} \\ 
+%     \hline
+%     Share Derivatives           & \ding{51} & Commercial Use of Model       & \ding{55} \\ 
+%     \hline
+%     Share Output                & \ding{51} & Commercial Use of Output      & \ding{55} \\ 
+%     \hline
+%     Patent Use                  & \ding{51} & Commercial Use of Derivatives & \ding{55} \\ 
+%     \hline
+%     Copyright Use               & \ding{51} & Commercial Use of Code \& Docs & \ding{55} \\ 
+%     \hline
+%     Retain Original Attribution  & \ding{51} & Disclose Source               & \ding{55} \\ 
+%     \hline
+%     Retain Original License      & \ding{51} & Responsible AI Restrictions    & \ding{55} \\ 
+%     \hline
+%     Retain All Notices          & \ding{51} &                               &   \\ 
+%     \hline
+%     Disclaimer of Warranty      & \ding{51} &                               &   \\ 
+%     \hline
+%     Limitation of Liability     & \ding{51} &                               &   \\ 
+%     \hline
+%   \end{tabular}
+%   \label{tab:model_sheet1}
+% \end{table}
 
-\begin{table}[h]
-  \centering
-  \caption{Model Sheet of MG-BY-OS.}
-  \footnotesize
-  \begin{tabular}{|l|c|l|c|}
-    \hline
-        Use \& Modify & \ding{51} & Trademark Use & \ding{55} \\ 
-        \hline
-        Create Derivatives            & \ding{51} & Responsible AI Restrictions & \ding{55} \\ 
-        \hline
-        Share Verbatim Copy           & \ding{51} &                             &   \\ 
-        \hline
-        Share Derivatives             & \ding{51} &                             &   \\ 
-        \hline
-        Share Output                  & \ding{51} &                             &   \\ 
-        \hline
-        Patent Use                    & \ding{51} &                             &   \\ 
-        \hline
-        Copyright Use                 & \ding{51} &                             &   \\ 
-        \hline
-        Commercial Use of Model       & \ding{51} &                             &   \\ 
-        \hline
-        Commercial Use of Output      & \ding{51} &                             &   \\ 
-        \hline
-        Commercial Use of Derivatives & \ding{51} &                             &   \\ 
-        \hline
-        Commercial Use of Code \& Docs & \ding{51} &                             &   \\ 
-        \hline
-        Retain Original Attribution   & \ding{51} &                             &   \\ 
-        \hline
-        Retain Original License       & \ding{51} &                             &   \\ 
-        \hline
-  \end{tabular}
-  \label{tab:model_sheet2}
-\end{table}
+% \begin{table}[h]
+%   \centering
+%   \caption{Model Sheet of MG-BY-OS.}
+%   \footnotesize
+%   \begin{tabular}{|l|c|l|c|}
+%     \hline
+%         Use \& Modify & \ding{51} & Trademark Use & \ding{55} \\ 
+%         \hline
+%         Create Derivatives            & \ding{51} & Responsible AI Restrictions & \ding{55} \\ 
+%         \hline
+%         Share Verbatim Copy           & \ding{51} &                             &   \\ 
+%         \hline
+%         Share Derivatives             & \ding{51} &                             &   \\ 
+%         \hline
+%         Share Output                  & \ding{51} &                             &   \\ 
+%         \hline
+%         Patent Use                    & \ding{51} &                             &   \\ 
+%         \hline
+%         Copyright Use                 & \ding{51} &                             &   \\ 
+%         \hline
+%         Commercial Use of Model       & \ding{51} &                             &   \\ 
+%         \hline
+%         Commercial Use of Output      & \ding{51} &                             &   \\ 
+%         \hline
+%         Commercial Use of Derivatives & \ding{51} &                             &   \\ 
+%         \hline
+%         Commercial Use of Code \& Docs & \ding{51} &                             &   \\ 
+%         \hline
+%         Retain Original Attribution   & \ding{51} &                             &   \\ 
+%         \hline 
+%         Retain Original License       & \ding{51} &                             &   \\ 
+%         \hline
+%   \end{tabular}
+%   \label{tab:model_sheet2}
+% \end{table}
 
 
 Figure~\ref{fig:license} shows the coverage of MG Licenses. MG Licenses can serve as a substitute for all other model licenses in general model publishing purposes.
 In particular, the MG-BY-RAI license can substitute for OpenRAIL-M; the MG-BY-NC-RAI license can be seen as a substitute for Llama 2/3/3.1, OPT-175B, and AI2-ImpaACT-LR licenses; and the MG-BY-OS license can nearly substitute for the Gemma license in general model publishing scenarios.
 
 
-\begin{figure}[htp]
+\begin{figure}[b]
   \centering
   \includegraphics[width=\linewidth]{fig/license.pdf}
   \caption{The Coverage of Model Publishing Scenarios by MG Licenses.}
@@ -404,7 +426,7 @@ In particular, the MG-BY-RAI license can substitute for OpenRAIL-M; the MG-BY-NC
 \section{Supplementary License Analysis Results: Complex In-the-Wild Workflow}
 \label{apdx:case2}
 
-\begin{figure}[]
+\begin{figure}[h]
     \centering
     \includegraphics[width=\linewidth]{fig/case2.pdf}
     \caption{Analysis Results for an In-the-Wild Workflow based on SmolLM. Detected Issues Are Indicated in the Lower-Right Corner of Each Reported Work.}

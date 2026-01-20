@@ -55,9 +55,8 @@
 \acmConference[WWW '26] {Proceedings of the ACM Web Conference 2026}{April 13--17, 2026}{Dubai, United Arab Emirates.}
 \acmBooktitle{Proceedings of the ACM Web Conference 2026 (WWW '26), April 13--17, 2026, Dubai, United Arab Emirates}
 \acmISBN{979-8-4007-2307-0/2026/04}
-\acmDOI{10.1145/XXXXXX.XXXXXX}
+\acmDOI{10.1145/3774904.3792968}
 \settopmatter{printacmref=true}
-
 
 %%
 %% Submission ID.
@@ -96,7 +95,7 @@
 \usepackage{booktabs}
 \usepackage{rotating}
 \usepackage{array}
-%\usepackage[para]{footmisc}
+\usepackage[para]{footmisc}
 %\usepackage{tablefootnote}
 \usepackage{xcolor}
 \usepackage{colortbl}
@@ -214,11 +213,11 @@ These ML assets, including models, datasets, and software, may originate from va
 However, commonly chosen licenses, such as GPL and Apache, are software-specific and are not clearly defined or bounded in the context of model publishing.
 Meanwhile, the reused assets may also be under free-content licenses and model licenses, which pose a potential risk of license noncompliance and rights infringement within the model production workflow.
 In this paper, we address these challenges along two lines:
-1) For ML workflow compliance, we propose a new vocabulary for ML workflow management and encoded license rules to enable ontological reasoning for analyzing rights granting and compliance issues.
-2) For standardized model publishing, we introduce a set of model licenses that provide flexible options to meet the diverse needs of the ML community.
-Our analysis tool is built on Turtle language and Notation3 reasoning engine, envisioned as a first step toward Linked Open Data for ML workflow management.
-We have also encoded our proposed model licenses into rules and demonstrated the effects of GPL and other commonly used licenses in model publishing, along with the flexibility advantages of our licenses, through comparisons and experiments. 
-\textbf{Code is available at} \url{https://anonymous.4open.science/r/MG-Analyzer-2933}.
+1) For ML workflow compliance, we propose ModelGo (MG) Analyzer, a tool that incorporates a vocabulary for ML workflow management and encoded license rules, enabling ontological reasoning to analyze rights granting and compliance issues.
+2) For standardized model publishing, we introduce ModelGo Licenses, a set of modell-specific licenses that provide flexible options to meet the diverse needs of the ML community.
+MG Analyzer is built on Turtle language and Notation3 reasoning engine, envisioned as a first step toward Linked Open Data for ML workflow management.
+We have also encoded our proposed model licenses into rules and demonstrated the effects of GPL and other commonly used licenses in model publishing, along with the flexibility advantages of our licenses, through comparisons and experiments.
+% \textbf{Code is available at \url{https://github.com/morningD/ModelGo-Analyzer}}.
 
 \end{abstract}
 
@@ -268,6 +267,13 @@ We have also encoded our proposed model licenses into rules and demonstrated the
 %% This command processes the author and affiliation and title
 %% information and builds the first part of the formatted document.
 \maketitle
+\newcommand\webconfavailabilityurl{https://doi.org/10.5281/zenodo.18277024}
+\ifdefempty{\webconfavailabilityurl}{}{
+\begingroup\small\noindent\raggedright\textbf{Resource Availability:}\\
+% please change the following context to include multiple artifacts if necessary, including data, models, code, etc.
+The source code of this paper has been made publicly available at \url{\webconfavailabilityurl}.
+\endgroup
+}
 
 \input{INTRODUCTION}
 
@@ -292,7 +298,9 @@ Our experiments show that commonly used OSS and CC licenses are unsuitable for m
 %% identification of the section in the article metadata, and the
 %% consistent spelling of the heading.
 \begin{acks}
-This research is sponsored by Shanghai Pujiang Programme (25PJA029).
+% We sincerely thank the anonymous reviewers for their helpful comments.
+This research is sponsored by Shanghai Pujiang Programme (Award No. 25PJA029).
+This research is also supported in part by the National Research Foundation, Singapore and Infocomm Media Development Authority under its Trust Tech Funding Initiative. Any opinions, findings and conclusions or recommendations expressed in this material are those of the author(s) and do not reflect the views of National Research Foundation, Singapore and Infocomm Media Development Authority.
 \end{acks}
 
 %%
@@ -306,6 +314,7 @@ This research is sponsored by Shanghai Pujiang Programme (25PJA029).
 %%
 %% If your work has an appendix, this is the place to put it.
 \appendix
+\balance
 \input{APPENDIX}
 
 \end{document}
